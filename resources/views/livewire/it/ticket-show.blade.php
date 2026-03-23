@@ -176,67 +176,52 @@
         <div class="card-body p-4">
 
             {{-- ══════════════ STATUS BAR ══════════════ --}}
-            @php
-                $statusClasses = [
-                    'new'         => 'bg-dark bg-opacity-25',
-                    'open'        => 'bg-success text-dark bg-opacity-25',
-                    'in_progress' => 'bg-warning bg-opacity-25',
-                    'closed'      => 'bg-danger bg-opacity-25',
-                ];
-                $currentClass = $statusClasses[$ticket->status] ?? 'bg-light';
-            @endphp
-
-            <div class="row {{ $currentClass }} rounded-3 p-3 mb-4 align-items-center">
-                <div class="col-lg-6">
-                    <div class="d-flex flex-wrap gap-3">
-                        <span class="badge bg-white text-dark border shadow-sm px-3 py-2"  wire:poll.5s>
-                            <i class="fa fa-circle me-1
-                                @if($ticket->status=='new') text-secondary
-                                @elseif($ticket->status=='open') text-success
-                                @elseif($ticket->status=='in_progress') text-warning
-                                @else text-danger @endif"></i>
-                            {{ ucfirst($ticket->status) }}
-                        </span>
-                        <span class="text-dark small d-flex align-items-center gap-1">
-                            <i class="fa fa-building opacity-50"></i>
-                            {{ $ticket->category->name }}
-                        </span>
-                        <span class="text-dark small d-flex align-items-center gap-1">
-                            <i class="fa fa-user opacity-50"></i>
-                            {{ ucFirst($ticket->user->name) }}
-                        </span>
-                        <span class="text-dark small d-flex align-items-center gap-1">
-                            <i class="fa fa-clock opacity-50 text-danger"></i>
-                            {{ $ticket->created_at->format('d M Y, h:i A') }}
-                        </span>
-                    </div>
-                </div>
-
-                @can('manage tickets')
-                    @if ($status != 'closed')
-                        <div class="col-lg-6 mt-3 mt-lg-0">
-                            <form wire:submit.prevent="update_Status"
-                                class="d-flex align-items-center justify-content-lg-end gap-2">
-                                <label class="text-dark small fw-bold mb-0">{{ __('Change Status') }}:</label>
-                                <select  wire:ignore wire:model="status" class="form-select form-select-sm shadow-sm"
-                                    style="width: 160px;">
-                                    <option value="">{{ __('Choose One') }}</option>
-                                    <option value="new">{{ __('Back To New') }}</option>
-                                    <option value="open">{{ __('Open') }}</option>
-                                    <option value="in_progress">{{ __('In Progress') }}</option>
-                                    <option value="closed">{{ __('Closed') }}</option>
-                                </select>
-                                @error('status')
-                                    <span class="text-danger small">{{ $message }}</span>
-                                @enderror
-                                <button class="btn btn-primary btn-sm px-3">
-                                    <i class="fa fa-paper-plane"></i>
-                                </button>
-                            </form>
-                        </div>
-                    @endif
-                @endcan
+    <div class="row {{ $ticket->status->bgColor() }} rounded-3 p-3 mb-4 align-items-center">
+        <div class="col-lg-6">
+            <div class="d-flex flex-wrap gap-3">
+                <span class="badge bg-white text-dark border shadow-sm px-3 py-2" wire:poll.5s>
+                    <i class="fa fa-circle me-1 text-{{ $ticket->status->color() }}"></i>
+                    {{ $ticket->status->label() }}
+                </span>
+                <span class="text-dark small d-flex align-items-center gap-1">
+                    <i class="fa fa-building opacity-50"></i>
+                    {{ $ticket->category->name }}
+                </span>
+                <span class="text-dark small d-flex align-items-center gap-1">
+                    <i class="fa fa-user opacity-50"></i>
+                    {{ ucFirst($ticket->user->name) }}
+                </span>
+                <span class="text-dark small d-flex align-items-center gap-1">
+                    <i class="fa fa-clock opacity-50 text-danger"></i>
+                    {{ $ticket->created_at->format('d M Y, h:i A') }}
+                </span>
             </div>
+        </div>
+
+        @can('manage tickets')
+            @if ($ticket->status !== \App\Core\Enum\TicketStatus::Closed)
+                <div class="col-lg-6 mt-3 mt-lg-0">
+                    <form wire:submit.prevent="update_Status"
+                        class="d-flex align-items-center justify-content-lg-end gap-2">
+                        <label class="text-dark small fw-bold mb-0">{{ __('Change Status') }}:</label>
+                        <select wire:ignore wire:model="status"
+                            class="form-select form-select-sm shadow-sm" style="width: 160px;">
+                            <option value="">{{ __('Choose One') }}</option>
+                            @foreach($statuses as $status)
+                                <option value="{{ $status->value }}">{{ $status->label() }}</option>
+                            @endforeach
+                        </select>
+                        @error('status')
+                            <span class="text-danger small">{{ $message }}</span>
+                        @enderror
+                        <button class="btn btn-primary btn-sm px-3">
+                            <i class="fa fa-paper-plane"></i>
+                        </button>
+                    </form>
+                </div>
+            @endif
+        @endcan
+    </div>
 
             {{-- ══════════════ CHAT ══════════════ --}}
             <div class="rounded-4 p-3 mb-3"

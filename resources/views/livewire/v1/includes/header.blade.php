@@ -114,36 +114,6 @@
         </nav>
     </header>
 
-    {{-- ✅ Pusher Listener للـ Notifications --}}
-    <script>
-        document.addEventListener('livewire:initialized', () => {
-            const userId = {{auth()->id()}};
-            // ✅ Listen على الـ Private Channel بتاع اليوزر
-            window.Echo.private(`App.Models.User.${userId}`)
-                .notification((notification) => {
-                    console.log('🔔 New Notification:', notification);
 
-                    Livewire.dispatch('refreshNotifications');
 
-                    if (typeof Swal !== 'undefined') {
-                        Swal.mixin({
-                            toast: true
-                            , position: 'top-end'
-                            , showConfirmButton: false
-                            , timer: 5000
-                            , timerProgressBar: true
-                        , }).fire({
-                            icon: 'info'
-                            , title: notification.title ? ? 'New Notification'
-                            , text: notification.message ? ? ''
-                        , });
-                    }
-
-                    // ✅ صوت
-                    new Audio("{{ asset('sounds/message.mp3') }}")
-                        .play().catch(() => {});
-                });
-        });
-
-    </script>
 </div>

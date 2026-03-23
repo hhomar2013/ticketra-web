@@ -1,3 +1,5 @@
+@use('App\Core\Enum\TicketStatus')
+
 <div>
     <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 py-8">
 
@@ -26,23 +28,26 @@
                 <label class="me-1 text-muted small">{{ __('Sort') }}:</label>
                 <select wire:model.change="sortBy" class="form-select form-select-sm border-0 shadow-sm bg-light" style="width: 150px;">
                     <option value="">{{ __('Sort status') }}</option>
-                    <option value="new">{{ __('New') }}</option>
-                    <option value="open">{{ __('Open') }}</option>
-                    <option value="in_progress">{{ __('In Progress') }}</option>
-                    <option value="closed">{{ __('Closed') }}</option>
+                    @foreach($statuses as $status)
+                        <option value="{{ $status->value }}">{{ $status->label() }}</option>
+                    @endforeach
                 </select>
 
                 {{-- Count --}}
                 @if ($sortCount)
-                <label class="text-muted small">{{ __('Count') }}: {{ $sortCount }}</label>
+                    <label class="text-muted small">{{ __('Count') }}: {{ $sortCount }}</label>
                 @endif
 
-                {{-- ✅ View Toggle --}}
+                {{-- View Toggle --}}
                 <div class="btn-group ms-2 shadow-sm" role="group">
-                    <button type="button" wire:click="$set('viewMode', 'card')" class="btn btn-sm btn-outline-secondary {{ $viewMode === 'card' ? 'active' : '' }}" title="{{ __('Card View') }}">
+                    <button type="button" wire:click="$set('viewMode', 'card')"
+                        class="btn btn-sm btn-outline-secondary {{ $viewMode === 'card' ? 'active' : '' }}"
+                        title="{{ __('Card View') }}">
                         <i class="fas fa-th"></i>
                     </button>
-                    <button type="button" wire:click="$set('viewMode', 'list')" class="btn btn-sm btn-outline-secondary {{ $viewMode === 'list' ? 'active' : '' }}" title="{{ __('List View') }}">
+                    <button type="button" wire:click="$set('viewMode', 'list')"
+                        class="btn btn-sm btn-outline-secondary {{ $viewMode === 'list' ? 'active' : '' }}"
+                        title="{{ __('List View') }}">
                         <i class="fas fa-list"></i>
                     </button>
                 </div>
@@ -50,74 +55,68 @@
         </div>
 
         {{-- ===================== CARD VIEW ===================== --}}
-        <div id="card-view" class="row g-4 {{ $viewMode === 'card' ? 'overflow-auto' : 'd-none' }} "  scrollbar-width: thin; scrollbar-color: rgba(0,0,0,.2) transparent;">
+        <div id="card-view"
+            class="row g-4 {{ $viewMode === 'card' ? 'overflow-auto' : 'd-none' }}"
+            style="scrollbar-width: thin; scrollbar-color: rgba(0,0,0,.2) transparent;">
 
             @forelse ($tickets as $ticket)
-            <div class="col-md-6 col-lg-4">
-                <div class="card h-100 border-0 shadow-sm hover-shadow transition-all" style="border-radius: 15px; overflow: hidden;">
+                <div class="col-md-6 col-lg-4">
+                    <div class="card h-100 border-0 shadow-sm hover-shadow transition-all" style="border-radius: 15px; overflow: hidden;">
 
-                    {{-- شريط اللون العلوي --}}
-                    <div style="height: 5px;" class="
-                        @if ($ticket->status == 'new')         bg-secondary
-                        @elseif($ticket->status == 'open')        bg-success
-                        @elseif($ticket->status == 'in_progress') bg-warning
-                        @elseif($ticket->status == 'closed')      bg-danger
-                        @endif">
-                    </div>
+                        {{-- شريط اللون العلوي --}}
+                        <div style="height: 5px;" class="bg-{{ $ticket->status->color() }}"></div>
 
-                    <div class="card-body p-4">
-                        <div class="d-flex justify-content-between align-items-start mb-3">
-                            <span class="badge bg-light text-dark border shadow-sm">#{{ $ticket->id }}</span>
-                            <span class="badge rounded-pill px-3
-                                @if ($ticket->status == 'new')         bg-secondary-subtle text-secondary
-                                @elseif($ticket->status == 'open')        bg-success-subtle  text-success
-                                @elseif($ticket->status == 'in_progress') bg-warning-subtle  text-warning
-                                @elseif($ticket->status == 'closed')      bg-danger-subtle   text-danger
-                                @endif">
-                                {{ ucfirst($ticket->status) }}
-                            </span>
-                        </div>
-
-                        <h5 class="card-title fw-bold text-truncate mb-3" title="{{ $ticket->title }}">
-                            {{ $ticket->title }}
-                        </h5>
-
-                        <div class="ticket-info mb-4">
-                            <div class="d-flex align-items-center mb-2 text-muted small">
-                                <i class="fas fa-building me-2 opacity-50"></i>
-                                <strong>{{ __('Dept') }}:</strong>
-                                <span class="ms-1">{{ $ticket->category->name }}</span>
+                        <div class="card-body p-4">
+                            <div class="d-flex justify-content-between align-items-start mb-3">
+                                <span class="badge bg-light text-dark border shadow-sm">#{{ $ticket->id }}</span>
+                                <span class="badge rounded-pill px-3 {{ $ticket->status->subColor() }}">
+                                    {{ $ticket->status->label() }}
+                                </span>
                             </div>
-                            <div class="d-flex align-items-center mb-2 text-muted small">
-                                <i class="fas fa-user me-2 opacity-50"></i>
-                                <strong>{{ __('From') }}:</strong>
-                                <span class="ms-1">{{ ucFirst($ticket->user->name) }}</span>
-                            </div>
-                            <div class="d-flex align-items-center text-muted small">
-                                <i class="fas fa-calendar-alt me-2 opacity-50"></i>
-                                <strong>{{ __('Date') }}:</strong>
-                                <span class="ms-1">{{ $ticket->created_at->format('d M, Y') }}</span>
-                            </div>
-                        </div>
 
-                        <div class="d-grid">
-                            <a href="{{ route('it.tickets.show', $ticket->id) }}" class="btn btn-outline-primary btn-sm rounded-pill py-2 transition-all">
-                                <i class="fas fa-external-link-alt me-1"></i> {{ __('Show ticket') }}
-                            </a>
+                            <h5 class="card-title fw-bold text-truncate mb-3" title="{{ $ticket->title }}">
+                                {{ $ticket->title }}
+                            </h5>
+
+                            <div class="ticket-info mb-4">
+                                <div class="d-flex align-items-center mb-2 text-muted small">
+                                    <i class="fas fa-building me-2 opacity-50"></i>
+                                    <strong>{{ __('Dept') }}:</strong>
+                                    <span class="ms-1">{{ $ticket->category->name }}</span>
+                                </div>
+                                <div class="d-flex align-items-center mb-2 text-muted small">
+                                    <i class="fas fa-user me-2 opacity-50"></i>
+                                    <strong>{{ __('From') }}:</strong>
+                                    <span class="ms-1">{{ ucFirst($ticket->user->name) }}</span>
+                                </div>
+                                <div class="d-flex align-items-center text-muted small">
+                                    <i class="fas fa-calendar-alt me-2 opacity-50"></i>
+                                    <strong>{{ __('Date') }}:</strong>
+                                    <span class="ms-1">{{ $ticket->created_at->format('d M, Y') }}</span>
+                                </div>
+                            </div>
+
+                            <div class="d-grid">
+                                <a href="{{ route('it.tickets.show', $ticket->id) }}"
+                                    class="btn btn-outline-primary btn-sm rounded-pill py-2 transition-all">
+                                    <i class="fas fa-external-link-alt me-1"></i> {{ __('Show ticket') }}
+                                </a>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
             @empty
-            <div class="col-12 text-center text-muted py-5">
-                <i class="fas fa-inbox fa-3x mb-3 opacity-25"></i>
-                <p>{{ __('No tickets found') }}</p>
-            </div>
+                <div class="col-12 text-center text-muted py-5">
+                    <i class="fas fa-inbox fa-3x mb-3 opacity-25"></i>
+                    <p>{{ __('No tickets found') }}</p>
+                </div>
             @endforelse
         </div>
 
         {{-- ===================== LIST VIEW ===================== --}}
-        <div id="list-view" class="{{ $viewMode === 'list' ? 'overflow-auto' : 'd-none' }}" style="height: calc(100vh - 200px);">
+        <div id="list-view"
+            class="{{ $viewMode === 'list' ? 'overflow-auto' : 'd-none' }}"
+            style="height: calc(100vh - 200px);">
 
             <div class="card border-0 shadow-sm" style="border-radius: 15px; overflow: hidden;">
                 <table class="table table-hover align-middle mb-0">
@@ -134,50 +133,46 @@
                     </thead>
                     <tbody>
                         @forelse ($tickets as $ticket)
-                        <tr>
-                            <td class="ps-4">
-                                <span class="badge bg-light text-dark border">#{{ $ticket->id }}</span>
-                            </td>
-                            <td class="fw-bold" style="max-width: 220px;">
-                                <span class="text-truncate d-block" title="{{ $ticket->title }}">
-                                    {{ $ticket->title }}
-                                </span>
-                            </td>
-                            <td class="text-muted small">
-                                <i class="fas fa-building me-1 opacity-50"></i>
-                                {{ $ticket->category->name }}
-                            </td>
-                            <td class="text-muted small">
-                                <i class="fas fa-user me-1 opacity-50"></i>
-                                {{ ucFirst($ticket->user->name) }}
-                            </td>
-                            <td>
-                                <span class="badge rounded-pill px-3
-                                    @if ($ticket->status == 'new')         bg-secondary-subtle text-secondary
-                                    @elseif($ticket->status == 'open')        bg-success-subtle  text-success
-                                    @elseif($ticket->status == 'in_progress') bg-warning-subtle  text-warning
-                                    @elseif($ticket->status == 'closed')      bg-danger-subtle   text-danger
-                                    @endif">
-                                    {{ ucfirst($ticket->status) }}
-                                </span>
-                            </td>
-                            <td class="text-muted small">
-                                <i class="fas fa-calendar-alt me-1 opacity-50"></i>
-                                {{ $ticket->created_at->format('d M, Y') }}
-                            </td>
-                            <td>
-                                <a href="{{ route('it.tickets.show', $ticket->id) }}" class="btn btn-outline-primary btn-sm rounded-pill transition-all">
-                                    <i class="fas fa-external-link-alt me-1"></i> {{ __('Show') }}
-                                </a>
-                            </td>
-                        </tr>
+                            <tr>
+                                <td class="ps-4">
+                                    <span class="badge bg-light text-dark border">#{{ $ticket->id }}</span>
+                                </td>
+                                <td class="fw-bold" style="max-width: 220px;">
+                                    <span class="text-truncate d-block" title="{{ $ticket->title }}">
+                                        {{ $ticket->title }}
+                                    </span>
+                                </td>
+                                <td class="text-muted small">
+                                    <i class="fas fa-building me-1 opacity-50"></i>
+                                    {{ $ticket->category->name }}
+                                </td>
+                                <td class="text-muted small">
+                                    <i class="fas fa-user me-1 opacity-50"></i>
+                                    {{ ucFirst($ticket->user->name) }}
+                                </td>
+                                <td>
+                                    <span class="badge rounded-pill px-3 {{ $ticket->status->subColor() }}">
+                                        {{ $ticket->status->label() }}
+                                    </span>
+                                </td>
+                                <td class="text-muted small">
+                                    <i class="fas fa-calendar-alt me-1 opacity-50"></i>
+                                    {{ $ticket->created_at->format('d M, Y') }}
+                                </td>
+                                <td>
+                                    <a href="{{ route('it.tickets.show', $ticket->id) }}"
+                                        class="btn btn-outline-primary btn-sm rounded-pill transition-all">
+                                        <i class="fas fa-external-link-alt me-1"></i> {{ __('Show') }}
+                                    </a>
+                                </td>
+                            </tr>
                         @empty
-                        <tr>
-                            <td colspan="7" class="text-center text-muted py-5">
-                                <i class="fas fa-inbox fa-3x mb-3 opacity-25 d-block"></i>
-                                {{ __('No tickets found') }}
-                            </td>
-                        </tr>
+                            <tr>
+                                <td colspan="7" class="text-center text-muted py-5">
+                                    <i class="fas fa-inbox fa-3x mb-3 opacity-25 d-block"></i>
+                                    {{ __('No tickets found') }}
+                                </td>
+                            </tr>
                         @endforelse
                     </tbody>
                 </table>
@@ -239,7 +234,6 @@
         color: #fff !important;
         border-color: #0d6efd !important;
     }
-
 </style>
 @endsection
 
@@ -248,8 +242,8 @@
     function showView(type) {
         const cardView = document.getElementById('card-view');
         const listView = document.getElementById('list-view');
-        const btnCard = document.getElementById('btn-card');
-        const btnList = document.getElementById('btn-list');
+        const btnCard  = document.getElementById('btn-card');
+        const btnList  = document.getElementById('btn-list');
 
         if (!cardView || !listView) return;
 
@@ -267,7 +261,5 @@
     }
 
     document.addEventListener('DOMContentLoaded', restoreView);
-
     document.addEventListener('livewire:updated', restoreView);
-
 </script>

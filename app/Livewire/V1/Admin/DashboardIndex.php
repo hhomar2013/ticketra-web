@@ -1,7 +1,7 @@
 <?php
 namespace App\Livewire\V1\Admin;
 
-
+use App\Core\Enum\TicketStatus;
 use App\Livewire\Actions\Logout;
 use App\Models\Ticket;
 use App\Models\TicketFeedback;
@@ -10,17 +10,11 @@ use Livewire\Component;
 
 class DashboardIndex extends Component
 {
-
-
     public function logout(Logout $logout): void
     {
         $logout();
-
         $this->redirect('/', navigate: true);
     }
-
-
-
 
     public function render()
     {
@@ -28,10 +22,10 @@ class DashboardIndex extends Component
 
         $stats = [
             'total'       => (clone $tickets)->count(),
-            'new'         => (clone $tickets)->where('status', 'new')->count(),
-            'open'        => (clone $tickets)->where('status', 'open')->count(),
-            'in_progress' => (clone $tickets)->where('status', 'in_progress')->count(),
-            'closed'      => (clone $tickets)->where('status', 'closed')->count(),
+            'new'         => (clone $tickets)->where('status', TicketStatus::New)->count(),
+            'open'        => (clone $tickets)->where('status', TicketStatus::Open)->count(),
+            'in_progress' => (clone $tickets)->where('status', TicketStatus::InProgress)->count(),
+            'closed'      => (clone $tickets)->where('status', TicketStatus::Closed)->count(),
         ];
 
         $recentTickets = Ticket::with('user', 'category', 'assignedUser')
@@ -39,12 +33,12 @@ class DashboardIndex extends Component
             ->take(6)
             ->get();
 
-        $avgRating    = round(TicketFeedback::avg('rating') ?? 0, 1);
+        $avgRating      = round(TicketFeedback::avg('rating') ?? 0, 1);
         $totalFeedbacks = TicketFeedback::count();
 
         // أحسن 3 موظفين بأكتر تذاكر مغلقة
         $topAgents = User::withCount(['assignedTickets as closed_count' => fn($q) =>
-                $q->where('status', 'closed')
+                $q->where('status', TicketStatus::Closed)
             ])
             ->having('closed_count', '>', 0)
             ->orderByDesc('closed_count')
@@ -57,11 +51,8 @@ class DashboardIndex extends Component
             'count' => Ticket::whereDate('created_at', now()->subDays($i))->count(),
         ]);
 
-        return view('livewire.v1.admin.dashboard-index'
-        , compact(
+        return view('livewire.v1.admin.dashboard-index', compact(
             'stats', 'recentTickets', 'avgRating', 'totalFeedbacks', 'topAgents', 'weeklyData'
         ));
     }
 }
-
-

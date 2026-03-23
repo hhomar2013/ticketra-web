@@ -1,6 +1,7 @@
 <?php
 namespace App\Livewire\It;
 
+use App\Core\Enum\TicketStatus;
 use App\Models\Ticket;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
@@ -18,7 +19,7 @@ class TicketIndex extends Component
     public string $sortBy             = '';
     public int $perPage               = 10;
     public int $sortCount;
-    public  $viewMode = 'card';
+    public $viewMode = 'card';
 
     public function mount()
     {
@@ -64,8 +65,9 @@ class TicketIndex extends Component
     {
         $tickets = $this->tickets();
 
-        return view('livewire.it.ticket-index', [
+    return view('livewire.it.ticket-index', [
             'tickets' => $tickets,
+            'statuses' => TicketStatus::cases(),
         ]);
     }
 }

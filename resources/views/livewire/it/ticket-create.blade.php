@@ -232,81 +232,70 @@
     @if(count($tickets))
         <div class="row g-3">
             @foreach ($tickets as $ticket)
-            <div class="col-md-6 col-lg-4">
-                <div class="card ticket-card shadow-sm h-100">
+                <div class="col-md-6 col-lg-4">
+                    <div class="card ticket-card shadow-sm h-100">
 
-                    {{-- Color Bar --}}
-                    <div class="color-bar
-                        @if ($ticket->status == 'new')         bg-secondary
-                        @elseif($ticket->status == 'open')        bg-primary
-                        @elseif($ticket->status == 'in_progress') bg-warning
-                        @elseif($ticket->status == 'closed')      bg-success
-                        @endif">
-                    </div>
+                        {{-- Color Bar ✅ --}}
+                        <div class="color-bar bg-{{ $ticket->status->color() }}"></div>
 
-                    <div class="card-body p-4">
+                        <div class="card-body p-4">
 
-                        {{-- Top Row --}}
-                        <div class="d-flex justify-content-between align-items-center mb-3">
-                            <span class="badge bg-light text-muted border fw-normal"
-                                style="font-size: 11px;">#{{ $ticket->id }}</span>
-                            <span class="badge rounded-pill px-3
-                                @if ($ticket->status == 'new')         bg-secondary-subtle
-                                @elseif($ticket->status == 'open')        bg-primary-subtle
-                                @elseif($ticket->status == 'in_progress') bg-warning-subtle
-                                @elseif($ticket->status == 'closed')      bg-success-subtle
-                                @endif">
-                                @if($ticket->status == 'new') 🕐
-                                @elseif($ticket->status == 'open') 📂
-                                @elseif($ticket->status == 'in_progress') ⚙️
-                                @else ✅ @endif
-                                {{ ucfirst($ticket->status) }}
-                            </span>
-                        </div>
+                            {{-- Top Row --}}
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                <span class="badge bg-light text-muted border fw-normal"
+                                    style="font-size: 11px;">#{{ $ticket->id }}</span>
 
-                        {{-- Title --}}
-                        <h6 class="fw-bold text-dark mb-3 text-truncate" title="{{ $ticket->title }}">
-                            {{ $ticket->title }}
-                        </h6>
-
-                        {{-- Meta --}}
-                        <div class="vstack gap-1 mb-4">
-                            <div class="d-flex align-items-center gap-2 text-muted small">
-                                <i class="fas fa-layer-group opacity-50" style="width: 14px;"></i>
-                                <span>{{ $ticket->category->name }}</span>
+                                {{-- Badge ✅ --}}
+                                <span class="badge rounded-pill px-3 {{ $ticket->status->subColor() }}">
+                                    {{ $ticket->status->emoji() }}
+                                    {{ $ticket->status->label() }}
+                                </span>
                             </div>
-                            <div class="d-flex align-items-center gap-2 text-muted small">
-                                <i class="fas fa-clock opacity-50" style="width: 14px;"></i>
-                                <span>{{ $ticket->created_at->diffForHumans() }}</span>
-                            </div>
-                            @if($ticket->replies_count ?? $ticket->replies->count())
+
+                            {{-- Title --}}
+                            <h6 class="fw-bold text-dark mb-3 text-truncate" title="{{ $ticket->title }}">
+                                {{ $ticket->title }}
+                            </h6>
+
+                            {{-- Meta --}}
+                            <div class="vstack gap-1 mb-4">
                                 <div class="d-flex align-items-center gap-2 text-muted small">
-                                    <i class="fas fa-comments opacity-50" style="width: 14px;"></i>
-                                    <span>{{ $ticket->replies->count() }} {{ __('replies') }}</span>
+                                    <i class="fas fa-layer-group opacity-50" style="width: 14px;"></i>
+                                    <span>{{ $ticket->category->name }}</span>
                                 </div>
-                            @endif
-                        </div>
+                                <div class="d-flex align-items-center gap-2 text-muted small">
+                                    <i class="fas fa-clock opacity-50" style="width: 14px;"></i>
+                                    <span>{{ $ticket->created_at->diffForHumans() }}</span>
+                                </div>
+                                @if($ticket->replies_count ?? $ticket->replies->count())
+                                    <div class="d-flex align-items-center gap-2 text-muted small">
+                                        <i class="fas fa-comments opacity-50" style="width: 14px;"></i>
+                                        <span>{{ $ticket->replies->count() }} {{ __('replies') }}</span>
+                                    </div>
+                                @endif
+                            </div>
 
-                        {{-- Actions --}}
-                        <div class="d-flex gap-2">
-                            <a href="{{ route('user.tickets.show', $ticket->id) }}"
-                                class="btn btn-primary btn-sm rounded-pill flex-grow-1 fw-bold">
-                                <i class="fas fa-eye me-1"></i> {{ __('View') }}
-                            </a>
-                            @if ($ticket->status == 'new')
-                                <button
-                                    wire:click.prevent="deleteTicket({{ $ticket->id }})"
-                                    wire:confirm="{{ __('Are you sure you want to cancel this ticket?') }}"
-                                    class="btn btn-outline-danger btn-sm rounded-pill px-3"
-                                    title="{{ __('Cancel ticket') }}">
-                                    <i class="fas fa-times"></i>
-                                </button>
-                            @endif
-                        </div>
+                            {{-- Actions --}}
+                            <div class="d-flex gap-2">
+                                <a href="{{ route('user.tickets.show', $ticket->id) }}"
+                                    class="btn btn-primary btn-sm rounded-pill flex-grow-1 fw-bold">
+                                    <i class="fas fa-eye me-1"></i> {{ __('View') }}
+                                </a>
+                                {{-- ✅ بدل == 'new' --}}
+                                @if ($ticket->status === \App\Core\Enum\TicketStatus::New)
+                                    <button
+                                        wire:click.prevent="deleteTicket({{ $ticket->id }})"
+                                        wire:confirm="{{ __('Are you sure you want to cancel this ticket?') }}"
+                                        class="btn btn-outline-danger btn-sm rounded-pill px-3"
+                                        title="{{ __('Cancel ticket') }}">
+                                        <i class="fas fa-times"></i>
+                                    </button>
+                                @endif
+                            </div>
 
+                        </div>
                     </div>
                 </div>
-            </div>
             @endforeach
         </div>
     @else

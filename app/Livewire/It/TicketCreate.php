@@ -1,6 +1,7 @@
 <?php
 namespace App\Livewire\It;
 
+use App\Core\Enum\TicketStatus;
 use App\Models\Category;
 use App\Models\Ticket;
 use Illuminate\Support\Facades\Auth;
@@ -96,6 +97,6 @@ class TicketCreate extends Component
 
     public function render()
     {
-        return view('livewire.it.ticket-create');
+        return view('livewire.it.ticket-create',['statuses'=> TicketStatus::cases()]);
     }
 }

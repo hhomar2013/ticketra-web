@@ -1,6 +1,7 @@
 <?php
 namespace App\Livewire\It;
 
+use App\Core\Enum\TicketStatus;
 use App\Models\Ticket;
 use App\Models\TicketFeedback;
 use App\Models\TicketReply;
@@ -19,11 +20,11 @@ class TicketShow extends Component
     public $rating            = 0;
     public $comment           = '';
     public $feedbackSubmitted = false;
-
+    public $statuses;
     public function mount($id)
     {
         $this->ticket = Ticket::with('replies.user', 'feedback')->findOrFail($id);
-
+        $this->statuses = TicketStatus::cases();
         // ✅ لو موظف IT وفتح التذكرة وملهاش حد معين - اتعين عليه تلقائي
         if (Auth::user()->hasRole('it') && is_null($this->ticket->assigned_to)) {
             $this->ticket->update(['assigned_to' => Auth::id()]);
@@ -115,10 +116,10 @@ class TicketShow extends Component
 
         // ✅ إظهار الرسالة لصاحبها فوراً
         $this->dispatch('reply-added', [
-            'message'    => $reply->message,
-            'user_id'    => Auth::id(),
-            'user_name'  => Auth::user()->name,
-            'created_at' => now()->format('h:i A'),
+            'message'       => $reply->message,
+            'user_id'       => Auth::id(),
+            'user_name'     => Auth::user()->name,
+            'created_at'    => now()->format('h:i A'),
             'ticket_status' => $this->status,
         ]);
 

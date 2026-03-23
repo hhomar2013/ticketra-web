@@ -1,10 +1,15 @@
 <?php
 namespace App\Models;
 
+use App\Core\Enum\TicketStatus;
 use Illuminate\Database\Eloquent\Model;
 
 class Ticket extends Model
 {
+
+    protected $casts = [
+        'status' => TicketStatus::class,
+    ];
 
     protected $guarded = [];
 
@@ -16,7 +21,6 @@ class Ticket extends Model
     public function replies()
     {
         return $this->hasMany(TicketReply::class);
-        // ->orderBy('id', 'desc');
     }
 
     public function category()
