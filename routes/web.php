@@ -8,6 +8,7 @@ use App\Livewire\V1\Admin\DashboardIndex;
 use App\Livewire\V1\Hardware\AssetCategories\AssetCategoriesCreate;
 use App\Livewire\V1\Hardware\AssetCategories\AssetCategoriesIndex;
 use App\Livewire\V1\Hardware\Assets\AssetReport;
+use App\Livewire\V1\Hardware\Assets\AssetsAssigned;
 use App\Livewire\V1\Hardware\Assets\AssetsCreate;
 use App\Livewire\V1\Hardware\Assets\AssetsHistory;
 use App\Livewire\V1\Hardware\Assets\AssetsIndex;
@@ -65,15 +66,21 @@ Route::middleware(['auth'])->group(function () {
     Route::get('hardware/brands/edit/{id}', BrandsCreate::class)->name('hardware.brands.edit');
     Route::get('hardware/brands/models/{id}', BrandsModels::class)->name('hardware.brands.models');
 
-    Route::get('hardware/assets', AssetsIndex::class)->name('hardware.assets.index');
+
     Route::prefix('hardware/assets-online')->name('hardware.assets-online.')->group(function () {
         Route::get('/', OnlineAssets::class)->name('index');
         Route::get('/{id}', ShowOnlineAsset::class)->name('show');
     });//agent traking assets
-    Route::get('hardware/assets/create/', AssetsCreate::class)->name('hardware.assets.create');
-    Route::get('hardware/assets/edit/{id}', AssetsCreate::class)->name('hardware.assets.edit');
-    Route::get('hardware/assets/history/{id}', AssetsHistory::class)->name('hardware.assets.history');
-    Route::get('hardware/assets/assign-to-employee/{id}', AssignToEmployee::class)->name('hardware.assets.assign-to-employee');
+
+    Route::prefix('hardware/assets')->name('hardware.assets.')->group(function () {
+        Route::get('/', AssetsIndex::class)->name('index');
+        Route::get('/create/', AssetsCreate::class)->name('create');
+        Route::get('/edit/{id}', AssetsCreate::class)->name('edit');
+        Route::get('/history/{id}', AssetsHistory::class)->name('history');
+        Route::get('/assign-to-employee/{id}', AssignToEmployee::class)->name('assign-to-employee');
+        Route::get('/assets-assigned', AssetsAssigned::class)->name('assets-assigned');
+    });
+
     Route::get('maintenance/invoices', InvoiceIndex::class)->name('maintenance.invoices.index');
     Route::get('maintenance/invoices/create-maintenance-order', InvoiceCreate::class)->name('maintenance.invoices.create');
 

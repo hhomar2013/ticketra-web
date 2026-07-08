@@ -295,7 +295,7 @@
                                 <span class="text-muted small font-monospace">{{ $asset->serial_number }}</span>
                             </td>
                             <td>
-                                @php
+                                {{-- @php
                                     $statusMap = [
                                         'available' => [
                                             'class' => 'status-available',
@@ -323,10 +323,9 @@
                                         'dot' => '#6c757d',
                                         'label' => ucfirst($asset->status),
                                     ];
-                                @endphp
-                                <span class="status-badge {{ $s['class'] }}">
-                                    <span class="s-dot" style="background: {{ $s['dot'] }};"></span>
-                                    {{ $s['label'] }}
+                                @endphp --}}
+                                <span class="status-badge {{ $asset->status->badge() }}">
+                                    {{ $asset->status->label() }}
                                 </span>
                             </td>
                             <td>

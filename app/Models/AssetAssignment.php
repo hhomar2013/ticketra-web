@@ -12,7 +12,7 @@ class AssetAssignment extends Model
 
     public function asset()
     {
-        return $this->belongsTo(asset::class);
+        return $this->belongsTo(asset::class, 'asset_id');
     }
 
     public function user()

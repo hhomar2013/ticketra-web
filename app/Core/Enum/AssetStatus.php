@@ -34,14 +34,15 @@ enum AssetStatus: string
     public function badge(): string
     {
         return match ($this) {
-            self::Assigned => 'badge badge-primary',
-            self::Available => 'badge badge-success',
-            self::Broken => 'badge badge-danger',
-            self::Lost => 'badge badge-warning',
-            self::Sold => 'badge badge-info',
-            self::Stock => 'badge badge-secondary',
-            self::Damaged => 'badge badge-danger',
-            self::Retired => 'badge badge-dark',
+            self::Assigned => 'badge bg-primary rounded-pill shadow-sm px-3 text-white',
+            self::Available => 'badge bg-success rounded-pill shadow-sm px-3 text-white',
+            self::Broken => 'badge bg-danger rounded-pill shadow-sm px-3 text-white',
+            self::Lost => 'badge bg-warning rounded-pill shadow-sm px-3 text-white',
+            self::Sold => 'badge bg-info rounded-pill shadow-sm px-3 text-white',
+            self::Stocked => 'badge bg-secondary rounded-pill shadow-sm px-3 text-white',
+            self::Damaged => 'badge bg-danger rounded-pill shadow-sm text-white',
+            self::Retired => 'badge bg-dark rounded-pill shadow-sm text-white',
+            self::Maintenance => 'badge bg-warning rounded-pill shadow-sm px-3 text-white',
         };
     }
 

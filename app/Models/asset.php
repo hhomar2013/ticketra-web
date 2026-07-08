@@ -5,11 +5,12 @@ namespace App\Models;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Casts\Attribute;
+use App\Core\Enum\AssetStatus as AssetStatusEnum;
 
 class asset extends Model
 {
     protected $guarded = [];
-    // protected $casts = ['warranty_expiry' => 'date'];
+    protected $casts = ['warranty_expiry' => 'date', 'status' => AssetStatusEnum::class];
 
     public function user()
     {
@@ -86,12 +87,12 @@ class asset extends Model
         return $this->hasMany(asset_attribute::class, 'asset_id');
     }
 
-    public function warranty_expiry(): Attribute
-    {
-        return Attribute::make(
-            get: fn($value) => $value ? Carbon::parse($value)->format('Y-m-d') : null,
-        );
-    }
+    // public function warranty_expiry(): Attribute
+    // {
+    //     return Attribute::make(
+    //         get: fn($value) => $value ? Carbon::parse($value)->format('Y-m-d') : null,
+    //     );
+    // }
 
 
 }

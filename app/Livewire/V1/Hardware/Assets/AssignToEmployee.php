@@ -27,7 +27,8 @@ class AssignToEmployee extends Component
             ->pluck('user_id');
 
         // ✅ استثنيهم
-        $this->employees = User::role('user')
+        $this->employees = User::query()
+            // ->role('user')
             // ->whereNotIn('id', $assignedUserIds)
             ->latest()
             ->get();
