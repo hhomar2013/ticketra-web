@@ -148,6 +148,7 @@ class AssetsIndex extends Component
                 'condition_on_return' => $this->condition_on_return,
                 'returned_at' => $this->returned_at,
                 'notes' => $this->notes,
+                'status' => $this->condition_on_return,
             ]);
             $asset = asset::find($this->selectedAsset->id);
             $asset->update([

@@ -216,12 +216,7 @@
             <small class="text-muted">{{ __('Manage and track all assigned hardware assets') }}</small>
         </div>
         <div class="d-flex gap-2">
-            <button wire:click="createAsset" class="btn btn-primary btn-sm rounded-pill px-4 fw-bold shadow-sm">
-                <i class="fas fa-plus me-1"></i> {{ __('New Asset') }}
-            </button>
-            <button wire:click="downloadTemplate" class="btn btn-outline-primary btn-sm rounded-pill px-4 shadow-sm">
-                <i class="fas fa-download me-1"></i> {{ __('Download Template') }}
-            </button>
+
         </div>
     </div>
 
@@ -234,7 +229,7 @@
                 <option value="50">50</option>
                 <option value="100">100</option>
             </select>
-            <button wire:click.prevent="sortBy('id')" class="filter-btn {{ $sortField === 'id' ? 'active' : '' }}">
+            {{-- <button wire:click.prevent="sortBy('id')" class="filter-btn {{ $sortField === 'id' ? 'active' : '' }}">
                 <i class="fa fa-hashtag" style="font-size: 11px;"></i> {{ __('ID') }}
             </button>
             <button wire:click.prevent="sortBy('purchase_date')"
@@ -251,7 +246,7 @@
                 @else
                     <i class="fa fa-arrow-down-wide-short text-primary"></i> {{ __('Descending') }}
                 @endif
-            </button>
+            </button> --}}
         </div>
         <div class="search-wrap" style="min-width: 260px;">
             <i class="fa fa-search s-ico"></i>

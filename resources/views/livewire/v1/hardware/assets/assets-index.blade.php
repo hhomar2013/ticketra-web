@@ -218,6 +218,10 @@
             <small class="text-muted">{{ __('Manage and track all your hardware assets') }}</small>
         </div>
         <div class="d-flex gap-2">
+            <a href="{{ route('hardware.assets.assets-assigned') }}"
+                class="btn btn-success btn-sm rounded-pill px-4 fw-bold shadow-sm">
+                <i class="fas fa-user me-1"></i> {{ __('Assigned Assets') }}
+            </a>
             <button wire:click="createAsset" class="btn btn-primary btn-sm rounded-pill px-4 fw-bold shadow-sm">
                 <i class="fas fa-plus me-1"></i> {{ __('New Asset') }}
             </button>
@@ -597,17 +601,9 @@
 
                                 {{-- الحالة الديناميكية --}}
                                 <div>
-                                    @php
-                                        $statusClasses = [
-                                            'available' => 'status-available',
-                                            'assigned' => 'status-assigned',
-                                            'maintenance' => 'status-maintenance',
-                                            'retired' => 'status-retired',
-                                        ];
-                                        $currentClass = $statusClasses[$selectedAsset->status] ?? 'status-retired';
-                                    @endphp
-                                    <span class="status-badge {{ $currentClass }} px-3 py-2 fs-5">
-                                        {{ ucfirst($selectedAsset->status) }}
+
+                                    <span class="status-badge {{ $selectedAsset->status->badge() }} px-3 py-2 fs-5">
+                                        {{ ucfirst($selectedAsset->status->label()) }}
                                     </span>
                                 </div>
                             </div>

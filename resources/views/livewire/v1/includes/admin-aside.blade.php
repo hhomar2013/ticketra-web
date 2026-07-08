@@ -70,6 +70,7 @@
                         </span>
                         <span class="hide-menu">{{ __('Assets') }}</span>
                     </a>
+
                 </li>
 
                 <li class="sidebar-item">

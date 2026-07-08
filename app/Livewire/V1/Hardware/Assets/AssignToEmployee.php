@@ -54,6 +54,8 @@ class AssignToEmployee extends Component
             'assigned_at' => now(),
             'condition_on_assign' => __('Asset Assigned to Employee'),
             'notes' => $this->notes ?? '',
+            'status' => AssetStatusEnum::Assigned->value
+
         ]);
         if ($q) {
             $this->dispatch('alert', type: 'success', message: __('Asset Assigned to Employee Successfully'));

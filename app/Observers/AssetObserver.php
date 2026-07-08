@@ -32,10 +32,10 @@ class AssetObserver
     {
         asset_log::create([
             'asset_id' => $asset->id,
-            'user_id' => Auth::id() ?? 1, // 1 غالباً بيكون الـ Admin أو System
+            'user_id' => Auth::id() ?? 1,
             'action' => $action,
             'old_status' => $asset->getOriginal('status')->value,
-            'new_status' => $asset->status->value,
+            'new_status' => $asset->status,
             'description' => $description,
         ]);
     }
