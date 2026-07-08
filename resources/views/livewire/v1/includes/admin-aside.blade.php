@@ -3,7 +3,7 @@
         {{-- ══════ Brand Logo ══════ --}}
         <div class="brand-logo d-flex align-items-center justify-content-between">
             <a class="text-nowrap">
-                <img src="{{ asset('asset/images/cover.png') }}" alt="{{ config('app.name') }}" style="width: 12rem;" />
+                <img src="{{ asset('asset/images/logo.png') }}" alt="{{ config('app.name') }}" style="width: 12rem;" />
             </a>
             <div class="close-btn d-xl-none d-block sidebartoggler cursor-pointer" id="sidebarCollapse">
                 <i class="ti ti-x fs-8"></i>

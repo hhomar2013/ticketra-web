@@ -18,7 +18,7 @@ class AssetObserver
         $monitoredFields = ['status', 'user_id', 'branch_id'];
 
         // إذا لم يتغير أي حقل مهم، نخرج فوراً
-        if (! $asset->wasChanged($monitoredFields)) {
+        if (!$asset->wasChanged($monitoredFields)) {
             return;
         }
 
@@ -31,11 +31,11 @@ class AssetObserver
     private function logAction(Asset $asset, string $action, string $description): void
     {
         asset_log::create([
-            'asset_id'    => $asset->id,
-            'user_id'     => Auth::id() ?? 1, // 1 غالباً بيكون الـ Admin أو System
-            'action'      => $action,
-            'old_status'  => $asset->getOriginal('status'),
-            'new_status'  => $asset->status,
+            'asset_id' => $asset->id,
+            'user_id' => Auth::id() ?? 1, // 1 غالباً بيكون الـ Admin أو System
+            'action' => $action,
+            'old_status' => $asset->getOriginal('status')->value,
+            'new_status' => $asset->status->value,
             'description' => $description,
         ]);
     }
@@ -45,14 +45,14 @@ class AssetObserver
         $changes = [];
 
         if ($asset->wasChanged('status')) {
-            $old       = $asset->getOriginal('status');
-            $new       = $asset->status;
+            $old = $asset->getOriginal('status')->value;
+            $new = $asset->status->value;
             $changes[] = __("Status changed from :old to :new", ['old' => $old, 'new' => $new]);
         }
 
         if ($asset->wasChanged('user_id')) {
-            $oldUser   = \App\Models\User::find($asset->getOriginal('user_id'))?->name ?? __('Nobody');
-            $newUser   = $asset->user?->name ?? __('Nobody');
+            $oldUser = \App\Models\User::find($asset->getOriginal('user_id'))?->name ?? __('Nobody');
+            $newUser = $asset->user?->name ?? __('Nobody');
             $changes[] = __("Ownership transferred from :old to :new", ['old' => $oldUser, 'new' => $newUser]);
         }
 
@@ -62,7 +62,7 @@ class AssetObserver
             $changes[] = __("Transferred from branch :old to :new", ['old' => $oldBranch, 'new' => $newBranch]);
         }
 
-        return ! empty($changes)
+        return !empty($changes)
             ? implode(' | ', $changes)
             : __('General details updated.');
     }

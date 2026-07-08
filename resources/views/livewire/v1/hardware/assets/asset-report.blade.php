@@ -1,7 +1,7 @@
 <div class="container-fluid p-5">
     <div class="row">
         <div class="col-md-2">
-            <img src="{{ asset('asset/images/hpd.png') }}" alt="" srcset="" style="width: 200px;">
+            <img src="{{ asset('asset/images/logo.png') }}" alt="" srcset="" style="width: 200px;">
         </div>
         <div class="col-md-10">
             <h1 class="text-center">{{ __('IT Asset Receipt') }}</h1>

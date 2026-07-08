@@ -54,7 +54,7 @@ class asset extends Model
 
     public function isAssigned()
     {
-        return $this->status === 'assigned';
+        return $this->status === AssetStatusEnum::Assigned;
     }
 
 

@@ -392,7 +392,7 @@
                         <span
                             style="background: rgba(13,110,253,.1); color: #0d6efd;
                         border-radius: 20px; padding: 3px 10px; font-size: 11px; font-weight: 700;">
-                            {{ ucfirst($asset->status) }}
+                            {{ ucfirst($asset->status->label()) }}
                         </span>
                     </div>
                 @endif
