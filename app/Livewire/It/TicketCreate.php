@@ -1,102 +1,96 @@
 <?php
+
 namespace App\Livewire\It;
 
+use App\Core\DTO\TicketDTO;
 use App\Core\Enum\TicketStatus;
+use App\Core\Services\TicketService;
 use App\Models\Category;
-use App\Models\Ticket;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Notification;
 use Livewire\Component;
 use Livewire\WithFileUploads;
 
 class TicketCreate extends Component
 {
     use WithFileUploads;
-    public $title, $description, $category_id, $image, $tickets, $content = '';
-    public $categories;
 
-    protected $listeners = ['ticketCreated' => 'mount'];
+    // ══════════════ Properties ══════════════
+    public string $title       = '';
+    public string $description = '';
+    public string $content     = '';
+    public        $image       = null;
+    public ?int   $category_id = null;
+    public        $tickets     = [];
+    public        $categories;
 
-    public function newTicketDetected()
+    // ══════════════ Listeners ══════════════
+    protected $listeners = ['ticketCreated' => 'refreshTickets'];
+
+    // ══════════════ Inject Service via boot() ══════════════
+    protected TicketService $ticketService;
+
+    public function boot(TicketService $ticketService): void
     {
-        $ticket = Ticket::latest()->first();
-        broadcast(new \App\Events\NewTicketEvent($ticket))->toOthers();
-        // $this->dispatch('new-ticket-detected', [
-        //     'user'      => Auth::user()->name
-        // ]);
+        $this->ticketService = $ticketService;
     }
 
-    public function mount()
+    // ══════════════ Mount ══════════════
+    public function mount(): void
     {
-        $this->categories = Category::all();
+        $this->categories  = Category::all();
+        $this->category_id = Auth::user()->category_id;
         $this->refreshTickets();
     }
 
-    public function refreshTickets()
+    // ══════════════ Refresh Tickets ══════════════
+    public function refreshTickets(): void
     {
-        $this->category_id = Auth::user()->category_id;
-        $id                = Auth::user()->id;
-
-        $this->tickets = Ticket::query()->where('user_id', $id)->with('category')->latest()->get();
+        $this->tickets = $this->ticketService->getUserTickets(Auth::id());
     }
 
-    public function submit()
+    // ══════════════ Submit ══════════════
+    public function submit(): void
     {
         $this->validate([
-            'title'       => 'required',
-            'description' => 'required',
+            'title'       => 'required|string|max:255',
+            'description' => 'required|string',
             'category_id' => 'required|exists:categories,id',
             'image'       => 'nullable|image|max:2048',
         ]);
 
-        $ticket = Ticket::create([
+        // بناء الـ DTO
+        $dto = TicketDTO::fromArray([
             'title'       => $this->title,
             'description' => $this->description,
             'user_id'     => Auth::id(),
             'category_id' => $this->category_id,
-            'status'      => 'new',
         ]);
 
-        if ($this->image) {
-            $path = $this->image->store('tickets', 'public');
-            $ticket->image()->create(['file_path' => $path]);
-        }
+        $this->ticketService->create($dto, $this->image);
 
-        // تجهيز البيانات الموحدة
-        $notificationData = [
-            'user'      => Auth::user()->name,
-            'subject'   => $this->title,
-            'ticket_id' => $ticket->id,
-            'url'       => route('it.tickets.show', $ticket->id),
-        ];
-
-        // أ- إرسال للمتصفح الحالي (لو محتاج يظهر لصاحب الطلب)
-        $this->dispatch('new-ticket-detected', $notificationData);
-
-        // ب- إرسال عبر Reverb (بث مباشر لكل الأدمنز المتصلين)
-        // تأكد أن كلاس NewTicketEvent يستقبل التذكرة ويجهز البيانات في خاصية $ticketData
-        broadcast(new \App\Events\NewTicketEvent($ticket));
-
-        // ج- إرسال Notification للداتابيز (ليراها الأدمن في قائمة الإشعارات لاحقاً)
-        // سنرسلها لكل الأدمنز أو لموظف معين
-        $admins = \App\Models\User::where('role', 'admin')->get();
-        Notification::send($admins, new \App\Notifications\TicketUpdatedNotification($notificationData));
+        $this->dispatch('new-ticket-detected', [
+            'user'    => Auth::user()->name,
+            'subject' => $this->title,
+        ]);
 
         $this->dispatch('refresh-summernote');
         $this->dispatch('ticketCreated');
         $this->reset(['title', 'description', 'image']);
     }
-    public function deleteTicket($id)
+
+    // ══════════════ Delete ══════════════
+    public function deleteTicket(int $id): void
     {
-        $ticket_id = $id;
-        $q         = Ticket::query()->find($ticket_id);
-        $q->delete();
-        session()->flash('message', 'Ticket Canceld Successfully.');
+        $this->ticketService->delete($id);
+        session()->flash('message', 'Ticket Cancelled Successfully.');
         $this->refreshTickets();
     }
 
+    // ══════════════ Render ══════════════
     public function render()
     {
-        return view('livewire.it.ticket-create',['statuses'=> TicketStatus::cases()]);
+        return view('livewire.it.ticket-create', [
+            'statuses' => TicketStatus::cases(),
+        ]);
     }
 }

@@ -1,12 +1,20 @@
 <?php
 namespace App\Models;
 
+
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 
 class asset extends Model
 {
     protected $guarded = [];
-    protected $casts   = ['warranty_expiry' => 'date', 'purchase_price' => 'decimal:2'];
+    // protected $casts = ['warranty_expiry' => 'date'];
+
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'user_id');
+    }
 
     public function category()
     {
@@ -48,6 +56,8 @@ class asset extends Model
         return $this->status === 'assigned';
     }
 
+
+
     public function Transfer()
     {
         return $this->hasMany(asset_transfer::class);
@@ -65,4 +75,23 @@ class asset extends Model
             $asset->asset_tag = 'TAG-' . str_pad(asset::count() + 1, 5, '0', STR_PAD_LEFT);
         });
     }
+    public function attributes()
+    {
+        return $this->belongsToMany(attributes::class, 'asset_attribute')
+            ->withPivot('value');
+    }
+
+    public function specs()
+    {
+        return $this->hasMany(asset_attribute::class, 'asset_id');
+    }
+
+    public function warranty_expiry(): Attribute
+    {
+        return Attribute::make(
+            get: fn($value) => $value ? Carbon::parse($value)->format('Y-m-d') : null,
+        );
+    }
+
+
 }

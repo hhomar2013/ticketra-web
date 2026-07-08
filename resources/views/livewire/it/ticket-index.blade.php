@@ -6,8 +6,8 @@
         {{-- ===================== HEADER ===================== --}}
         <div class="d-flex justify-content-between align-items-center mb-4 bg-white p-4 shadow-sm rounded-lg border-bottom">
             <div>
-                <h2 class="font-bold text-2xl text-gray-800 mb-0">
-                    <i class="fas fa-ticket me-2"></i>{{ __('Tickets') }}
+                <h2 class="font-bold text-2xl  mb-0">
+                    <i class="fas fa-ticket me-2 text-warning"></i>{{ __('Tickets') }}
                 </h2>
                 <p class="text-muted small mb-0">
                     {{ __('Management and follow-up of technical support tickets') }}

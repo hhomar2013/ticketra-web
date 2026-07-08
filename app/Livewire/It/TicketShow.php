@@ -23,9 +23,9 @@ class TicketShow extends Component
     public $statuses;
     public function mount($id)
     {
-        $this->ticket = Ticket::with('replies.user', 'feedback')->findOrFail($id);
+        $this->ticket   = Ticket::with('replies.user', 'feedback')->findOrFail($id);
         $this->statuses = TicketStatus::cases();
-        // ✅ لو موظف IT وفتح التذكرة وملهاش حد معين - اتعين عليه تلقائي
+
         if (Auth::user()->hasRole('it') && is_null($this->ticket->assigned_to)) {
             $this->ticket->update(['assigned_to' => Auth::id()]);
             $this->ticket->refresh();
@@ -90,52 +90,110 @@ class TicketShow extends Component
 
     public function update_Status()
     {
-        if ($this->status == 'new') {
-            $this->ticket->update(['status' => 'new']);
-            $displayStatus = 'New';
-        } else {
-            $this->validate(['status' => 'required|in:open,in_progress,closed']);
-            $this->ticket->update(['status' => $this->status]);
-
-            $displayStatus = match ($this->status) {
-                'open'        => 'Opened',
-                'in_progress' => 'In Progress',
-                'closed'      => 'Closed',
-                default       => $this->status
-            };
+        // 1. التحويل من String لـ Enum لضمان صحة البيانات
+        $newStatus = TicketStatus::tryFrom($this->status);
+        if (! $newStatus) {
+            $this->dispatch('show-toast', ['message' => 'Invalid Status', 'type' => 'error']);
+            return;
         }
 
+        // 2. تحديث التذكرة باستخدام الـ Enum
+        $this->ticket->update([
+            'status' => $newStatus->value,
+        ]);
+
+        // 3. استخدام ميثود الـ label() من الـ Enum بدل الـ match اليدوي
+        $displayStatus = $newStatus->label();
+
+        // 4. إنشاء الرد (Reply)
         $reply = TicketReply::create([
             'ticket_id' => $this->ticket->id,
             'user_id'   => Auth::id(),
-            'message'   => "Your Ticket status has been changed to: " . $displayStatus,
+            'message'   => "changed to: " . $displayStatus,
         ]);
 
-        // ✅ Broadcast للتاني
+        // ✅ Broadcast (للطرف الآخر)
         broadcast(new \App\Events\NewTicketReply($reply->load('user')))->toOthers();
 
-        // ✅ إظهار الرسالة لصاحبها فوراً
+        // ✅ إظهار الرسالة في نفس اللحظة (Current User)
         $this->dispatch('reply-added', [
             'message'       => $reply->message,
             'user_id'       => Auth::id(),
             'user_name'     => Auth::user()->name,
             'created_at'    => now()->format('h:i A'),
-            'ticket_status' => $this->status,
+            'ticket_status' => $newStatus->value,
         ]);
 
-        $this->ticket->user?->notify(new \App\Notifications\TicketUpdatedNotification([
-            'ticket_id' => $this->ticket->id,
-            'title'     => "Status update : " . $this->ticket->title,
-            'message'   => $displayStatus,
-            'user_name' => Auth::user()->name,
-            'type'      => 'status_change',
-        ]));
+        // 5. إرسال الإشعار لصاحب التذكرة
+        if ($this->ticket->user) {
+            $this->ticket->user->notify(new \App\Notifications\TicketUpdatedNotification([
+                'ticket_id' => $this->ticket->id,
+                'title'     => "Status update: " . $this->ticket->title,
+                'message'   => "Ticket status changed to " . $displayStatus,
+                'user_name' => Auth::user()->name,
+                'type'      => 'status_change',
+            ]));
+        }
 
+        // 6. التحديثات النهائية للـ UI
         $this->dispatch('refreshNotifications');
-        // $this->dispatch('ticket-status-updated', status: $this->status);
-        $this->dispatch('show-toast', ['message' => 'Status has been updated', 'type' => 'success']);
+        $this->dispatch('show-toast', [
+            'message' => 'Status has been updated to ' . $displayStatus,
+            'type'    => 'success',
+        ]);
+
+        // إعادة تحميل البيانات للتحديث
         $this->ticket->load('replies.user');
     }
+
+    // public function update_Status()
+    // {
+    //     if ($this->status == 'new') {
+    //         $this->ticket->update(['status' => 'new']);
+    //         $displayStatus = 'New';
+    //     } else {
+    //         $this->validate(['status' => 'required|in:open,in_progress,closed']);
+    //         $this->ticket->update(['status' => $this->status]);
+
+    //         $displayStatus = match ($this->status) {
+    //             'open'        => 'Opened',
+    //             'in_progress' => 'In Progress',
+    //             'closed'      => 'Closed',
+    //             default       => $this->status
+    //         };
+    //     }
+
+    //     $reply = TicketReply::create([
+    //         'ticket_id' => $this->ticket->id,
+    //         'user_id'   => Auth::id(),
+    //         'message'   => "Your Ticket status has been changed to: " . $displayStatus,
+    //     ]);
+
+    //     // ✅ Broadcast للتاني
+    //     broadcast(new \App\Events\NewTicketReply($reply->load('user')))->toOthers();
+
+    //     // ✅ إظهار الرسالة لصاحبها فوراً
+    //     $this->dispatch('reply-added', [
+    //         'message'       => $reply->message,
+    //         'user_id'       => Auth::id(),
+    //         'user_name'     => Auth::user()->name,
+    //         'created_at'    => now()->format('h:i A'),
+    //         'ticket_status' => $this->status,
+    //     ]);
+
+    //     $this->ticket->user?->notify(new \App\Notifications\TicketUpdatedNotification([
+    //         'ticket_id' => $this->ticket->id,
+    //         'title'     => "Status update : " . $this->ticket->title,
+    //         'message'   => $displayStatus,
+    //         'user_name' => Auth::user()->name,
+    //         'type'      => 'status_change',
+    //     ]));
+
+    //     $this->dispatch('refreshNotifications');
+    //     // $this->dispatch('ticket-status-updated', status: $this->status);
+    //     $this->dispatch('show-toast', ['message' => 'Status has been updated', 'type' => 'success']);
+    //     $this->ticket->load('replies.user');
+    // }
 
     #[On('deleteReply')] // ✅ Livewire 3 syntax
     public function deleteReply($id)

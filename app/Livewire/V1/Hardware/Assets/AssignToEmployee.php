@@ -7,7 +7,7 @@ use App\Models\branch;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
-
+use App\Core\Enum\AssetStatus as AssetStatusEnum;
 class AssignToEmployee extends Component
 {
 
@@ -20,15 +20,15 @@ class AssignToEmployee extends Component
     public function mount($id = null)
     {
         $this->branch = branch::all();
-        $this->asset  = asset::find($id);
+        $this->asset = asset::find($id);
         // ✅ جيب الـ IDs اللي عندهم assets مرتبطة بيهم
         $assignedUserIds = asset::whereNotNull('user_id')
-            ->where('status', 'assigned')
+            ->where('status', AssetStatusEnum::Assigned->value)
             ->pluck('user_id');
 
         // ✅ استثنيهم
         $this->employees = User::role('user')
-        // ->whereNotIn('id', $assignedUserIds)
+            // ->whereNotIn('id', $assignedUserIds)
             ->latest()
             ->get();
     }
@@ -42,17 +42,17 @@ class AssignToEmployee extends Component
     {
         $this->validate([
             'employee_id' => 'required',
-            'branch_id'   => 'required',
+            'branch_id' => 'required',
         ]);
 
         $q = AssetAssignment::query()->create([
-            'asset_id'            => $this->asset->id,
-            'user_id'             => $this->employee_id,
-            'branch_id'           => $this->branch_id,
-            'assigned_by'         => Auth::user()->id,
-            'assigned_at'         => now(),
+            'asset_id' => $this->asset->id,
+            'user_id' => $this->employee_id,
+            'branch_id' => $this->branch_id,
+            'assigned_by' => Auth::user()->id,
+            'assigned_at' => now(),
             'condition_on_assign' => __('Asset Assigned to Employee'),
-            'notes'               => $this->notes ?? '',
+            'notes' => $this->notes ?? '',
         ]);
         if ($q) {
             $this->dispatch('alert', type: 'success', message: __('Asset Assigned to Employee Successfully'));

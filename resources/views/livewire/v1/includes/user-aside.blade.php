@@ -29,14 +29,14 @@
                         <span class="hide-menu">{{ __('Tickets') }}</span>
                     </li>
                     <li class="sidebar-item">
-                        <a class="sidebar-link" href="{{ route('tickets.create') }}" aria-expanded="false">
+                        <a class="sidebar-link {{ request()->routeIs('*.tickets.*') ? 'active' : '' }}" href="{{ route('tickets.create') }}" aria-expanded="false">
                             <span>
                                 <iconify-icon icon="solar:layers-minimalistic-bold-duotone" class="fs-6"></iconify-icon>
                             </span>
                             <span class="hide-menu">{{ __('New Ticket') }}</span>
                         </a>
                     </li>
-               
+
                 </ul>
 
             </nav>

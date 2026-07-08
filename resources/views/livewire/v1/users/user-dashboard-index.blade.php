@@ -1,3 +1,5 @@
+@use('App\Core\Enum\TicketStatus')
+
 <div>
     @push('styles')
     <style>
@@ -8,16 +10,22 @@
             overflow: hidden;
             position: relative;
         }
+
         .stat-card:hover {
             transform: translateY(-5px);
-            box-shadow: 0 16px 32px rgba(0,0,0,.1) !important;
+            box-shadow: 0 16px 32px rgba(0, 0, 0, .1) !important;
         }
+
         .stat-card .icon-box {
-            width: 52px; height: 52px;
+            width: 52px;
+            height: 52px;
             border-radius: 14px;
-            display: flex; align-items: center; justify-content: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             font-size: 22px;
         }
+
         .stat-card .card-stripe {
             height: 4px;
             width: 100%;
@@ -25,17 +33,19 @@
 
         .ticket-item {
             border-radius: 14px;
-            border: 1px solid rgba(0,0,0,.06);
+            border: 1px solid rgba(0, 0, 0, .06);
             transition: box-shadow .2s, transform .15s;
             background: #fff;
         }
+
         .ticket-item:hover {
-            box-shadow: 0 6px 20px rgba(0,0,0,.08);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, .08);
             transform: translateY(-2px);
         }
 
         .status-dot {
-            width: 8px; height: 8px;
+            width: 8px;
+            height: 8px;
             border-radius: 50%;
             display: inline-block;
         }
@@ -47,34 +57,41 @@
             overflow: hidden;
             position: relative;
         }
+
         .welcome-card::before {
             content: '';
             position: absolute;
-            top: -40px; right: -40px;
-            width: 180px; height: 180px;
+            top: -40px;
+            right: -40px;
+            width: 180px;
+            height: 180px;
             border-radius: 50%;
-            background: rgba(255,255,255,.08);
+            background: rgba(255, 255, 255, .08);
         }
+
         .welcome-card::after {
             content: '';
             position: absolute;
-            bottom: -30px; right: 60px;
-            width: 120px; height: 120px;
+            bottom: -30px;
+            right: 60px;
+            width: 120px;
+            height: 120px;
             border-radius: 50%;
-            background: rgba(255,255,255,.05);
+            background: rgba(255, 255, 255, .05);
         }
 
         .quick-action {
             border-radius: 14px;
-            border: 1.5px dashed rgba(13,110,253,.3);
-            background: rgba(13,110,253,.03);
+            border: 1.5px dashed rgba(13, 110, 253, .3);
+            background: rgba(13, 110, 253, .03);
             transition: all .2s;
             cursor: pointer;
             text-decoration: none;
         }
+
         .quick-action:hover {
             border-color: #0d6efd;
-            background: rgba(13,110,253,.08);
+            background: rgba(13, 110, 253, .08);
             transform: translateY(-2px);
         }
 
@@ -84,13 +101,35 @@
         }
 
         .avatar-circle {
-            width: 46px; height: 46px;
+            width: 46px;
+            height: 46px;
             border-radius: 50%;
             background: linear-gradient(135deg, #0d6efd, #6ea8fe);
-            display: flex; align-items: center; justify-content: center;
-            font-size: 16px; font-weight: 700; color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            font-weight: 700;
+            color: #fff;
             flex-shrink: 0;
         }
+
+        .bg-primary-subtle {
+            background-color: #cfe2ff !important;
+        }
+
+        .bg-success-subtle {
+            background-color: #d1e7dd !important;
+        }
+
+        .bg-warning-subtle {
+            background-color: #fff3cd !important;
+        }
+
+        .bg-secondary-subtle {
+            background-color: #e2e3e5 !important;
+        }
+
     </style>
     @endpush
 
@@ -109,8 +148,7 @@
                     <p class="text-white text-opacity-75 mb-3 small">
                         {{ __('Track and manage your support tickets from here.') }}
                     </p>
-                    <a href="{{ route('tickets.create') }}"
-                        class="btn btn-light btn-sm fw-bold px-4 rounded-pill shadow-sm">
+                    <a href="{{ route('tickets.create') }}" class="btn btn-light btn-sm fw-bold px-4 rounded-pill shadow-sm">
                         <i class="fa fa-plus me-1 text-primary"></i>
                         {{ __('New Ticket') }}
                     </a>
@@ -201,64 +239,49 @@
                                 <h6 class="fw-bold mb-0">{{ __('Recent Tickets') }}</h6>
                                 <small class="text-muted">{{ __('Your latest submissions') }}</small>
                             </div>
-                            <a href="{{ route('tickets.create') }}"
-                                class="btn btn-outline-primary btn-sm rounded-pill px-3">
+                            <a href="{{ route('tickets.create') }}" class="btn btn-outline-primary btn-sm rounded-pill px-3">
                                 {{ __('View All') }} <i class="fa fa-arrow-right ms-1"></i>
                             </a>
                         </div>
 
                         <div class="vstack gap-2">
                             @forelse ($recentTickets as $ticket)
-                                <a href="{{ route('user.tickets.show', $ticket->id) }}"
-                                    class="ticket-item p-3 d-flex align-items-center gap-3 text-decoration-none">
+                            <a href="{{ route('it.tickets.show', $ticket->id) }}" class="ticket-item p-3 d-flex align-items-center gap-3 text-decoration-none">
 
-                                    {{-- Icon --}}
-                                    <div style="width: 40px; height: 40px; min-width: 40px; border-radius: 12px;
-                                        display: flex; align-items: center; justify-content: center;
-                                        @if($ticket->status=='closed') background: rgba(25,135,84,.1);
-                                        @elseif($ticket->status=='in_progress') background: rgba(255,193,7,.1);
-                                        @elseif($ticket->status=='open') background: rgba(13,110,253,.1);
-                                        @else background: rgba(108,117,125,.1); @endif">
-                                        <i class="fa
-                                            @if($ticket->status=='closed') fa-check-circle text-success
-                                            @elseif($ticket->status=='in_progress') fa-spinner text-warning
-                                            @elseif($ticket->status=='open') fa-ticket text-primary
-                                            @else fa-inbox text-secondary @endif">
-                                        </i>
-                                    </div>
-
-                                    {{-- Info --}}
-                                    <div class="flex-fill" style="min-width: 0;">
-                                        <div class="fw-bold text-dark text-truncate small">
-                                            {{ $ticket->title }}
-                                        </div>
-                                        <div class="text-muted" style="font-size: 11px;">
-                                            <i class="fa fa-building me-1 opacity-50"></i>
-                                            {{ $ticket->category->name }}
-                                            <span class="mx-1">•</span>
-                                            {{ $ticket->created_at->diffForHumans() }}
-                                        </div>
-                                    </div>
-
-                                    {{-- Status --}}
-                                    <span class="badge rounded-pill px-3 flex-shrink-0
-                                        @if($ticket->status=='new')         bg-secondary-subtle text-secondary
-                                        @elseif($ticket->status=='open')        bg-primary-subtle   text-primary
-                                        @elseif($ticket->status=='in_progress') bg-warning-subtle   text-warning
-                                        @elseif($ticket->status=='closed')      bg-success-subtle   text-success
-                                        @endif">
-                                        {{ ucfirst($ticket->status) }}
-                                    </span>
-                                </a>
-                            @empty
-                                <div class="text-center text-muted py-5">
-                                    <i class="fa fa-ticket fa-3x d-block mb-3 opacity-25"></i>
-                                    <p class="mb-2">{{ __('No tickets yet') }}</p>
-                                    <a href="{{ route('tickets.create') }}"
-                                        class="btn btn-primary btn-sm rounded-pill px-4">
-                                        {{ __('Submit your first ticket') }}
-                                    </a>
+                                {{-- Icon ✅ --}}
+                                <div style="width:40px;height:40px;min-width:40px;border-radius:12px;
+                                        display:flex;align-items:center;justify-content:center;
+                                        background: rgba({{ $ticket->status === TicketStatus::Closed ? '25,135,84' : ($ticket->status === TicketStatus::InProgress ? '255,193,7' : ($ticket->status === TicketStatus::Open ? '13,110,253' : '108,117,125')) }},.1);">
+                                    <i class="fa {{ $ticket->status === TicketStatus::Closed ? 'fa-check-circle text-success' : ($ticket->status === TicketStatus::InProgress ? 'fa-spinner text-warning' : ($ticket->status === TicketStatus::Open ? 'fa-ticket text-primary' : 'fa-inbox text-secondary')) }}"></i>
                                 </div>
+
+                                {{-- Info --}}
+                                <div class="flex-fill" style="min-width: 0;">
+                                    <div class="fw-bold text-dark text-truncate small">
+                                        {{ $ticket->title }}
+                                    </div>
+                                    <div class="text-muted" style="font-size: 11px;">
+                                        <i class="fa fa-building me-1 opacity-50"></i>
+                                        {{ $ticket->category->name }}
+                                        <span class="mx-1">•</span>
+                                        {{ $ticket->created_at->diffForHumans() }}
+                                    </div>
+                                </div>
+
+                                {{-- Status Badge ✅ --}}
+                                <span class="badge rounded-pill px-3 flex-shrink-0 {{ $ticket->status->subColor() }}">
+                                    {{ $ticket->status->emoji() }} {{ $ticket->status->label() }}
+                                </span>
+
+                            </a>
+                            @empty
+                            <div class="text-center text-muted py-5">
+                                <i class="fa fa-ticket fa-3x d-block mb-3 opacity-25"></i>
+                                <p class="mb-2">{{ __('No tickets yet') }}</p>
+                                <a href="{{ route('tickets.create') }}" class="btn btn-primary btn-sm rounded-pill px-4">
+                                    {{ __('Submit your first ticket') }}
+                                </a>
+                            </div>
                             @endforelse
                         </div>
                     </div>
@@ -276,9 +299,9 @@
                             <small class="text-muted d-block mb-3">{{ __('Your tickets progress') }}</small>
 
                             @php
-                                $rate = $totalTickets > 0
-                                    ? round(($closedTickets / $totalTickets) * 100)
-                                    : 0;
+                            $rate = $totalTickets > 0
+                            ? round(($closedTickets / $totalTickets) * 100)
+                            : 0;
                             @endphp
 
                             <div class="d-flex align-items-center gap-3 mb-3">
@@ -289,8 +312,7 @@
                                 <div class="flex-fill">
                                     <div class="progress progress-thin">
                                         <div class="progress-bar
-                                            {{ $rate >= 70 ? 'bg-success' : ($rate >= 40 ? 'bg-warning' : 'bg-primary') }}"
-                                            style="width: {{ $rate }}%">
+                                            {{ $rate >= 70 ? 'bg-success' : ($rate >= 40 ? 'bg-warning' : 'bg-primary') }}" style="width: {{ $rate }}%">
                                         </div>
                                     </div>
                                     <small class="text-muted mt-1 d-block">
@@ -357,13 +379,4 @@
 
         </div>
     </div>
-
-    @push('styles')
-    <style>
-        .bg-primary-subtle   { background-color: #cfe2ff !important; }
-        .bg-success-subtle   { background-color: #d1e7dd !important; }
-        .bg-warning-subtle   { background-color: #fff3cd !important; }
-        .bg-secondary-subtle { background-color: #e2e3e5 !important; }
-    </style>
-    @endpush
 </div>

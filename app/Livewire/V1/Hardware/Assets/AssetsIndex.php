@@ -1,44 +1,70 @@
 <?php
 namespace App\Livewire\V1\Hardware\Assets;
 
+use App\Core\Enum\AssetReturnStatus;
 use App\Models\asset;
 use App\Models\AssetAssignment;
 use App\Models\asset_transfer;
 use App\Models\branch;
+use App\Models\brand;
+use App\Models\Category;
 use Illuminate\Support\Facades\Auth;
+use Livewire\Attributes\Computed;
 use Livewire\Component;
-
+use Livewire\WithPagination;
+use App\Core\Enum\AssetStatus;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\AssetsTemplateExport;
 class AssetsIndex extends Component
 {
-
-    public $assets;
+    use WithPagination;
+    protected $paginationTheme = 'bootstrap';
+    // public $assets;
     public $branches;
     public $branch_id;
     public $status = ['available', 'assigned', 'under_repair', 'retired'];
     public $search;
-    public $sortField     = 'id';
+    public $sortField = 'id';
     public $sortDirection = 'asc';
-    public $searchField   = 'id';
-    public $IsReturn      = false;
+    public $searchField = 'id';
+    public $IsReturn = false;
     public $selectedAsset;
     public $condition_on_return = '', $notes = '', $returned_at;
-    protected $listeners        = [
+    public $perPage = 10;
+    protected $listeners = [
         'refreshAssetTable' => 'mount',
-        'delete-asset'      => 'deleteAsset',
+        'delete-asset' => 'deleteAsset',
     ];
+
+    public $returnStatuses;
 
     public function mount()
     {
-        $this->assets = asset::query()->with(['category', 'branch', 'brand', 'typeModel'])
-            ->where('asset_tag', 'like', '%' . $this->search . '%')
-            ->orWhere('serial_number', 'like', '%' . $this->search . '%')
-            ->orderBy($this->sortField, $this->sortDirection)
-            ->get();
+        // $this->assets = asset::query()->with(['category', 'branch', 'brand', 'typeModel'])
+        //     ->where('asset_tag', 'like', '%' . $this->search . '%')
+        //     ->orWhere('serial_number', 'like', '%' . $this->search . '%')
+        //     ->orderBy($this->sortField, $this->sortDirection)
+        //     ->paginate(10);
         $this->branches = branch::all();
+        $this->returnStatuses = AssetReturnStatus::cases();
+
+    }
+
+    #[Computed]
+    public function assets()
+    {
+        return asset::query()->with(['category', 'branch', 'brand', 'typeModel', 'specs'])
+            ->when($this->search, function ($query) {
+                $query->where('asset_tag', 'like', '%' . $this->search . '%')
+                    ->orWhere('serial_number', 'like', '%' . $this->search . '%');
+            })
+            ->orderBy($this->sortField, $this->sortDirection)
+            ->paginate($this->perPage);
     }
 
     public function updatedSearch()
     {
+        $this->resetPage();
         $this->mount();
     }
 
@@ -60,7 +86,7 @@ class AssetsIndex extends Component
             $this->sortDirection = $this->sortDirection === 'asc' ? 'desc' : 'asc';
         }
 
-        $this->sortField   = $field;
+        $this->sortField = $field;
         $this->searchField = $value;
         $this->mount();
     }
@@ -88,6 +114,11 @@ class AssetsIndex extends Component
         return redirect()->route('hardware.assets.assign-to-employee', $id);
     }
 
+    public function assetReceipt($id)
+    {
+        return redirect()->route('assets-reports.index', ['id' => $id]);
+    }
+
     public function returnToBranch($id)
     {
         $this->IsReturn = true;
@@ -107,35 +138,63 @@ class AssetsIndex extends Component
             ->first();
         $this->validate([
             'condition_on_return' => 'required',
-            'returned_at'         => 'required',
-            'branch_id'           => 'required',
+            'returned_at' => 'required',
+            'branch_id' => 'required',
         ]);
 
         if ($assignment) {
             $assignment->update([
-                'returned_at'         => now(),
+                'returned_at' => now(),
                 'condition_on_return' => $this->condition_on_return,
-                'returned_at'         => $this->returned_at,
-                'notes'               => $this->notes,
+                'returned_at' => $this->returned_at,
+                'notes' => $this->notes,
             ]);
             $asset = asset::find($this->selectedAsset->id);
             $asset->update([
-                'status'    => 'available',
+                'status' => 'available',
                 'branch_id' => $this->branch_id,
             ]);
 
             asset_transfer::create([
-                'asset_id'       => $asset->id,
+                'asset_id' => $asset->id,
                 'from_branch_id' => $assignment->branch_id, // الفرع القديم
-                'to_branch_id'   => $this->branch_id,       // الفرع الجديد
-                'action_by'      => Auth::user()->id,
-                'reason'         => $this->condition_on_return,
+                'to_branch_id' => $this->branch_id,       // الفرع الجديد
+                'action_by' => Auth::user()->id,
+                'reason' => $this->condition_on_return,
             ]);
         }
 
         $this->dispatch('hide-return-modal');
         $this->dispatch('refreshAssetTable');
         $this->reset(['selectedAsset', 'condition_on_return', 'returned_at', 'notes', 'branch_id']);
+    }
+
+
+    public function viewAsset($id)
+    {
+        $this->selectedAsset = [];
+        $this->selectedAsset = asset::query()->where('id', $id)->with('specs.attribute', 'typeModel')->firstOrFail();
+
+        // dd($this->selectedAsset);
+        $this->dispatch('show-view-modal');
+    }
+    public function downloadTemplate()
+    {
+        $branches = Branch::pluck('name')->toArray();
+        $categories = Category::pluck('name')->toArray();
+
+        // تعديل اسم العلاقة هنا إلى typeModels ليطابق الموديل
+        $brandsWithModels = Brand::with('typeModels')->get()->mapWithKeys(function ($brand) {
+            // استخدام Safe Navigation (?->) للتأكد في حال وجود براند بدون موديلات
+            $models = $brand->typeModels ? $brand->typeModels->pluck('name')->toArray() : [];
+
+            return [$brand->name => $models];
+        })->toArray();
+
+        return Excel::download(
+            new AssetsTemplateExport($branches, $categories, $brandsWithModels),
+            'assets_import_template.xlsx'
+        );
     }
 
     public function render()

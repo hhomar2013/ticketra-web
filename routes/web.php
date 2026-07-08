@@ -1,6 +1,5 @@
 <?php
 
-use App\Livewire\V1\Invoices\InvoiceBatches;
 use App\Livewire\It\TicketCreate;
 use App\Livewire\It\TicketIndex;
 use App\Livewire\It\TicketShow;
@@ -8,15 +7,19 @@ use App\Livewire\UserManager;
 use App\Livewire\V1\Admin\DashboardIndex;
 use App\Livewire\V1\Hardware\AssetCategories\AssetCategoriesCreate;
 use App\Livewire\V1\Hardware\AssetCategories\AssetCategoriesIndex;
+use App\Livewire\V1\Hardware\Assets\AssetReport;
 use App\Livewire\V1\Hardware\Assets\AssetsCreate;
 use App\Livewire\V1\Hardware\Assets\AssetsHistory;
 use App\Livewire\V1\Hardware\Assets\AssetsIndex;
 use App\Livewire\V1\Hardware\Assets\AssignToEmployee;
+use App\Livewire\V1\Hardware\Assets\OnlineAssets;
+use App\Livewire\V1\Hardware\Assets\ShowOnlineAsset;
 use App\Livewire\V1\Hardware\Branch\BranchCreate;
 use App\Livewire\V1\Hardware\Branch\BranchIndex;
 use App\Livewire\V1\Hardware\Brands\BrandsCreate;
 use App\Livewire\V1\Hardware\Brands\BrandsIndex;
 use App\Livewire\V1\Hardware\Brands\BrandsModels;
+use App\Livewire\V1\Invoices\InvoiceBatches;
 use App\Livewire\V1\Invoices\InvoiceCreate as InvoicesInvoiceCreate;
 use App\Livewire\V1\Invoices\InvoicesIndex;
 use App\Livewire\V1\Maintenance\InvoiceCreate;
@@ -32,8 +35,8 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
 
-    if (! Auth::check()) {
-        return redirect()->route('login'); // او الصفحة اللي عندك
+    if (!Auth::check()) {
+        return redirect()->route('login');
     }
 
     if (Auth::user()->hasRole('it')) {
@@ -43,11 +46,11 @@ Route::get('/', function () {
     return redirect()->route('user.dashboard');
 });
 
-Route::middleware(['auth', 'role:it'])->group(function () {
+Route::middleware(['auth'])->group(function () {
     Route::get('/dashboard', DashboardIndex::class)->name('admin.dashboard');
     Route::get('it/tickets', TicketIndex::class)->name('it.tickets.index');
     Route::get('it/tickets/create', TicketCreate::class)->name('it.tickets.create');
-    Route::get('it/tickets/{id}', TicketShow::class)->name('it.tickets.show');
+    Route::get('/tickets/{id}', TicketShow::class)->name('it.tickets.show');
     Route::get('admin/users', UserManager::class)->name('admin.users');
     Route::view('profile', 'profile')->name('profile');
     Route::get('hardware/branches', BranchIndex::class)->name('hardware.branches');
@@ -63,6 +66,10 @@ Route::middleware(['auth', 'role:it'])->group(function () {
     Route::get('hardware/brands/models/{id}', BrandsModels::class)->name('hardware.brands.models');
 
     Route::get('hardware/assets', AssetsIndex::class)->name('hardware.assets.index');
+    Route::prefix('hardware/assets-online')->name('hardware.assets-online.')->group(function () {
+        Route::get('/', OnlineAssets::class)->name('index');
+        Route::get('/{id}', ShowOnlineAsset::class)->name('show');
+    });//agent traking assets
     Route::get('hardware/assets/create/', AssetsCreate::class)->name('hardware.assets.create');
     Route::get('hardware/assets/edit/{id}', AssetsCreate::class)->name('hardware.assets.edit');
     Route::get('hardware/assets/history/{id}', AssetsHistory::class)->name('hardware.assets.history');
@@ -88,12 +95,16 @@ Route::middleware(['auth', 'role:it'])->group(function () {
         Route::get('/{id}/batches', InvoiceBatches::class)->name('batches');
     });
 
+    Route::prefix('assets-reports')->name('assets-reports.')->group(function () {
+        Route::get('/{id}', AssetReport::class)->name('index');
+    });
+
 });
 
-Route::middleware(['auth', 'role:user'])->group(function () {
+Route::middleware(['auth'])->group(function () {
     Route::get('/founders/dashboard', UserDashboardIndex::class)->name('user.dashboard');
     Route::get('it/tickets/create', TicketCreate::class)->name('tickets.create');
-    Route::get('/founders/tickets/{id}', TicketShow::class)->name('user.tickets.show');
+    // Route::get('/tickets/{id}', TicketShow::class)->name('tickets.show');
     Route::view('profile', 'profile')->name('profile');
 });
 

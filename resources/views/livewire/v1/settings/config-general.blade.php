@@ -1,142 +1,195 @@
 <div>
     @push('styles')
-    <style>
-        .setting-section {
-            background: #fff;
-            border: 1px solid #e5e7eb;
-            border-radius: 16px;
-            overflow: hidden;
-            margin-bottom: 20px;
-        }
-        .setting-section-header {
-            padding: 16px 20px;
-            background: #f9fafb;
-            border-bottom: 1px solid #e5e7eb;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-        .section-icon {
-            width: 32px; height: 32px;
-            border-radius: 9px;
-            display: flex; align-items: center; justify-content: center;
-            font-size: 14px;
-            flex-shrink: 0;
-        }
-        .setting-section-body { padding: 20px; }
+        {{-- <style>
+            .setting-section {
+                background: #fff;
+                border: 1px solid #e5e7eb;
+                border-radius: 16px;
+                overflow: hidden;
+                margin-bottom: 20px;
+            }
 
-        .setting-field label {
-            font-size: 12px;
-            font-weight: 700;
-            letter-spacing: .6px;
-            text-transform: uppercase;
-            color: #6b7280;
-            margin-bottom: 6px;
-            display: block;
-        }
-        .setting-field .field-hint {
-            font-size: 11px;
-            color: #9ca3af;
-            margin-top: 4px;
-        }
-        .s-input {
-            width: 100%;
-            border: 1.5px solid #e5e7eb;
-            border-radius: 10px;
-            padding: 10px 14px;
-            font-size: 14px;
-            color: #111827;
-            background: #f9fafb;
-            transition: all .2s;
-            outline: none;
-        }
-        .s-input:focus {
-            border-color: #0d6efd;
-            background: #fff;
-            box-shadow: 0 0 0 4px rgba(13,110,253,.08);
-        }
-        select.s-input { cursor: pointer; }
+            .setting-section-header {
+                padding: 16px 20px;
+                background: #f9fafb;
+                border-bottom: 1px solid #e5e7eb;
+                display: flex;
+                align-items: center;
+                gap: 10px;
+            }
 
-        /* Toggle Switch */
-        .toggle-wrap {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 14px 0;
-            border-bottom: 1px solid #f3f4f6;
-        }
-        .toggle-wrap:last-child { border-bottom: none; padding-bottom: 0; }
-        .toggle-wrap:first-child { padding-top: 0; }
-        .toggle-info h6 {
-            font-size: 14px; font-weight: 600;
-            color: #111827; margin-bottom: 2px;
-        }
-        .toggle-info p { font-size: 12px; color: #9ca3af; margin: 0; }
+            .section-icon {
+                width: 32px;
+                height: 32px;
+                border-radius: 9px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 14px;
+                flex-shrink: 0;
+            }
 
-        .toggle-switch {
-            position: relative;
-            width: 44px; height: 24px;
-            flex-shrink: 0;
-        }
-        .toggle-switch input { opacity: 0; width: 0; height: 0; }
-        .toggle-slider {
-            position: absolute;
-            cursor: pointer;
-            inset: 0;
-            background: #e5e7eb;
-            border-radius: 24px;
-            transition: .25s;
-        }
-        .toggle-slider::before {
-            content: '';
-            position: absolute;
-            width: 18px; height: 18px;
-            left: 3px; top: 3px;
-            background: #fff;
-            border-radius: 50%;
-            transition: .25s;
-            box-shadow: 0 1px 4px rgba(0,0,0,.15);
-        }
-        .toggle-switch input:checked + .toggle-slider { background: #0d6efd; }
-        .toggle-switch input:checked + .toggle-slider::before { transform: translateX(20px); }
+            .setting-section-body {
+                padding: 20px;
+            }
 
-        .save-bar {
-            position: sticky;
-            bottom: 0;
-            background: #fff;
-            border-top: 1px solid #e5e7eb;
-            padding: 16px 0;
-            margin-top: 8px;
-            z-index: 10;
-        }
-        .btn-save {
-            background: linear-gradient(135deg, #0d6efd, #0047c4);
-            border: none;
-            border-radius: 12px;
-            color: #fff;
-            font-size: 14px;
-            font-weight: 700;
-            padding: 12px 32px;
-            cursor: pointer;
-            transition: transform .15s, box-shadow .2s;
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-        }
-        .btn-save:hover  { transform: translateY(-1px); box-shadow: 0 8px 20px rgba(13,110,253,.3); }
-        .btn-save:active { transform: translateY(0); }
+            .setting-field label {
+                font-size: 12px;
+                font-weight: 700;
+                letter-spacing: .6px;
+                text-transform: uppercase;
+                color: #6b7280;
+                margin-bottom: 6px;
+                display: block;
+            }
 
-        .maintenance-banner {
-            background: linear-gradient(135deg, #fef3c7, #fde68a);
-            border: 1px solid #fbbf24;
-            border-radius: 12px;
-            padding: 14px 18px;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            margin-bottom: 16px;
-        }
-    </style>
+            .setting-field .field-hint {
+                font-size: 11px;
+                color: #9ca3af;
+                margin-top: 4px;
+            }
+
+            .s-input {
+                width: 100%;
+                border: 1.5px solid #e5e7eb;
+                border-radius: 10px;
+                padding: 10px 14px;
+                font-size: 14px;
+                color: #111827;
+                background: #f9fafb;
+                transition: all .2s;
+                outline: none;
+            }
+
+            .s-input:focus {
+                border-color: #0d6efd;
+                background: #fff;
+                box-shadow: 0 0 0 4px rgba(13, 110, 253, .08);
+            }
+
+            select.s-input {
+                cursor: pointer;
+            }
+
+            /* Toggle Switch */
+            .toggle-wrap {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                padding: 14px 0;
+                border-bottom: 1px solid #f3f4f6;
+            }
+
+            .toggle-wrap:last-child {
+                border-bottom: none;
+                padding-bottom: 0;
+            }
+
+            .toggle-wrap:first-child {
+                padding-top: 0;
+            }
+
+            .toggle-info h6 {
+                font-size: 14px;
+                font-weight: 600;
+                color: #111827;
+                margin-bottom: 2px;
+            }
+
+            .toggle-info p {
+                font-size: 12px;
+                color: #9ca3af;
+                margin: 0;
+            }
+
+            .toggle-switch {
+                position: relative;
+                width: 44px;
+                height: 24px;
+                flex-shrink: 0;
+            }
+
+            .toggle-switch input {
+                opacity: 0;
+                width: 0;
+                height: 0;
+            }
+
+            .toggle-slider {
+                position: absolute;
+                cursor: pointer;
+                inset: 0;
+                background: #e5e7eb;
+                border-radius: 24px;
+                transition: .25s;
+            }
+
+            .toggle-slider::before {
+                content: '';
+                position: absolute;
+                width: 18px;
+                height: 18px;
+                left: 3px;
+                top: 3px;
+                background: #fff;
+                border-radius: 50%;
+                transition: .25s;
+                box-shadow: 0 1px 4px rgba(0, 0, 0, .15);
+            }
+
+            .toggle-switch input:checked+.toggle-slider {
+                background: #0d6efd;
+            }
+
+            .toggle-switch input:checked+.toggle-slider::before {
+                transform: translateX(20px);
+            }
+
+            .save-bar {
+                position: sticky;
+                bottom: 0;
+                background: #fff;
+                border-top: 1px solid #e5e7eb;
+                padding: 16px 0;
+                margin-top: 8px;
+                z-index: 10;
+            }
+
+            .btn-save {
+                background: linear-gradient(135deg, #0d6efd, #0047c4);
+                border: none;
+                border-radius: 12px;
+                color: #fff;
+                font-size: 14px;
+                font-weight: 700;
+                padding: 12px 32px;
+                cursor: pointer;
+                transition: transform .15s, box-shadow .2s;
+                display: inline-flex;
+                align-items: center;
+                gap: 8px;
+            }
+
+            .btn-save:hover {
+                transform: translateY(-1px);
+                box-shadow: 0 8px 20px rgba(13, 110, 253, .3);
+            }
+
+            .btn-save:active {
+                transform: translateY(0);
+            }
+
+            .maintenance-banner {
+                background: linear-gradient(135deg, #fef3c7, #fde68a);
+                border: 1px solid #fbbf24;
+                border-radius: 12px;
+                padding: 14px 18px;
+                display: flex;
+                align-items: center;
+                gap: 12px;
+                margin-bottom: 16px;
+            }
+        </style> --}}
     @endpush
 
     <div>
@@ -177,8 +230,7 @@
                     <div class="col-lg-6 setting-field">
                         <label>{{ __('System Name') }}</label>
                         <input type="text" wire:model="app_name"
-                            class="s-input @error('app_name') border-danger @enderror"
-                            placeholder="My IT System">
+                            class="s-input @error('app_name') border-danger @enderror" placeholder="My IT System">
                         @error('app_name')
                             <div class="text-danger" style="font-size: 12px; margin-top: 4px;">{{ $message }}</div>
                         @enderror
@@ -297,8 +349,8 @@
                 @if ($auto_close)
                     <div class="mt-3 setting-field" style="max-width: 280px;">
                         <label>{{ __('Auto-Close After (days)') }}</label>
-                        <input type="number" wire:model="auto_close_days"
-                            class="s-input" min="1" max="365">
+                        <input type="number" wire:model="auto_close_days" class="s-input" min="1"
+                            max="365">
                         <div class="field-hint">
                             {{ __('Tickets inactive for this many days will be closed') }}
                         </div>

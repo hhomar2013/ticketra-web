@@ -7,7 +7,7 @@ use Livewire\Component;
 class AssetCategoriesCreate extends Component
 {
     public $category = null;
-    public $IsEdit   = false;
+    public $IsEdit = false;
     public $name;
     public $slug;
     public $description;
@@ -16,17 +16,17 @@ class AssetCategoriesCreate extends Component
     public function mount($id = null)
     {
         if ($id) {
-            $this->category    = asset_category::find($id);
-            $this->IsEdit      = true;
-            $this->name        = $this->category->name;
-            $this->slug        = $this->category->slug;
+            $this->category = asset_category::find($id);
+            $this->IsEdit = true;
+            $this->name = $this->category->name;
+            $this->slug = $this->category->slug;
             $this->description = $this->category->description;
             $this->category_id = $id;
         }
     }
     public function updatedName($value): void
     {
-        if (! $this->IsEdit) {
+        if (!$this->IsEdit) {
             $this->slug = \Illuminate\Support\Str::slug($value);
         }
     }
@@ -41,18 +41,18 @@ class AssetCategoriesCreate extends Component
         asset_category::query()->updateOrCreate([
             'id' => $this->category_id,
         ], [
-            'name'        => $this->name,
-            'slug'        => $this->slug,
+            'name' => $this->name,
+            'slug' => $this->slug,
             'description' => $this->description,
         ]);
 
-        $this->name        = '';
-        $this->slug        = '';
+        $this->name = '';
+        $this->slug = '';
         $this->description = '';
 
         $this->dispatch('refreshCategoryTable');
         $this->dispatch('show-toast', [
-            'type'    => 'success',
+            'type' => 'success',
             'message' => 'Category saved successfully',
         ]);
     }

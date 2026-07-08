@@ -1,19 +1,23 @@
 <?php
-
 namespace App\Events;
 
-use App\Models\Ticket;
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast; // مهم جداً
+use Illuminate\Contracts\Broadcasting\ShouldBroadcastNow;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
-class NewTicketEvent implements ShouldBroadcast
+class NewTicketEvent implements ShouldBroadcastNow
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
     public $ticketData;
+
+    public function broadcastAs(): string
+    {
+        return 'new-ticket';
+    }
 
     public function __construct($ticket)
     {

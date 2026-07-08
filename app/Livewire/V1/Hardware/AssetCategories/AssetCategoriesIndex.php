@@ -37,7 +37,7 @@ class AssetCategoriesIndex extends Component
         $category->delete();
         $this->dispatch('refreshCategoryTable');
         $this->dispatch('show-toast', [
-            'type'    => 'success',
+            'type' => 'success',
             'message' => 'Category deleted successfully',
         ]);
     }

@@ -277,7 +277,7 @@
 
                             {{-- Actions --}}
                             <div class="d-flex gap-2">
-                                <a href="{{ route('user.tickets.show', $ticket->id) }}"
+                                <a href="{{ route('it.tickets.show', $ticket->id) }}"
                                     class="btn btn-primary btn-sm rounded-pill flex-grow-1 fw-bold">
                                     <i class="fas fa-eye me-1"></i> {{ __('View') }}
                                 </a>

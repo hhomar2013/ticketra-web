@@ -4,16 +4,18 @@ namespace App\Events;
 use App\Models\TicketReply;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Broadcasting\PrivateChannel;
-use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
+use Illuminate\Contracts\Broadcasting\ShouldBroadcastNow;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
-class NewTicketReply implements ShouldBroadcast
+class NewTicketReply implements ShouldBroadcastNow
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
     public function __construct(public TicketReply $reply)
-    {}
+    {
+        $this->reply->loadMissing(['ticket', 'user']);
+    }
 
     public function broadcastOn(): array
     {
@@ -30,8 +32,7 @@ class NewTicketReply implements ShouldBroadcast
             'user_id'       => $this->reply->user_id,
             'user_name'     => $this->reply->user->name,
             'created_at'    => $this->reply->created_at->format('h:i A'),
-            'ticket_status' => $this->reply->ticket->status,
-
+            'ticket_status' => $this->reply->ticket?->status->value ?? 'open',
         ];
     }
 }

@@ -15,7 +15,7 @@ class PermissionsManagment extends Seeder
     public function run(): void
     {
 
-        $departmients = ['IT' , 'HR', 'Finance', 'Operations', 'Sales'];
+        $departmients = ['IT', 'HR', 'Finance', 'Operations', 'Sales'];
 
         foreach ($departmients as $dept) {
             Category::create(['name' => $dept]);
@@ -35,7 +35,7 @@ class PermissionsManagment extends Seeder
             'category_id' => Category::where('name', 'Finance')->first()->id,
         ]);
 
-// إنشاء صلاحيات
+        // إنشاء صلاحيات
         Permission::create(['name' => 'create tickets']);
         Permission::create(['name' => 'reply tickets']);
         Permission::create(['name' => 'manage tickets']);
@@ -49,12 +49,12 @@ class PermissionsManagment extends Seeder
 
 
 
-// إنشاء أدوار
+        // إنشاء أدوار
         $admin = Role::create(['name' => 'admin']);
         $agent = Role::create(['name' => 'agent']);
-        $user  = Role::create(['name' => 'user']);
+        $user = Role::create(['name' => 'user']);
 
-// ربط الصلاحيات بالأدوار
+        // ربط الصلاحيات بالأدوار
         $admin->givePermissionTo(Permission::all());
         $agent->givePermissionTo(['reply tickets', 'assign tickets']);
         $user->givePermissionTo(['create tickets']);

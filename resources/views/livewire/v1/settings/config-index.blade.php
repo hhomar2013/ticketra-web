@@ -62,12 +62,12 @@
                 padding: 28px;
                 min-height: 300px;
             }
-
         </style>
 
         {{-- ══════ Header ══════ --}}
         <div class="d-flex align-items-center gap-3 mb-4">
-            <div style="width: 46px; height: 46px; border-radius: 14px;
+            <div
+                style="width: 46px; height: 46px; border-radius: 14px;
                 background: linear-gradient(135deg,#0d6efd,#0047c4);
                 display: flex; align-items: center; justify-content: center; font-size: 20px;">
                 ⚙️
@@ -81,24 +81,39 @@
         {{-- ══════ Tabs ══════ --}}
         <div class="d-flex flex-wrap gap-2 mb-4">
 
-            <button wire:click.prevent="setPage('general')" class="settings-tab-btn {{ $page === 'general' ? 'active' : '' }}">
+            <button wire:click.prevent="setPage('general')"
+                class="settings-tab-btn {{ $page === 'general' ? 'active' : '' }}">
                 <div class="tab-icon"><i class="fa-solid fa-earth-africa"></i></div>
                 {{ __('General') }}
             </button>
 
-            <button wire:click.prevent="setPage('branches')" class="settings-tab-btn {{ $page === 'branches' ? 'active' : '' }}">
+            <button wire:click.prevent="setPage('branches')"
+                class="settings-tab-btn {{ $page === 'branches' ? 'active' : '' }}">
                 <div class="tab-icon"><i class="fa-solid fa-code-branch"></i></div>
                 {{ __('Branches') }}
             </button>
+            <button wire:click.prevent="setPage('departments')"
+                class="settings-tab-btn {{ $page === 'departments' ? 'active' : '' }}">
+                <div class="tab-icon"><i class="fa-solid fa-layer-group"></i></div>
+                {{ __('Departments') }}
+            </button>
 
-            <button wire:click.prevent="setPage('asset-categories')" class="settings-tab-btn {{ $page === 'asset-categories' ? 'active' : '' }}">
+            <button wire:click.prevent="setPage('asset-categories')"
+                class="settings-tab-btn {{ $page === 'asset-categories' ? 'active' : '' }}">
                 <div class="tab-icon"><i class="fa-solid fa-layer-group"></i></div>
                 {{ __('Asset Categories') }}
             </button>
 
-            <button wire:click.prevent="setPage('brands')" class="settings-tab-btn {{ $page === 'brands' ? 'active' : '' }}">
+            <button wire:click.prevent="setPage('brands')"
+                class="settings-tab-btn {{ $page === 'brands' ? 'active' : '' }}">
                 <div class="tab-icon"><i class="fa-solid fa-layer-group"></i></div>
                 {{ __('Brands') }}
+            </button>
+
+            <button wire:click.prevent="setPage('specs-types')"
+                class="settings-tab-btn {{ $page === 'specs-types' ? 'active' : '' }}">
+                <div class="tab-icon"><i class="fa-solid fa-layer-group"></i></div>
+                {{ __('Specs Types') }}
             </button>
 
         </div>
@@ -106,28 +121,35 @@
 
         <div class="settings-content shadow-sm">
             @switch($page)
-            @case('general')
-            @livewire('v1.settings.config-general')
-            @break
+                @case('general')
+                    @livewire('v1.settings.config-general')
+                @break
 
-            @case('branches')
-            @livewire('v1.hardware.branch.branch-index')
-            @break
+                @case('branches')
+                    @livewire('v1.hardware.branch.branch-index')
+                @break
 
-            @case('brands')
-            @livewire('v1.hardware.brands.brands-index')
-            @break
+                @case('departments')
+                    @livewire('v1.departments.departments-index')
+                @break
 
-            @case('asset-categories')
-            @livewire('v1.hardware.asset-categories.asset-categories-index')
-            @break
+                @case('brands')
+                    @livewire('v1.hardware.brands.brands-index')
+                @break
 
+                @case('asset-categories')
+                    @livewire('v1.hardware.asset-categories.asset-categories-index')
+                @break
 
-            @default
-            <div class="text-center text-muted py-5">
-                <i class="fa fa-gear fa-3x d-block mb-3 opacity-25"></i>
-                <p>{{ __('Select a setting from the tabs above') }}</p>
-            </div>
+                @case('specs-types')
+                    @livewire('v1.hardware.specs-types.st-index')
+                @break
+
+                @default
+                    <div class="text-center text-muted py-5">
+                        <i class="fa fa-gear fa-3x d-block mb-3 opacity-25"></i>
+                        <p>{{ __('Select a setting from the tabs above') }}</p>
+                    </div>
             @endswitch
         </div>
 

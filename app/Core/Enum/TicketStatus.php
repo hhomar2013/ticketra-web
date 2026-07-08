@@ -32,7 +32,7 @@ enum TicketStatus: string
     public function subColor(): string
     {
         return match($this) {
-            TicketStatus::New        => 'bg-secondary-subtle text-secondary',
+            TicketStatus::New        => 'bg-secondary-subtle text-dark',
             TicketStatus::Open       => 'bg-success-subtle text-success',
             TicketStatus::InProgress => 'bg-warning-subtle text-warning',
             TicketStatus::Closed     => 'bg-danger-subtle text-danger',

@@ -15,7 +15,7 @@ class Login extends Component
     public function updated($property)
     {
         $this->validateOnly($property, [
-            'email'    => 'required|email',
+            'email' => 'required|email',
             'password' => 'required|string',
         ]);
     }
@@ -24,14 +24,16 @@ class Login extends Component
     {
         // dd($this->email, $this->password, $this->remember);
         $this->validate([
-            'email'    => 'required|email',
+            'email' => 'required|email',
             'password' => 'required|string',
         ]);
 
-        if (Auth::attempt([
-            'email'    => $this->email,
-            'password' => $this->password,
-        ], $this->remember)) {
+        if (
+            Auth::attempt([
+                'email' => $this->email,
+                'password' => $this->password,
+            ], $this->remember)
+        ) {
 
             session()->regenerate();
             return redirect()->intended('/');

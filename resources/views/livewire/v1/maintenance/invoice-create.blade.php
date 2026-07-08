@@ -1,131 +1,744 @@
 <div>
 
-    <div class="card">
-        <div class="card-header">
-            <div class="d-flex align-items-center justify-content-between">
-                <h5 class="card-title fw-semibold mb-0"> {{ __('Maintenance') }} </h5>
-                <button wire:click="back" class="btn btn-danger"> <i class="fas fa-arrow-left"></i> </button>
+    <style>
+        .branch-page {
+            display: grid;
+            grid-template-columns: 1fr 360px;
+            gap: 20px;
+            align-items: start;
+        }
+
+        .form-panel {
+            background: #fff;
+            border: 1px solid #e5e7eb;
+            border-radius: 20px;
+            overflow: hidden;
+        }
+
+        .form-panel-header {
+            padding: 24px 28px;
+            border-bottom: 1px solid #f3f4f6;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .form-panel-header .header-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+            flex-shrink: 0;
+        }
+
+        .form-panel-body {
+            padding: 28px;
+        }
+
+        .f-lbl {
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: .7px;
+            text-transform: uppercase;
+            color: #9ca3af;
+            margin-bottom: 7px;
+            display: block;
+        }
+
+        .f-wrap {
+            position: relative;
+        }
+
+        .f-wrap .f-ico {
+            position: absolute;
+            left: 13px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #d1d5db;
+            font-size: 13px;
+            pointer-events: none;
+            transition: color .2s;
+        }
+
+        .f-wrap:focus-within .f-ico {
+            color: #0d6efd;
+        }
+
+        .f-input {
+            width: 100%;
+            border: 1.5px solid #e5e7eb;
+            border-radius: 12px;
+            padding: 11px 14px 11px 40px;
+            font-size: 14px;
+            color: #111827;
+            background: #fafafa;
+            transition: all .2s;
+            outline: none;
+        }
+
+        .f-input::placeholder {
+            color: #d1d5db;
+        }
+
+        .f-input:focus {
+            border-color: #0d6efd;
+            background: #fff;
+            box-shadow: 0 0 0 4px rgba(13, 110, 253, .09);
+        }
+
+        .f-input.is-invalid {
+            border-color: #ef4444;
+            background: #fff8f8;
+        }
+
+        select.f-input {
+            cursor: pointer;
+        }
+
+        textarea.f-input {
+            padding-left: 40px;
+            resize: none;
+        }
+
+        .f-err {
+            font-size: 11px;
+            color: #ef4444;
+            margin-top: 5px;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .section-divider {
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: .8px;
+            text-transform: uppercase;
+            color: #9ca3af;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin: 4px 0 16px;
+        }
+
+        .section-divider::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: #f3f4f6;
+        }
+
+        .batch-section {
+            background: #f9fafb;
+            border: 1.5px dashed #e5e7eb;
+            border-radius: 16px;
+            padding: 20px;
+            transition: border-color .2s;
+        }
+
+        .batch-section.active {
+            border-color: #0d6efd;
+            background: rgba(13, 110, 253, .02);
+        }
+
+        .btn-submit {
+            background: linear-gradient(135deg, #0d6efd, #0047c4);
+            border: none;
+            border-radius: 12px;
+            color: #fff;
+            font-size: 14px;
+            font-weight: 700;
+            padding: 13px 28px;
+            cursor: pointer;
+            transition: transform .15s, box-shadow .2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-submit:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 24px rgba(13, 110, 253, .3);
+        }
+
+        .btn-submit:active {
+            transform: translateY(0);
+        }
+
+        .side-panel {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .preview-card {
+            background: linear-gradient(135deg, #0d6efd 0%, #0047c4 100%);
+            border-radius: 16px;
+            padding: 20px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .preview-card::before {
+            content: '';
+            position: absolute;
+            top: -20px;
+            right: -20px;
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, .08);
+        }
+
+        .preview-card::after {
+            content: '';
+            position: absolute;
+            bottom: -15px;
+            left: 30px;
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, .05);
+        }
+
+        .p-row {
+            margin-bottom: 10px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .p-label {
+            color: rgba(255, 255, 255, .5);
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: .5px;
+            margin-bottom: 2px;
+        }
+
+        .p-value {
+            color: #fff;
+            font-weight: 700;
+            font-size: 13px;
+        }
+
+        .info-card {
+            background: #fff;
+            border: 1px solid #e5e7eb;
+            border-radius: 16px;
+            padding: 20px;
+        }
+
+        .info-card h6 {
+            font-size: 13px;
+            font-weight: 700;
+            color: #111827;
+            margin-bottom: 14px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .tip-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            margin-bottom: 12px;
+            font-size: 13px;
+            color: #6b7280;
+            line-height: 1.5;
+        }
+
+        .tip-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .tip-dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            flex-shrink: 0;
+            margin-top: 6px;
+        }
+
+        .toggle-wrap {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .toggle-switch {
+            position: relative;
+            width: 44px;
+            height: 24px;
+            flex-shrink: 0;
+        }
+
+        .toggle-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .toggle-slider {
+            position: absolute;
+            cursor: pointer;
+            inset: 0;
+            background: #e5e7eb;
+            border-radius: 24px;
+            transition: .25s;
+        }
+
+        .toggle-slider::before {
+            content: '';
+            position: absolute;
+            width: 18px;
+            height: 18px;
+            left: 3px;
+            top: 3px;
+            background: #fff;
+            border-radius: 50%;
+            transition: .25s;
+            box-shadow: 0 1px 4px rgba(0, 0, 0, .15);
+        }
+
+        .toggle-switch input:checked+.toggle-slider {
+            background: #0d6efd;
+        }
+
+        .toggle-switch input:checked+.toggle-slider::before {
+            transform: translateX(20px);
+        }
+
+        @media (max-width: 900px) {
+            .branch-page {
+                grid-template-columns: 1fr;
+            }
+
+            .side-panel {
+                order: -1;
+            }
+        }
+    </style>
+
+    <div class="branch-page">
+
+        {{-- ══════ FORM PANEL ══════ --}}
+        <div class="form-panel shadow-sm">
+            <div class="form-panel-header">
+                <div class="header-icon"
+                    style="{{ $IsEdit ? 'background:rgba(255,193,7,.12);' : 'background:rgba(13,110,253,.1);' }}">
+                    {{ $IsEdit ? '✏️' : '🧾' }}
+                </div>
+                <div>
+                    <h5 class="fw-bold mb-0" style="font-size:16px;">
+                        {{ $IsEdit ? __('Edit Invoice') : __('Create Maintenance Invoice') }}
+                    </h5>
+                    <p class="text-muted mb-0" style="font-size:12px;">
+                        {{ __('Fill in the invoice details below') }}
+                    </p>
+                </div>
             </div>
 
+            <div class="form-panel-body">
+                <div class="row g-4">
 
-        </div>
-        <div class="card-body">
-            <form wire:submit="save">
-                <h1 class="text-danger"> {{ '#' . $invoiceNumber }}</h1>
-                <div class="row">
-                    <div class="col-lg-4">
-                        <label for="">{{ __('Suppliers') }}</label>
-                        <select class="form-control " wire:model.live="supplier_id">
-                            <option value="">{{ __('Select Supplier') }}</option>
-                            @foreach ($suppliers as $supplier)
-                                <option value="{{ $supplier->id }}">{{ $supplier->brand_name }}</option>
-                            @endforeach
-
-                        </select>
+                    {{-- ── Invoice Info ── --}}
+                    <div class="col-12">
+                        <div class="section-divider">{{ __('Invoice Info') }}</div>
                     </div>
 
-                    <div class="col-lg-4">
-                        <label for="invoice_date">{{ __('Invoice date') }}</label>
-                        <input type="date" class="form-control" name="" id="invoice_date"
-                            wire:model.live="invoice_date" />
+                    <div class="col-md-6">
+                        <label class="f-lbl">{{ __('Invoice Number') }} <span
+                                class="text-danger text-lg"><br>#{{ $invoice_number }}</span></label>
+
                     </div>
-                </div>
 
-                <hr>
-                <div>
-                    <div class="input-group">
-                        <input type="text" wire:model.live="search" wire:keydown.enter="searchInAsset"
-                            class="form-control" placeholder="Search...">
-                        <button wire:click.prevent="searchInAsset" class="btn btn-outline-secondary">Search</button>
+                    <div class="col-md-6">
+                        <label class="f-lbl">{{ __('Invoice Date') }} <span class="text-danger">*</span></label>
+                        <div class="f-wrap">
+                            <i class="fa fa-calendar f-ico"></i>
+                            <input type="date" wire:model.live="invoice_date"
+                                class="f-input @error('invoice_date') is-invalid @enderror">
+                        </div>
+                        @error('invoice_date')
+                            <div class="f-err"><i class="fa fa-circle-exclamation"></i> {{ $message }}</div>
+                        @enderror
                     </div>
-                    @if (!empty($search))
-                        <ul class="list-group mt-2 shadow-sm">
-                            {{-- استبدل isNotEmpty() بـ count() > 0 --}}
-                            @if (count($results) > 0)
-                                @foreach ($results as $result)
-                                    <li class="list-group-item list-group-item-action cursor-pointer p-0"
-                                        wire:click.prevent="select({{ $result }})">
 
-                                        @php
-                                            // فحص إذا كان العنصر مختاراً
-                                            $isSelected = collect($select_list)->contains('id', $result['id']);
-                                        @endphp
-
-                                        <div
-                                            class="d-flex align-items-center p-2 {{ $isSelected ? 'bg-success text-white' : '' }}">
-                                            <div class="flex-grow-1">
-                                                <strong>{{ __('Asset Tag') }}:</strong>
-                                                {{ $result['asset_tag'] ?? $result->asset_tag }} <br>
-                                                <small class="{{ $isSelected ? 'text-white-50' : 'text-muted' }}">
-                                                    {{ __('Serial number') }}:
-                                                    {{ $result['serial_number'] ?? $result->serial_number }}
-                                                </small>
-                                            </div>
-
-                                            @if ($isSelected)
-                                                <i class="fas fa-check-circle"></i>
-                                            @endif
-                                        </div>
-                                    </li>
+                    <div class="col-md-6">
+                        <label class="f-lbl">{{ __('Supplier') }} <span class="text-danger">*</span></label>
+                        <div class="f-wrap">
+                            <i class="fa fa-truck f-ico"></i>
+                            <select wire:model.live="suppliers_id"
+                                class="f-input @error('suppliers_id') is-invalid @enderror">
+                                <option value="">{{ __('Select Supplier') }}</option>
+                                @foreach ($suppliers as $supplier)
+                                    <option value="{{ $supplier->id }}">{{ $supplier->brand_name }}</option>
                                 @endforeach
-                            @else
-                                <li class="list-group-item text-muted text-center py-3">
-                                    {{ __('No results found') }}
-                                </li>
-                            @endif
-                        </ul>
+                            </select>
+                        </div>
+                        @error('suppliers_id')
+                            <div class="f-err"><i class="fa fa-circle-exclamation"></i> {{ $message }}</div>
+                        @enderror
+                    </div>
+
+                    <div class="col-md-6">
+                        <label class="f-lbl">{{ __('Total Amount') }} <span class="text-danger">*</span></label>
+                        <div class="f-wrap">
+                            <i class="fa fa-dollar-sign f-ico"></i>
+                            <input type="number" wire:model.live="total_amount"
+                                class="f-input @error('total_amount') is-invalid @enderror" placeholder="0.00"
+                                step="0.01" min="0">
+                        </div>
+                        @error('total_amount')
+                            <div class="f-err"><i class="fa fa-circle-exclamation"></i> {{ $message }}</div>
+                        @enderror
+                    </div>
+
+                    <div class="col-md-6">
+                        <label class="f-lbl">{{ __('Status') }}</label>
+                        <div class="f-wrap">
+                            <i class="fa fa-circle-dot f-ico"></i>
+                            <select wire:model.live="status" class="f-input">
+                                <option value="pending">{{ __('Pending') }}</option>
+                                <option value="paid">{{ __('Paid') }}</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="col-12">
+                        <label class="f-lbl">{{ __('Notes') }}</label>
+                        <div class="f-wrap">
+                            <i class="fa fa-align-left f-ico" style="top:14px;transform:none;"></i>
+                            <textarea wire:model="notes" rows="2" class="f-input"
+                                placeholder="{{ __('Optional notes about this invoice...') }}"></textarea>
+                        </div>
+                    </div>
+
+                    <div class="maintenance-items">
+                        <h1 class="f-lbl p-3">{{ __('Selected maintenance assets') }}</h1>
+                        @foreach ($selected_items as $index => $item)
+                            <div class="row g-2 mb-3 align-items-end p-3 rounded-3"
+                                style="background: #f8fafc; border: 1px solid #eef2f6;">
+                                <div class="col-md-5">
+                                    <label class="f-lbl">{{ __('Asset') }}</label>
+                                    <div class="f-wrap">
+                                        <i class="fa fa-laptop f-ico"></i>
+
+                                        <input list="assets-list-{{ $index }}" class="f-input"
+                                            wire:model.live="selected_items.{{ $index }}.asset_id"
+                                            placeholder="{{ __('Select Asset') }}">
+                                        <datalist id="assets-list-{{ $index }}">
+                                            @foreach ($assets as $asset)
+                                                <option value="{{ $asset->id }}">{{ $asset->asset_tag }} -
+                                                    {{ $asset->serial_number }}
+                                                </option>
+                                            @endforeach
+                                        </datalist>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <label class="f-lbl">{{ __('Reason') }}</label>
+                                    <div class="f-wrap">
+                                        <i class="fa fa-comment-dots f-ico"></i>
+                                        <input type="text" class="f-input"
+                                            wire:model="selected_items.{{ $index }}.reason"
+                                            placeholder="Reason for maintenance (e.g. Broken screen)">
+                                    </div>
+                                </div>
+
+                                <div class="col-md-1">
+                                    <button type="button" wire:click="removeItem({{ $index }})"
+                                        class="btn btn-link text-danger p-0 mb-2">
+                                        <i class="fa fa-trash-can"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        @endforeach
+
+                        <button type="button" wire:click="addItem"
+                            class="btn btn-sm btn-outline-primary rounded-pill mt-2">
+                            <i class="fa fa-plus me-1"></i> {{ __('Add Another Asset') }}
+                        </button>
+                    </div>
+
+                </div>
+
+                {{-- Actions --}}
+                <div class="d-flex align-items-center gap-2 mt-4 pt-4" style="border-top:1px solid #f3f4f6;">
+                    <button wire:click="save" class="btn-submit">
+                        <span wire:loading.remove wire:target="save">
+                            <i class="fa {{ $IsEdit ? 'fa-floppy-disk' : 'fa-plus' }}"></i>
+                            {{ $IsEdit ? __('Save Changes') : __('Create Invoice') }}
+                        </span>
+                        <span wire:loading wire:target="save">
+                            <span class="spinner-border spinner-border-sm"></span>
+                            {{ __('Saving...') }}
+                        </span>
+                    </button>
+                    <a href="{{ route('maintenance.invoices.index') }}" wire:navigate
+                        class="btn btn-outline-secondary rounded-pill px-4 fw-bold" style="font-size:13px;">
+                        <i class="fa fa-arrow-left me-1"></i> {{ __('Back') }}
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        {{-- ══════ SIDE PANEL ══════ --}}
+        <div class="side-panel">
+
+            {{-- Live Preview --}}
+            <div class="preview-card shadow-sm">
+                <div style="position:relative;z-index:1;">
+                    <div
+                        style="width:52px;height:52px;border-radius:14px;background:rgba(255,255,255,.2);display:flex;align-items:center;justify-content:center;font-size:24px;margin-bottom:14px;">
+                        🧾
+                    </div>
+
+                    <div class="p-row">
+                        <div class="p-label">{{ __('Invoice #') }}</div>
+                        <div class="p-value font-monospace">{{ $invoice_number ?? '' ?: '—' }}</div>
+                    </div>
+
+                    @if ($suppliers_id)
+                        <div class="p-row">
+                            <div class="p-label">{{ __('Supplier') }}</div>
+                            <div class="p-value">
+                                {{ $suppliers->firstWhere('id', $suppliers_id)?->brand_name ?? '—' }}
+                            </div>
+                        </div>
                     @endif
 
+                    @if ($invoice_date)
+                        <div class="p-row">
+                            <div class="p-label">{{ __('Date') }}</div>
+                            <div class="p-value">{{ \Carbon\Carbon::parse($invoice_date)->format('d M Y') }}</div>
+                        </div>
+                    @endif
 
-                    <table class="table table-hover table-sm border">
-                        <thead>
-                            <tr>
-                                <th scope="col">#</th>
-                                <th scope="col">{{ __('Asset tag') }}</th>
-                                <th scope="col">{{ __('Serial number') }}</th>
-                                <th scope="col"><i class="fa fa-cogs"></i></th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach ($select_list as $key => $list)
-                                <tr>
-                                    <th scope="row">{{ $key + 1 }}</th>
-                                    <td>{{ $list['asset_tag'] }}</td>
-                                    <td>{{ $list['serial_number'] }}</td>
-                                    <td>
-                                        <button class="btn btn-sm btn-danger"
-                                            wire:click.prevent="deleteItem({{ $list['id'] }})"><i
-                                                class="fas fa-trash"></i></button>
-                                    </td>
-                                </tr>
-                            @endforeach
+                    @if ($total_amount)
+                        <div class="p-row">
+                            <div class="p-label">{{ __('Amount') }}</div>
+                            <div class="p-value" style="font-size:20px;">
+                                {{ number_format($total_amount, 2) }} EGP
+                            </div>
+                        </div>
+                    @endif
 
-                        </tbody>
-                    </table>
+                    @if ($selected_items && count($selected_items) > 0)
+                        <div class="p-row">
+                            <div class="p-label">{{ __('Assets') }}</div>
+                            <div class="p-value">
+                                {{ count($selected_items) }}
+                            </div>
+                        </div>
+                    @endif
+
+                    <div class="p-row">
+                        <span
+                            style="background:{{ $status === 'paid' ? 'rgba(25,135,84,.3)' : 'rgba(255,193,7,.3)' }};color:#fff;border-radius:20px;padding:4px 12px;font-size:11px;font-weight:700;">
+                            {{ $status === 'paid' ? '✅ ' . __('Paid') : '⏳ ' . __('Pending') }}
+                        </span>
+                    </div>
 
 
-                    @if ($select_list)
-                        <hr>
-                        <button class="btn btn-danger" wire:click.prevent="clearList">{{ __('clear List') }} </button>
 
-                        <button class="btn btn-primary" type="submit">{{ __('Save Order') }} </button>
+                    @if (!$invoice_number && !$suppliers_id)
+                        <div style="color:rgba(255,255,255,.4);font-size:12px;">
+                            {{ __('Fill in the form to preview') }}
+                        </div>
                     @endif
                 </div>
-                {{-- Seach form --}}
+            </div>
 
-
-
-            </form>
-
-
-
-
+            {{-- Tips --}}
+            {{-- <div class="info-card">
+                <h6>
+                    <span
+                        style="width:24px;height:24px;background:rgba(13,110,253,.1);border-radius:7px;display:inline-flex;align-items:center;justify-content:center;font-size:12px;">
+                        <i class="fa fa-lightbulb text-primary"></i>
+                    </span>
+                    {{ __('Tips') }}
+                </h6>
+                <div class="tip-item">
+                    <div class="tip-dot" style="background:#0d6efd;"></div>
+                    <span>{{ __('Invoice number must be unique for each supplier') }}</span>
+                </div>
+                <div class="tip-item">
+                    <div class="tip-dot" style="background:#0d6efd;"></div>
+                    <span>{{ __('You can add multiple batches to one invoice later') }}</span>
+                </div>
+                <div class="tip-item">
+                    <div class="tip-dot" style="background:#0d6efd;"></div>
+                    <span>{{ __('Batch number is auto-generated but can be changed') }}</span>
+                </div>
+                <div class="tip-item">
+                    <div class="tip-dot" style="background:#10b981;"></div>
+                    <span>{{ __('Mark invoice as paid after confirming payment') }}</span>
+                </div>
+            </div> --}}
 
         </div>
+
     </div>
 
 
+
+    <div class="branch-page">
+
+        {{-- ══════════════ MAIN INVOICE PANEL ══════════════ --}}
+        <div class="form-panel shadow-sm">
+            <div class="form-panel-header">
+                <div class="header-icon" style="background: rgba(13,110,253,.1);">📄</div>
+                <div>
+                    <h5 class="fw-bold mb-0" style="font-size: 16px;">{{ __('Maintenance Invoice') }}
+                        #1</h5>
+                    <p class="text-muted mb-0" style="font-size: 12px;">
+                        {{ __('Detailed view of maintenance records') }}</p>
+                </div>
+            </div>
+
+            <div class="form-panel-body">
+                {{-- ── Invoice Info ── --}}
+                <div class="section-divider">{{ __('General Information') }}</div>
+                <div class="row g-4 mb-5">
+                    <div class="col-md-4">
+                        <label class="f-lbl">{{ __('Supplier') }}</label>
+                        <div class="p-value text-dark" style="font-size: 15px;">
+                            <i class="fa fa-truck-field me-2 text-primary"></i> {{ 'Omar Mahgoub' }}
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <label class="f-lbl">{{ __('Date Created') }}</label>
+                        <div class="p-value text-dark" style="font-size: 14px;">
+                            <i class="fa fa-calendar-day me-2 text-primary"></i>
+                            Now
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <label class="f-lbl">{{ __('Total Assets') }}</label>
+                        <div class="p-value text-dark" style="font-size: 14px;">
+                            <i class="fa fa-layer-group me-2 text-primary"></i> 2 {{ __('Items') }}
+                        </div>
+                    </div>
+                </div>
+
+                {{-- ── Assets Table ── --}}
+                <div class="section-divider">{{ __('Included Assets') }}</div>
+                <div class="table-responsive">
+                    <table class="table table-borderless align-middle">
+                        <thead>
+                            <tr class="bg-light rounded">
+                                <th class="f-lbl py-3 ps-3" style="border-radius: 12px 0 0 12px;">
+                                    {{ __('Asset Tag') }}</th>
+                                <th class="f-lbl py-3">{{ __('Model / Brand') }}</th>
+                                <th class="f-lbl py-3">{{ __('Maintenance Note') }}</th>
+                                <th class="f-lbl py-3 pe-3 text-end" style="border-radius: 0 12px 12px 0;">
+                                    {{ __('Status') }}</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {{-- @foreach ($invoice->assets as $asset)
+                                <tr style="border-bottom: 1px solid #f3f4f6;">
+                                    <td class="py-3 ps-3">
+                                        <div class="fw-bold text-primary"
+                                            style="font-family: monospace; font-size: 14px;">
+                                            {{ $asset->asset_tag }}
+                                        </div>
+                                        <small class="text-muted"> pmaosdo</small>
+                                    </td>
+                                    <td class="py-3">
+                                        <div style="font-size: 13px; font-weight: 600;">lenovo
+                                        </div>
+                                        <div class="text-muted" style="font-size: 12px;">
+                                            {{ $asset->type_model->name }}</div>
+                                    </td>
+                                    <td class="py-3">
+                                        <div class="p-2 rounded bg-light"
+                                            style="font-size: 12px; max-width: 250px; line-height: 1.4;">
+                                            {{ $asset->pivot->maintenance_note ?: __('No notes provided') }}
+                                        </div>
+                                    </td>
+                                    <td class="py-3 pe-3 text-end">
+                                        <span class="badge"
+                                            style="background: rgba(16, 185, 129, 0.1); color: #10b981; border-radius: 8px; padding: 6px 12px; font-size: 11px;">
+                                            {{ __('Sent') }}
+                                        </span>
+                                    </td>
+                                </tr>
+                            @endforeach --}}
+                        </tbody>
+                    </table>
+                </div>
+
+                {{-- ── Actions ── --}}
+                <div class="d-flex align-items-center gap-2 pt-4 mt-4" style="border-top: 1px solid #f3f4f6;">
+                    <button type="button" class="btn btn-dark rounded-pill px-4 fw-bold" style="font-size: 13px;">
+                        <i class="fa fa-print me-1"></i> {{ __('Print Invoice') }}
+                    </button>
+                    <button type="button" wire:click="backToInvoices"
+                        class="btn btn-outline-secondary rounded-pill px-4 fw-bold" style="font-size: 13px;">
+                        {{ __('Back to List') }}
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        {{-- ══════════════ SIDE PANEL ══════════════ --}}
+        <div class="side-panel">
+
+            {{-- Preview Status Card --}}
+            <div class="preview-card shadow-sm">
+                <div style="position: relative; z-index: 1;">
+                    <div
+                        style="width: 52px; height: 52px; border-radius: 14px; 
+                            background: rgba(255,255,255,.2); display: flex; align-items: center; 
+                            justify-content: center; font-size: 26px; margin-bottom: 14px;">
+                        🛠️
+                    </div>
+                    <div class="p-row">
+                        <div class="p-label">{{ __('Invoice Status') }}</div>
+                        <div class="p-value" style="font-size: 18px;">{{ __('Under Maintenance') }}</div>
+                    </div>
+                    <div class="p-row">
+                        <div class="p-label">{{ __('Expected Completion') }}</div>
+                        <div class="p-value text-white-50">{{ \Carbon\Carbon::now()->addDays(7)->format('Y-m-d') }}
+                        </div>
+                    </div>
+                    <hr style="border-color: rgba(255,255,255,.1);">
+                    <div class="p-row">
+                        <div class="p-label">{{ __('Tracking ID') }}</div>
+                        <div class="p-value" style="font-family: monospace;">TRK-{{ strtoupper(Str::random(8)) }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            {{-- Log Info Card --}}
+            <div class="info-card">
+                <h6>
+                    <span
+                        style="width: 24px; height: 24px; background: rgba(13,110,253,.1); 
+                            border-radius: 7px; display: inline-flex; align-items: center; 
+                            justify-content: center; font-size: 12px;">
+                        <i class="fa fa-history text-primary"></i>
+                    </span>
+                    {{ __('Invoice Logs') }}
+                </h6>
+                <div class="tip-item">
+                    <div class="tip-dot" style="background: #10b981;"></div>
+                    <span><strong>10:30 AM:</strong> Invoice created by Admin</span>
+                </div>
+                <div class="tip-item">
+                    <div class="tip-dot" style="background: #0d6efd;"></div>
+                    <span><strong>11:00 AM:</strong> Supplier notified via Email</span>
+                </div>
+            </div>
+
+        </div>
+    </div>
 </div>
-@push('js')
-    <script src="{{ asset('assets/js/confirmDelete.js') }}"></script>
-@endpush

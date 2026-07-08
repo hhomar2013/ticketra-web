@@ -42,6 +42,7 @@ class TicketUpdatedNotification extends Notification
             'message'   => $this->details['message'] ?? 'Ticket has been updated',
             'user_name' => $this->details['user_name'] ?? null,
             'type'      => $this->details['type'] ?? 'status',
+            'action_url' => route('it.tickets.show', $this->details['ticket_id']),
         ];
     }
 }

@@ -1,183 +1,183 @@
 <div class="p-4">
 
     @push('styles')
-    <style>
-        .stat-card {
-            border-radius: 16px;
-            border: none;
-            transition: transform .2s, box-shadow .2s;
-            overflow: hidden;
-        }
+        <style>
+            /* .stat-card {
+                                                                border-radius: 16px;
+                                                                border: none;
+                                                                transition: transform .2s, box-shadow .2s;
+                                                                overflow: hidden;
+                                                            }
 
-        .stat-card:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 12px 28px rgba(0, 0, 0, .1) !important;
-        }
+                                                            .stat-card:hover {
+                                                                transform: translateY(-4px);
+                                                                box-shadow: 0 12px 28px rgba(0, 0, 0, .1) !important;
+                                                            }
 
-        .stat-icon {
-            width: 52px;
-            height: 52px;
-            border-radius: 14px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 22px;
-        }
+                                                            .stat-icon {
+                                                                width: 52px;
+                                                                height: 52px;
+                                                                border-radius: 14px;
+                                                                display: flex;
+                                                                align-items: center;
+                                                                justify-content: center;
+                                                                font-size: 22px;
+                                                            }
 
-        .ticket-row:hover {
-            background: #f8f9fa;
-        }
+                                                            .ticket-row:hover {
+                                                                background: #f8f9fa;
+                                                            }
 
-        .agent-avatar {
-            width: 38px;
-            height: 38px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 13px;
-            font-weight: 600;
-        }
+                                                            .agent-avatar {
+                                                                width: 38px;
+                                                                height: 38px;
+                                                                border-radius: 50%;
+                                                                display: flex;
+                                                                align-items: center;
+                                                                justify-content: center;
+                                                                font-size: 13px;
+                                                                font-weight: 600;
+                                                            }
 
-        .bar-chart-bar {
-            border-radius: 6px 6px 0 0;
-            transition: opacity .2s;
-            min-height: 4px;
-        }
+                                                            .bar-chart-bar {
+                                                                border-radius: 6px 6px 0 0;
+                                                                transition: opacity .2s;
+                                                                min-height: 4px;
+                                                            }
 
-        .bar-chart-bar:hover {
-            opacity: .8;
-        }
+                                                            .bar-chart-bar:hover {
+                                                                opacity: .8;
+                                                            }
 
-        .rating-bar {
-            height: 6px;
-            border-radius: 10px;
-            background: #e9ecef;
-            overflow: hidden;
-        }
+                                                            .rating-bar {
+                                                                height: 6px;
+                                                                border-radius: 10px;
+                                                                background: #e9ecef;
+                                                                overflow: hidden;
+                                                            }
 
-        .rating-fill {
-            height: 100%;
-            border-radius: 10px;
-            background: #ffc107;
-        }
+                                                            .rating-fill {
+                                                                height: 100%;
+                                                                border-radius: 10px;
+                                                                background: #ffc107;
+                                                            }
 
-        .stat-card {
-            border-radius: 18px;
-            border: none;
-            transition: transform .2s, box-shadow .2s;
-            overflow: hidden;
-            position: relative;
-        }
+                                                            .stat-card {
+                                                                border-radius: 18px;
+                                                                border: none;
+                                                                transition: transform .2s, box-shadow .2s;
+                                                                overflow: hidden;
+                                                                position: relative;
+                                                            }
 
-        .stat-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 16px 32px rgba(0, 0, 0, .1) !important;
-        }
+                                                            .stat-card:hover {
+                                                                transform: translateY(-5px);
+                                                                box-shadow: 0 16px 32px rgba(0, 0, 0, .1) !important;
+                                                            }
 
-        .stat-card .icon-box {
-            width: 52px;
-            height: 52px;
-            border-radius: 14px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 22px;
-        }
+                                                            .stat-card .icon-box {
+                                                                width: 52px;
+                                                                height: 52px;
+                                                                border-radius: 14px;
+                                                                display: flex;
+                                                                align-items: center;
+                                                                justify-content: center;
+                                                                font-size: 22px;
+                                                            }
 
-        .stat-card .card-stripe {
-            height: 4px;
-            width: 100%;
-        }
+                                                            .stat-card .card-stripe {
+                                                                height: 4px;
+                                                                width: 100%;
+                                                            }
 
-        .ticket-item {
-            border-radius: 14px;
-            border: 1px solid rgba(0, 0, 0, .06);
-            transition: box-shadow .2s, transform .15s;
-            background: #fff;
-        }
+                                                            .ticket-item {
+                                                                border-radius: 14px;
+                                                                border: 1px solid rgba(0, 0, 0, .06);
+                                                                transition: box-shadow .2s, transform .15s;
+                                                                background: #fff;
+                                                            }
 
-        .ticket-item:hover {
-            box-shadow: 0 6px 20px rgba(0, 0, 0, .08);
-            transform: translateY(-2px);
-        }
+                                                            .ticket-item:hover {
+                                                                box-shadow: 0 6px 20px rgba(0, 0, 0, .08);
+                                                                transform: translateY(-2px);
+                                                            }
 
-        .status-dot {
-            width: 8px;
-            height: 8px;
-            border-radius: 50%;
-            display: inline-block;
-        }
+                                                            .status-dot {
+                                                                width: 8px;
+                                                                height: 8px;
+                                                                border-radius: 50%;
+                                                                display: inline-block;
+                                                            }
 
-        .welcome-card {
-            background: linear-gradient(135deg, #0d6efd 0%, #0a58ca 100%);
-            border-radius: 20px;
-            border: none;
-            overflow: hidden;
-            position: relative;
-        }
+                                                            .welcome-card {
+                                                                background: linear-gradient(135deg, #0d6efd 0%, #0a58ca 100%);
+                                                                border-radius: 20px;
+                                                                border: none;
+                                                                overflow: hidden;
+                                                                position: relative;
+                                                            }
 
-        .welcome-card::before {
-            content: '';
-            position: absolute;
-            top: -40px;
-            right: -40px;
-            width: 180px;
-            height: 180px;
-            border-radius: 50%;
-            background: rgba(255, 255, 255, .08);
-        }
+                                                            .welcome-card::before {
+                                                                content: '';
+                                                                position: absolute;
+                                                                top: -40px;
+                                                                right: -40px;
+                                                                width: 180px;
+                                                                height: 180px;
+                                                                border-radius: 50%;
+                                                                background: rgba(255, 255, 255, .08);
+                                                            }
 
-        .welcome-card::after {
-            content: '';
-            position: absolute;
-            bottom: -30px;
-            right: 60px;
-            width: 120px;
-            height: 120px;
-            border-radius: 50%;
-            background: rgba(255, 255, 255, .05);
-        }
+                                                            .welcome-card::after {
+                                                                content: '';
+                                                                position: absolute;
+                                                                bottom: -30px;
+                                                                right: 60px;
+                                                                width: 120px;
+                                                                height: 120px;
+                                                                border-radius: 50%;
+                                                                background: rgba(255, 255, 255, .05);
+                                                            }
 
-        .quick-action {
-            border-radius: 14px;
-            border: 1.5px dashed rgba(13, 110, 253, .3);
-            background: rgba(13, 110, 253, .03);
-            transition: all .2s;
-            cursor: pointer;
-            text-decoration: none;
-        }
+                                                            .quick-action {
+                                                                border-radius: 14px;
+                                                                border: 1.5px dashed rgba(13, 110, 253, .3);
+                                                                background: rgba(13, 110, 253, .03);
+                                                                transition: all .2s;
+                                                                cursor: pointer;
+                                                                text-decoration: none;
+                                                            }
 
-        .quick-action:hover {
-            border-color: #0d6efd;
-            background: rgba(13, 110, 253, .08);
-            transform: translateY(-2px);
-        }
+                                                            .quick-action:hover {
+                                                                border-color: #0d6efd;
+                                                                background: rgba(13, 110, 253, .08);
+                                                                transform: translateY(-2px);
+                                                            }
 
-        .progress-thin {
-            height: 6px;
-            border-radius: 10px;
-        }
+                                                            .progress-thin {
+                                                                height: 6px;
+                                                                border-radius: 10px;
+                                                            }
 
-        .avatar-circle {
-            width: 46px;
-            height: 46px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, #0d6efd, #6ea8fe);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 16px;
-            font-weight: 700;
-            color: #fff;
-            flex-shrink: 0;
-        }
+                                                            .avatar-circle {
+                                                                width: 46px;
+                                                                height: 46px;
+                                                                border-radius: 50%;
+                                                                background: linear-gradient(135deg, #0d6efd, #6ea8fe);
+                                                                display: flex;
+                                                                align-items: center;
+                                                                justify-content: center;
+                                                                font-size: 16px;
+                                                                font-weight: 700;
+                                                                color: #fff;
+                                                                flex-shrink: 0;
+                                                            }
 
-        .bg-success-subtle  { background-color: #d1e7dd !important; }
-        .bg-warning-subtle  { background-color: #fff3cd !important; }
-        .bg-danger-subtle   { background-color: #f8d7da !important; }
-        .bg-secondary-subtle{ background-color: #e2e3e5 !important; }
-    </style>
+                                                            .bg-success-subtle  { background-color: #d1e7dd !important; }
+                                                            .bg-warning-subtle  { background-color: #fff3cd !important; }
+                                                            .bg-danger-subtle   { background-color: #f8d7da !important; }
+                                                            .bg-secondary-subtle{ background-color: #e2e3e5 !important; } */
+        </style>
     @endpush
 
     {{-- ===================== WELCOME ===================== --}}
@@ -329,7 +329,8 @@
                         <div style="font-size: 48px; line-height: 1;">{{ $avgRating }}</div>
                         <div class="mt-1">
                             @for ($i = 1; $i <= 5; $i++)
-                                <i class="fa fa-star" style="color: {{ $i <= round($avgRating) ? '#ffc107' : '#dee2e6' }};"></i>
+                                <i class="fa fa-star"
+                                    style="color: {{ $i <= round($avgRating) ? '#ffc107' : '#dee2e6' }};"></i>
                             @endfor
                         </div>
                         <small class="text-muted">out of 5.0</small>
@@ -338,7 +339,8 @@
                     {{-- Rating Bars --}}
                     @php
                         $ratingCounts = \App\Models\TicketFeedback::selectRaw('rating, count(*) as count')
-                            ->groupBy('rating')->pluck('count', 'rating');
+                            ->groupBy('rating')
+                            ->pluck('count', 'rating');
                     @endphp
                     <div class="vstack gap-2">
                         @for ($i = 5; $i >= 1; $i--)
@@ -352,7 +354,8 @@
                                 <div class="rating-bar flex-fill">
                                     <div class="rating-fill" style="width: {{ $pct }}%;"></div>
                                 </div>
-                                <small class="text-muted" style="width: 20px; font-size: 11px;">{{ $cnt }}</small>
+                                <small class="text-muted"
+                                    style="width: 20px; font-size: 11px;">{{ $cnt }}</small>
                             </div>
                         @endfor
                     </div>
@@ -370,7 +373,8 @@
                 <div class="card-body p-4 pb-0">
                     <div class="d-flex justify-content-between align-items-center mb-3">
                         <h6 class="fw-bold mb-0">Recent Tickets</h6>
-                        <a href="{{ route('it.tickets.index') }}" class="btn btn-sm btn-outline-primary rounded-pill">
+                        <a href="{{ route('it.tickets.index') }}"
+                            class="btn btn-sm btn-outline-primary rounded-pill">
                             View All <i class="fa fa-arrow-right ms-1"></i>
                         </a>
                     </div>
@@ -423,7 +427,8 @@
                                     </td>
                                     <td class="text-muted small pe-4">
                                         {{ $ticket->created_at->format('d M') }}<br>
-                                        <span style="font-size:10px;">{{ $ticket->created_at->diffForHumans() }}</span>
+                                        <span
+                                            style="font-size:10px;">{{ $ticket->created_at->diffForHumans() }}</span>
                                     </td>
                                 </tr>
                             @empty

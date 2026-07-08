@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\AssetController;
 use App\Http\Controllers\Api\Auth\LoginController;
 use App\Http\Controllers\Api\V1\TicketsController;
 use Illuminate\Support\Facades\Route;
@@ -7,7 +8,7 @@ use Illuminate\Support\Facades\Route;
 Route::get('/test', function () {
     return json_decode('{"test": "test"}');
 });
-
+Route::post('/v1/assets/collect', [AssetController::class, 'collect']);
 Route::post('/login', [LoginController::class, 'login']);
 
 Route::get('/user', function () {

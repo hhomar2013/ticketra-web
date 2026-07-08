@@ -246,7 +246,6 @@
                 order: -1;
             }
         }
-
     </style>
 
     <div class="branch-page">
@@ -254,7 +253,8 @@
         {{-- ══════════════ FORM PANEL ══════════════ --}}
         <div class="form-panel shadow-sm">
             <div class="form-panel-header">
-                <div class="header-icon" style="{{ $IsEdit ? 'background: rgba(255,193,7,.12);' : 'background: rgba(111,66,193,.1);' }}">
+                <div class="header-icon"
+                    style="{{ $IsEdit ? 'background: rgba(255,193,7,.12);' : 'background: rgba(111,66,193,.1);' }}">
                     {{ $IsEdit ? '✏️' : '🗂️' }}
                 </div>
                 <div>
@@ -263,9 +263,9 @@
                     </h5>
                     <p class="text-muted mb-0" style="font-size: 12px;">
                         @if ($category)
-                        {{ __('Editing') }}: <strong>{{ $category->name }}</strong>
+                            {{ __('Editing') }}: <strong>{{ $category->name }}</strong>
                         @else
-                        {{ __('Fill in the category details below') }}
+                            {{ __('Fill in the category details below') }}
                         @endif
                     </p>
                 </div>
@@ -280,10 +280,12 @@
                             <label class="f-lbl">{{ __('Category Name') }} <span class="text-danger">*</span></label>
                             <div class="f-wrap">
                                 <i class="fa fa-layer-group f-ico"></i>
-                                <input type="text" wire:model.live="name" class="f-input @error('name') is-invalid @enderror" placeholder="{{ __('e.g. Computers, Printers') }}">
+                                <input type="text" wire:model.live="name"
+                                    class="f-input @error('name') is-invalid @enderror"
+                                    placeholder="{{ __('e.g. Computers, Printers') }}">
                             </div>
                             @error('name')
-                            <div class="f-err"><i class="fa fa-circle-exclamation"></i> {{ $message }}</div>
+                                <div class="f-err"><i class="fa fa-circle-exclamation"></i> {{ $message }}</div>
                             @enderror
                         </div>
 
@@ -292,16 +294,18 @@
                             <label class="f-lbl">{{ __('Slug') }}</label>
                             <div class="f-wrap">
                                 <i class="fa fa-link f-ico"></i>
-                                <input type="text" wire:model.live="slug" class="f-input @error('slug') is-invalid @enderror" placeholder="{{ __('e.g. computers-printers') }}">
+                                <input type="text" wire:model.live="slug"
+                                    class="f-input @error('slug') is-invalid @enderror"
+                                    placeholder="{{ __('e.g. computers-printers') }}">
                             </div>
                             @error('slug')
-                            <div class="f-err"><i class="fa fa-circle-exclamation"></i> {{ $message }}</div>
+                                <div class="f-err"><i class="fa fa-circle-exclamation"></i> {{ $message }}</div>
                             @enderror
-                            @if($slug)
-                            <div class="slug-badge">
-                                <i class="fa fa-link" style="font-size: 10px;"></i>
-                                /{{ $slug }}
-                            </div>
+                            @if ($slug)
+                                <div class="slug-badge">
+                                    <i class="fa fa-link" style="font-size: 10px;"></i>
+                                    /{{ $slug }}
+                                </div>
                             @endif
                         </div>
 
@@ -310,11 +314,12 @@
                             <label class="f-lbl">{{ __('Description') }}</label>
                             <div class="f-wrap">
                                 <i class="fa fa-align-left f-ico ta-ico"></i>
-                                <textarea wire:model="description" rows="4" class="f-input @error('description') is-invalid @enderror" placeholder="{{ __('Describe what assets belong to this category...') }}">
+                                <textarea wire:model="description" rows="4" class="f-input @error('description') is-invalid @enderror"
+                                    placeholder="{{ __('Describe what assets belong to this category...') }}">
                                 </textarea>
                             </div>
                             @error('description')
-                            <div class="f-err"><i class="fa fa-circle-exclamation"></i> {{ $message }}</div>
+                                <div class="f-err"><i class="fa fa-circle-exclamation"></i> {{ $message }}</div>
                             @enderror
                         </div>
 
@@ -332,7 +337,8 @@
                                 {{ __('Saving...') }}
                             </span>
                         </button>
-                        <a href="{{ route('settings.config', ['page' => 'asset-categories']) }}" wire:navigate class="btn btn-outline-secondary rounded-pill px-4 fw-bold" style="font-size: 13px;">
+                        <a href="{{ route('settings.config', ['page' => 'asset-categories']) }}"
+                            class="btn btn-outline-secondary rounded-pill px-4 fw-bold" style="font-size: 13px;">
                             <i class="fa fa-arrow-left me-1"></i> {{ __('Back') }}
                         </a>
                     </div>
@@ -348,14 +354,14 @@
             <div class="preview-card shadow-sm">
                 <div style="position: relative; z-index: 1;">
                     @php
-                    $n = trim($name ?? '');
-                    $parts = explode(' ', $n);
-                    $initials = $n
-                    ? strtoupper(
-                    substr($parts[0], 0, 1) .
-                    (isset($parts[1]) ? substr($parts[1], 0, 1) : (strlen($n) > 1 ? $n[1] : '?'))
-                    )
-                    : '??';
+                        $n = trim($name ?? '');
+                        $parts = explode(' ', $n);
+                        $initials = $n
+                            ? strtoupper(
+                                substr($parts[0], 0, 1) .
+                                    (isset($parts[1]) ? substr($parts[1], 0, 1) : (strlen($n) > 1 ? $n[1] : '?')),
+                            )
+                            : '??';
                     @endphp
                     <div class="preview-avatar">{{ $initials }}</div>
 
@@ -363,20 +369,20 @@
                         {{ $n ?: __('Category Name') }}
                     </div>
 
-                    @if($slug ?? '')
-                    <div class="text-white text-opacity-75 small mb-1" style="font-family: monospace;">
-                        <i class="fa fa-link me-1" style="font-size: 10px;"></i>/{{ $slug }}
-                    </div>
+                    @if ($slug ?? '')
+                        <div class="text-white text-opacity-75 small mb-1" style="font-family: monospace;">
+                            <i class="fa fa-link me-1" style="font-size: 10px;"></i>/{{ $slug }}
+                        </div>
                     @endif
 
-                    @if($description ?? '')
-                    <div class="text-white text-opacity-75 small">
-                        {{ \Illuminate\Support\Str::limit($description, 70) }}
-                    </div>
+                    @if ($description ?? '')
+                        <div class="text-white text-opacity-75 small">
+                            {{ \Illuminate\Support\Str::limit($description, 70) }}
+                        </div>
                     @else
-                    <div class="text-white text-opacity-50 small">
-                        {{ __('Fill in the form to preview') }}
-                    </div>
+                        <div class="text-white text-opacity-50 small">
+                            {{ __('Fill in the form to preview') }}
+                        </div>
                     @endif
                 </div>
             </div>
@@ -384,7 +390,8 @@
             {{-- Tips --}}
             <div class="info-card">
                 <h6>
-                    <span style="width: 24px; height: 24px; background: rgba(111,66,193,.1);
+                    <span
+                        style="width: 24px; height: 24px; background: rgba(111,66,193,.1);
                         border-radius: 7px; display: inline-flex; align-items: center;
                         justify-content: center; font-size: 12px;">
                         <i class="fa fa-lightbulb" style="color: #6f42c1;"></i>
