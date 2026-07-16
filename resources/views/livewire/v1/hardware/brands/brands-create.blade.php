@@ -250,7 +250,6 @@
                 order: -1;
             }
         }
-
     </style>
 
     <div class="branch-page">
@@ -258,7 +257,8 @@
         {{-- ══════════════ FORM PANEL ══════════════ --}}
         <div class="form-panel shadow-sm">
             <div class="form-panel-header">
-                <div class="header-icon" style="{{ $IsEdit ? 'background: rgba(255,193,7,.12);' : 'background: rgba(13,110,253,.1);' }}">
+                <div class="header-icon"
+                    style="{{ $IsEdit ? 'background: rgba(255,193,7,.12);' : 'background: rgba(13,110,253,.1);' }}">
                     {{ $IsEdit ? '✏️' : '🏷️' }}
                 </div>
                 <div>
@@ -267,9 +267,9 @@
                     </h5>
                     <p class="text-muted mb-0" style="font-size: 12px;">
                         @if ($brand)
-                        {{ __('Editing') }}: <strong>{{ $brand->name }}</strong>
+                            {{ __('Editing') }}: <strong>{{ $brand->name }}</strong>
                         @else
-                        {{ __('Fill in the brand details below') }}
+                            {{ __('Fill in the brand details below') }}
                         @endif
                     </p>
                 </div>
@@ -284,10 +284,12 @@
                             <label class="f-lbl">{{ __('Brand Name') }} <span class="text-danger">*</span></label>
                             <div class="f-wrap">
                                 <i class="fa fa-tag f-ico"></i>
-                                <input type="text" wire:model.live="name" class="f-input @error('name') is-invalid @enderror" placeholder="{{ __('e.g. Dell, HP, Lenovo') }}">
+                                <input type="text" wire:model.live="name"
+                                    class="f-input @error('name') is-invalid @enderror"
+                                    placeholder="{{ __('e.g. Dell, HP, Lenovo') }}">
                             </div>
                             @error('name')
-                            <div class="f-err"><i class="fa fa-circle-exclamation"></i> {{ $message }}</div>
+                                <div class="f-err"><i class="fa fa-circle-exclamation"></i> {{ $message }}</div>
                             @enderror
                         </div>
 
@@ -298,25 +300,28 @@
 
                                 {{-- Preview --}}
                                 @if ($logo)
-                                <img src="{{ $this->getPreviewUrl($logo) }}" alt="preview" class="logo-preview" style="border-color: #0d6efd;">
+                                    {{ $this->getPreviewUrl($logo) }}
+                                    <img src="{{ $this->getPreviewUrl($logo) }}" alt="preview" class="logo-preview"
+                                        style="border-color: #0d6efd;">
                                 @elseif ($old_logo)
-                                <img src="{{ asset('storage/' . $old_logo) }}" alt="logo" class="logo-preview">
+                                    <img src="{{ asset('storage/' . $old_logo) }}" alt="logo" class="logo-preview">
                                 @else
-                                <div style="width: 80px; height: 80px; border-radius: 16px;
+                                    <div
+                                        style="width: 80px; height: 80px; border-radius: 16px;
                                         border: 2px dashed #e5e7eb; background: #f9fafb;
                                         display: flex; align-items: center; justify-content: center;
                                         font-size: 28px; flex-shrink: 0;">
-                                    🏷️
-                                </div>
+                                        🏷️
+                                    </div>
                                 @endif
 
                                 {{-- Upload Button --}}
                                 <label for="logo-input" class="logo-upload-btn">
                                     <i class="fa fa-upload"></i>
                                     @if ($logo || $old_logo)
-                                    {{ __('Change Logo') }}
+                                        {{ __('Change Logo') }}
                                     @else
-                                    {{ __('Upload Logo') }}
+                                        {{ __('Upload Logo') }}
                                     @endif
                                     <input type="file" id="logo-input" wire:model="logo" accept="image/*" hidden>
                                 </label>
@@ -331,7 +336,7 @@
                                 {{ __('PNG, JPG or SVG. Recommended size: 200x200px') }}
                             </div>
                             @error('logo')
-                            <div class="f-err mt-1"><i class="fa fa-circle-exclamation"></i> {{ $message }}</div>
+                                <div class="f-err mt-1"><i class="fa fa-circle-exclamation"></i> {{ $message }}</div>
                             @enderror
                         </div>
 
@@ -349,7 +354,8 @@
                                 {{ __('Saving...') }}
                             </span>
                         </button>
-                        <a wire:navigate href="{{ route('settings.config',['page'=>'brands']) }}" class="btn btn-outline-secondary rounded-pill px-4 fw-bold" style="font-size: 13px;">
+                        <a wire:navigate href="{{ route('settings.config', ['page' => 'brands']) }}"
+                            class="btn btn-outline-secondary rounded-pill px-4 fw-bold" style="font-size: 13px;">
                             <i class="fa fa-arrow-left me-1"></i> {{ __('Back') }}
                         </a>
                     </div>
@@ -367,38 +373,44 @@
 
                     {{-- Logo or Avatar --}}
                     @if ($logo)
-                    <img src="{{ $logo->temporaryUrl() }}" style="width: 56px; height: 56px; border-radius: 14px;
+                        <img src="{{ $logo->temporaryUrl() }}"
+                            style="width: 56px; height: 56px; border-radius: 14px;
                                    object-fit: contain; background: rgba(255,255,255,.2);
                                    padding: 6px; margin-bottom: 12px; display: block;">
                     @elseif ($old_logo)
-                    <img src="{{ asset('storage/' . $old_logo) }}" style="width: 56px; height: 56px; border-radius: 14px;
+                        <img src="{{ asset('storage/' . $old_logo) }}"
+                            style="width: 56px; height: 56px; border-radius: 14px;
                                    object-fit: contain; background: rgba(255,255,255,.2);
                                    padding: 6px; margin-bottom: 12px; display: block;">
                     @else
-                    @php
-                    $n = trim($name ?? '');
-                    $parts = explode(' ', $n);
-                    $initials = $n
-                    ? strtoupper(substr($parts[0],0,1) . (isset($parts[1]) ? substr($parts[1],0,1) : (strlen($n)>1 ? $n[1] : '?')))
-                    : '??';
-                    @endphp
-                    <div style="width: 56px; height: 56px; border-radius: 14px;
+                        @php
+                            $n = trim($name ?? '');
+                            $parts = explode(' ', $n);
+                            $initials = $n
+                                ? strtoupper(
+                                    substr($parts[0], 0, 1) .
+                                        (isset($parts[1]) ? substr($parts[1], 0, 1) : (strlen($n) > 1 ? $n[1] : '?')),
+                                )
+                                : '??';
+                        @endphp
+                        <div
+                            style="width: 56px; height: 56px; border-radius: 14px;
                             background: rgba(255,255,255,.2);
                             display: flex; align-items: center; justify-content: center;
                             font-size: 22px; font-weight: 800; color: #fff;
                             margin-bottom: 12px;">
-                        {{ $initials }}
-                    </div>
+                            {{ $initials }}
+                        </div>
                     @endif
 
                     <div class="text-white fw-bold mb-1" style="font-size: 16px;">
-                        {{ ($name ?? '') ?: __('Brand Name') }}
+                        {{ $name ?? '' ?: __('Brand Name') }}
                     </div>
                     <div class="text-white text-opacity-75 small">
-                        @if($logo || $old_logo)
-                        <i class="fa fa-check-circle me-1"></i> {{ __('Logo uploaded') }}
+                        @if ($logo || $old_logo)
+                            <i class="fa fa-check-circle me-1"></i> {{ __('Logo uploaded') }}
                         @else
-                        {{ __('Fill in the form to preview') }}
+                            {{ __('Fill in the form to preview') }}
                         @endif
                     </div>
 
@@ -408,7 +420,8 @@
             {{-- Tips --}}
             <div class="info-card">
                 <h6>
-                    <span style="width: 24px; height: 24px; background: rgba(13,110,253,.1);
+                    <span
+                        style="width: 24px; height: 24px; background: rgba(13,110,253,.1);
                         border-radius: 7px; display: inline-flex; align-items: center;
                         justify-content: center; font-size: 12px;">
                         <i class="fa fa-lightbulb text-primary"></i>
