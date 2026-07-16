@@ -4,11 +4,12 @@ namespace App\Livewire\V1\Hardware\Brands;
 
 use App\Models\brand;
 use Livewire\Component;
+use App\Helpers\WithPreviewHelper;
 use Livewire\Features\SupportFileUploads\WithFileUploads;
 
 class BrandsCreate extends Component
 {
-    use WithFileUploads;
+    use WithFileUploads ,WithPreviewHelper;
     protected $listeners = ['brand-created' => 'mount'];
     public $IsEdit = false;
     public $name;
@@ -26,13 +27,15 @@ class BrandsCreate extends Component
         }
     }
 
+
     public function submitBrand()
     {
         $this->validate([
             'name' => 'required',
-            'logo' => 'required',
+            // 'logo' => 'required',
         ]);
-        $image = $this->logo->store('brands', 'public');
+        
+        $image = $this->logo ? $this->logo->store('brands', 'public') :'';
         $brand =   brand::updateOrCreate(['id' => $this->brandId], [
             'name' => $this->name,
             'logo' => $image,

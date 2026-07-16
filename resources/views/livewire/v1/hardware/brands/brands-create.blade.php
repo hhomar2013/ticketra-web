@@ -298,7 +298,7 @@
 
                                 {{-- Preview --}}
                                 @if ($logo)
-                                <img src="{{ $logo->temporaryUrl() }}" alt="preview" class="logo-preview" style="border-color: #0d6efd;">
+                                <img src="{{ $this->getPreviewUrl($logo) }}" alt="preview" class="logo-preview" style="border-color: #0d6efd;">
                                 @elseif ($old_logo)
                                 <img src="{{ asset('storage/' . $old_logo) }}" alt="logo" class="logo-preview">
                                 @else

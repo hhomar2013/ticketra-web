@@ -33,6 +33,9 @@ use App\Livewire\V1\UsersManagement\UsersRoleAndPermissions;
 use App\Livewire\V1\Users\UserDashboardIndex;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Response;
+
 
 Route::get('/', function () {
 
@@ -118,5 +121,23 @@ Route::middleware(['auth'])->group(function () {
 Route::middleware('guest')->group(function () {
     Route::get('login', \App\Livewire\V1\Auth\Login::class)->name('login');
 });
+
+
+
+
+Route::get('/livewire-temp-preview/{filename}', function ($filename) {
+    // Livewire يخزن الملفات المؤقتة في ديسك local داخل مجلد livewire-tmp
+    $path = 'livewire-tmp/' . $filename;
+
+    if (!Storage::disk('local')->exists($path)) {
+        abort(404, 'الملف غير موجود أو انتهت صلاحيته');
+    }
+
+    $file = Storage::disk('local')->get($path);
+    $mimeType = Storage::disk('local')->mimeType($path);
+
+    // إرجاع الملف كـ Response مع الـ Mime Type المناسب ليعرض كصورة
+    return Response::make($file, 200)->header("Content-Type", $mimeType);
+})->name('livewire.temp.preview');
 
 // require __DIR__ . '/auth.php';
