@@ -300,7 +300,7 @@
 
                                 {{-- Preview --}}
                                 @if ($logo)
-                                    {{ $this->getPreviewUrl($logo) }}
+                                
                                     <img src="{{ $this->getPreviewUrl($logo) }}" alt="preview" class="logo-preview"
                                         style="border-color: #0d6efd;">
                                 @elseif ($old_logo)

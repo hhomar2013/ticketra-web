@@ -161,25 +161,21 @@ class AssetsCreate extends Component
             $asset = asset::create($data);
         }
 
-        // حل المشكلة الثانية: الحفظ الذكي للمواصفات
         foreach ($this->specs as $spec) {
-            // لو القيمة فاضية ممكن ما تحفظهاش عشان توفر مساحة (اختياري)
             $value = $this->spec_values[$spec->id] ?? '';
-
             asset_attribute::query()->updateOrCreate(
                 [
-                    // الشروط اللي بيبحث بيها (لو لقى السطر ده هيعدله)
                     'asset_id' => $asset->id,
                     'attribute_id' => $spec->id,
                 ],
                 [
-                    // القيمة اللي هتتحدث أو تتكريت جديدة
+
                     'value' => $value,
                 ]
             );
         }
 
-        // تفريغ المدخلات
+
         $this->reset(['asset_tag', 'serial_number', 'category_id', 'branch_id', 'brand_id', 'type_model_id', 'purchase_date', 'warranty_expiry', 'spec_values']);
 
         return redirect()->route('hardware.assets.index');

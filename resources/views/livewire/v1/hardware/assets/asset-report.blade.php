@@ -1,3 +1,13 @@
+<style>
+    .user-card {
+        /* background: linear-gradient(135deg, #407bd449 0%, #ffffff 50%); */
+        background-color: #88ade48b;
+        border-radius: 20px;
+        border: none;
+        overflow: hidden;
+        position: relative;
+    }
+</style>
 <div class="container-fluid p-5">
     <div class="row">
         <div class="col-md-2">
@@ -11,35 +21,35 @@
     <h3 class="mb-3">{{ __('Date') }} : {{ now()->format('Y - m - d') }}</h3>
 
     <div class="row">
-        <div class="welcome-card p-5 mb-4 shadow-sm">
-            <div class="d-flex align-items-center justify-content-between">
+        <div class="user-card  p-5 mb-4 shadow-sm">
+            <div class="d-flex align-items-center justify-content-between ">
                 <div style="position: relative; z-index: 1;">
 
-                    <h5 class="text-white  mb-2">
+                    <h5 class="text-dark  mb-2">
                         Date : {{ now()->format('d / m / Y') }}
                     </h5>
-                    <h4 class="text-white fw-bold mb-2">
+                    <h4 class="text-dark fw-bold mb-2">
                         Name : {{ $asset->assignments[0]['user']['name'] }}
                     </h4>
-                    <h4 class="text-white fw-bold mb-2">
+                    <h4 class="text-dark fw-bold mb-2">
                         Department : {{ $asset->assignments[0]['user']['category']['name'] }}
                     </h4>
-                    <h5 class="text-white fw-bold mb-2">
-                        Title : _______________________
+                    <h5 class="text-dark fw-bold mb-2">
+                        Title : {{ $asset->assignments[0]['user']['title'] }}
                     </h5>
                 </div>
-                <div class="d-none d-md-block text-white" style="position: relative; z-index: 1;" dir="rtl">
+                <div class="d-none d-md-block text-dark" style="position: relative; z-index: 1;" dir="rtl">
 
-                    <h5 class="text-white  mb-2">
+                    <h5 class="text-dark  mb-2">
                         التاريخ : {{ now()->format('d / m / Y') }}
                     </h5>
-                    <h5 class="text-white fw-bold mb-3">
+                    <h5 class="text-dark fw-bold mb-3">
                         الاسم : _________________________
                     </h5>
-                    <h5 class="text-white fw-bold mb-3">
+                    <h5 class="text-dark fw-bold mb-3">
                         الإدارة التابع لها : ___________________
                     </h5>
-                    <h5 class="text-white fw-bold mb-3">
+                    <h5 class="text-dark fw-bold mb-3">
                         الوظيفة : _________________________
                     </h5>
                 </div>

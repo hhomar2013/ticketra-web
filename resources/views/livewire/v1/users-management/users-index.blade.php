@@ -150,7 +150,7 @@
 
     {{-- ══════ Table ══════ --}}
     @if ($users->count())
-        <div class="table-wrap shadow-sm">
+        <div class="table-wrap shadow-sm p-2">
             <table class="table table-hover align-middle mb-0">
                 <thead style="background: #f9fafb;">
                     <tr>
@@ -289,9 +289,10 @@
                 </tbody>
             </table>
         </div>
-        <div class="mt-4 d-flex justify-content-end">
+        <div class="mt-4 d-flex justify-content-end ">
             {{ $users->links() }}
         </div>
+        <br>
     @else
         <div class="text-center py-5 text-muted">
             <div style="font-size: 48px; margin-bottom: 12px;">👥</div>

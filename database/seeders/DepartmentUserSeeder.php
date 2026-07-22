@@ -1,0 +1,286 @@
+<?php
+
+namespace Database\Seeders;
+
+use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
+use Carbon\Carbon;
+
+class DepartmentUserSeeder extends Seeder
+{
+    /**
+     * Run the database seeds.
+     */
+   public function run()
+    {
+        // تعطيل قيود المفاتيح الأجنبية مؤقتاً لتجنب المشاكل أثناء الـ Seed والـ Truncate
+        DB::statement('SET FOREIGN_KEY_CHECKS=0;');
+        
+        DB::table('users')->truncate();
+        DB::table('categories')->truncate();
+
+        // 1. إدخال مصفوفة الأقسام وحفظ الـ IDs الخاصة بها لربط المستخدمين بشكل صحيح
+        $departmentsData = [
+            1 => ['name' => 'Commercial - Sales', 'created_at' => '2026-07-07 01:30:31', 'updated_at' => '2026-07-07 06:45:28', 'is_active' => 1],
+            2 => ['name' => 'Finance (Treasury)', 'created_at' => '2026-07-07 01:30:31', 'updated_at' => '2026-07-07 09:22:56', 'is_active' => 1],
+            3 => ['name' => 'Projects', 'created_at' => '2026-07-07 01:30:31', 'updated_at' => '2026-07-07 12:00:24', 'is_active' => 1],
+            4 => ['name' => 'Security & Governmental Affairs', 'created_at' => '2026-07-07 01:30:31', 'updated_at' => '2026-07-07 14:37:52', 'is_active' => 1],
+            5 => ['name' => 'Facility Management', 'created_at' => '2026-07-07 01:30:31', 'updated_at' => '2026-07-07 17:15:20', 'is_active' => 1],
+            6 => ['name' => 'Supply Chain', 'created_at' => '2026-07-07 01:30:31', 'updated_at' => '2026-07-07 19:52:48', 'is_active' => 1],
+            7 => ['name' => 'Technical Commercial - Supply Chain', 'created_at' => '2026-07-07 01:30:31', 'updated_at' => '2026-07-07 22:30:16', 'is_active' => 1],
+            8 => ['name' => 'Customer Excellence', 'created_at' => '2026-07-07 01:30:31', 'updated_at' => '2026-07-08 01:07:44', 'is_active' => 1],
+            9 => ['name' => 'Commercial Properties & leasing - Operations', 'created_at' => '2026-07-07 01:30:31', 'updated_at' => '2026-07-08 03:45:12', 'is_active' => 1],
+            10 => ['name' => 'Development', 'created_at' => '2026-07-07 01:30:31', 'updated_at' => '2026-07-08 06:22:40', 'is_active' => 1],
+            11 => ['name' => 'Sales Operations & Contracts', 'created_at' => '2026-07-07 01:30:31', 'updated_at' => '2026-07-08 09:00:08', 'is_active' => 1],
+            12 => ['name' => 'Supply Cahin', 'created_at' => '2026-07-07 01:30:31', 'updated_at' => '2026-07-08 11:37:36', 'is_active' => 1],
+            13 => ['name' => 'Finance', 'created_at' => '2026-07-07 01:30:31', 'updated_at' => '2026-07-08 14:15:04', 'is_active' => 1],
+            14 => ['name' => 'Customer Excellence - Community', 'created_at' => '2026-07-07 01:30:31', 'updated_at' => '2026-07-08 16:52:32', 'is_active' => 1],
+            15 => ['name' => 'Customer Excellence - CRM', 'created_at' => '2026-07-07 01:30:31', 'updated_at' => '2026-07-08 19:30:00', 'is_active' => 1],
+            16 => ['name' => 'Community Management', 'created_at' => '2026-07-07 01:30:31', 'updated_at' => '2026-07-08 22:07:28', 'is_active' => 1],
+            17 => ['name' => 'Customer Operations', 'created_at' => '2026-07-07 01:30:31', 'updated_at' => '2026-07-09 00:44:56', 'is_active' => 1],
+            18 => ['name' => 'Technology', 'created_at' => '2026-07-07 01:30:31', 'updated_at' => '2026-07-09 03:22:24', 'is_active' => 1],
+            19 => ['name' => 'Human Resources', 'created_at' => '2026-07-07 01:30:31', 'updated_at' => '2026-07-09 05:59:52', 'is_active' => 1],
+            20 => ['name' => 'Finance FM', 'created_at' => '2026-07-07 01:30:31', 'updated_at' => '2026-07-09 08:37:20', 'is_active' => 1],
+            21 => ['name' => 'Technology - IT', 'created_at' => '2026-07-07 01:30:31', 'updated_at' => '2026-07-09 11:14:48', 'is_active' => 1],
+            22 => ['name' => 'Technical Commercial', 'created_at' => '2026-07-07 01:30:31', 'updated_at' => '2026-07-09 13:52:16', 'is_active' => 1],
+            23 => ['name' => 'Marketing', 'created_at' => '2026-07-07 01:30:31', 'updated_at' => '2026-07-09 16:29:44', 'is_active' => 1],
+            24 => ['name' => 'Administration', 'created_at' => '2026-07-07 01:30:31', 'updated_at' => '2026-07-09 19:07:12', 'is_active' => 1],
+            25 => ['name' => 'CRM', 'created_at' => '2026-07-07 01:30:31', 'updated_at' => '2026-07-09 21:44:40', 'is_active' => 1],
+            26 => ['name' => 'Contracts & Sales Operations', 'created_at' => '2026-07-07 01:30:31', 'updated_at' => '2026-07-10 00:22:08', 'is_active' => 1],
+            27 => ['name' => 'Operations & Leasing', 'created_at' => '2026-07-07 01:30:31', 'updated_at' => '2026-07-10 02:59:36', 'is_active' => 1],
+            28 => ['name' => 'Security', 'created_at' => '2026-07-07 01:30:31', 'updated_at' => '2026-07-10 05:37:04', 'is_active' => 1],
+            29 => ['name' => 'Legal', 'created_at' => '2026-07-07 01:30:31', 'updated_at' => '2026-07-10 08:14:32', 'is_active' => 1],
+            30 => ['name' => 'Customer Operations – Resale & Rentals', 'created_at' => '2026-07-07 01:30:31', 'updated_at' => '2026-07-10 10:52:00', 'is_active' => 1],
+            31 => ['name' => 'IT', 'created_at' => '2026-07-07 01:30:31', 'updated_at' => '2026-07-10 13:29:28', 'is_active' => 1],
+            32 => ['name' => 'FM', 'created_at' => '2026-07-07 01:30:31', 'updated_at' => '2026-07-10 16:06:56', 'is_active' => 1],
+        ];
+
+        $insertedDepartments = [];
+        foreach ($departmentsData as $oldId => $dept) {
+            // حفظ الـ ID الجديد الذي تم إنشاؤه لربطه لاحقاً بالمستخدمين
+            $insertedDepartments[$oldId] = DB::table('categories')->insertGetId($dept);
+        }
+
+        // 2. مصفوفة المستخدمين وربطها ديناميكياً بـ department_id الجديد
+        $usersData = [
+            ['employee_id' => 1922, 'name' => 'Abanoub Medhat', 'email' => 'Abanoub.Medhat@hpd.com.eg', 'title' => 'Senior Property Consultant', 'old_dept_id' => 6],
+            ['employee_id' => null, 'name' => 'Abd El Rahman Mossad (EXT)', 'email' => 'AbdElRahman.Mossad@hpd.com.eg', 'title' => 'Outsource', 'old_dept_id' => 7],
+            ['employee_id' => 2067, 'name' => 'Abdallah Abobakr', 'email' => 'Abdallah.Abobakr@hpd.com.eg', 'title' => 'Quality Team Leader', 'old_dept_id' => 8],
+            ['employee_id' => 1732, 'name' => 'Abdallah Ashraf', 'email' => 'Abdallah.Ashraf@hpd.com.eg', 'title' => 'Security & Military Affairs Associate Manager', 'old_dept_id' => 9],
+            ['employee_id' => 2029, 'name' => 'Abdallah Deheem', 'email' => 'Abdallah.Deheem@hpd.com.eg', 'title' => 'MEP Team Leader', 'old_dept_id' => 10],
+            ['employee_id' => 1038, 'name' => 'AbdAllah Mahmoud', 'email' => 'Abdallah.Mahmoud@hpd.com.eg', 'title' => 'Warehouse Manager', 'old_dept_id' => 11],
+            ['employee_id' => 40026, 'name' => 'Abdallah Mostafa', 'email' => 'Abdallah.mostafa@hpd.com.eg', 'title' => 'Landscape Senior Engineer', 'old_dept_id' => 10],
+            ['employee_id' => 1694, 'name' => 'Abdel Alim Hassan', 'email' => 'Abdelalim.Hassan@hpd.com.eg', 'title' => 'Infrastructure Manager', 'old_dept_id' => 8],
+            ['employee_id' => 1781, 'name' => 'Abdel Aziz Mohamed', 'email' => 'AbdelAziz.Mohamed@hpd.com.eg', 'title' => 'Warehouse Specialist', 'old_dept_id' => 12],
+            ['employee_id' => 603, 'name' => 'Abdel Latif Taha', 'email' => 'AbdelLatif.Taha@hpd.com.eg', 'title' => 'Administrator', 'old_dept_id' => 13],
+            ['employee_id' => 1916, 'name' => 'Abdel Rahman Abuzeid', 'email' => 'Abdelrahman.Abuzeid@hpd.com.eg', 'title' => 'Operation Senior Executive', 'old_dept_id' => 14],
+            ['employee_id' => 2105, 'name' => 'Abdel Rahman Ayman', 'email' => 'Abdelrahman.ayman@hpd.com.eg', 'title' => 'Senior Property Consultant', 'old_dept_id' => 6],
+            ['employee_id' => 1831, 'name' => 'Abdel Rahman Darder', 'email' => 'AbdelRahman.Darder@hpd.com.eg', 'title' => 'Interior Design Engineer', 'old_dept_id' => 15],
+            ['employee_id' => 2145, 'name' => 'Abdel Rahman Elrayes', 'email' => 'Abdelrahman.Elrayes@hpd.com.eg', 'title' => 'Sales Operations Senior Executive', 'old_dept_id' => 16],
+            ['employee_id' => 1937, 'name' => 'Abdel Rahman Hussein', 'email' => 'AbdelRahman.Hussein@hpd.com.eg', 'title' => 'Quantity Surveyor Team Leader', 'old_dept_id' => 8],
+            ['employee_id' => 1683, 'name' => 'Abdel Rahman Salem', 'email' => 'AbdelRahman.Salem@hpd.com.eg', 'title' => 'Mechanical Associate Manager', 'old_dept_id' => 8],
+            ['employee_id' => 2043, 'name' => 'Abdel Rhman Sayed', 'email' => 'Abdelrhman.Sayed@hpd.com.eg', 'title' => 'Modification Senior Engineer', 'old_dept_id' => 8],
+            ['employee_id' => 1127, 'name' => 'Abdel Sattar Gamal', 'email' => 'AbdelSattar.Gamal@hpd.com.eg', 'title' => 'Procurement Senior Specialist', 'old_dept_id' => 17],
+            ['employee_id' => 40023, 'name' => 'Abdelmeguid Ahmed', 'email' => 'Abdelmeguid.Ahmed@hpd.com.eg', 'title' => 'Soft Service Manager', 'old_dept_id' => 10],
+            ['employee_id' => 40015, 'name' => 'Abdelrahman Kotb', 'email' => 'Abdelrahman.Qoutb@hpd.com.eg', 'title' => 'Landscape Senior Engineer', 'old_dept_id' => 10],
+            ['employee_id' => 1971, 'name' => 'Abdullah Rafik', 'email' => 'Abdullah.Rafik@hpd.com.eg', 'title' => 'Treasury Accountant', 'old_dept_id' => 18],
+            ['employee_id' => null, 'name' => 'Adel Hassan', 'email' => 'Adel.Hassan@hpd.com.eg', 'title' => 'Senior Treasury Manager', 'old_dept_id' => 18],
+            ['employee_id' => 2077, 'name' => 'Adham Soliman', 'email' => 'Adham.Soliman@hpd.com.eg', 'title' => 'Property Consultant', 'old_dept_id' => 6],
+            ['employee_id' => 1911, 'name' => 'Adham Tag', 'email' => 'Adham.Tag@hpd.com.eg', 'title' => 'Senior Sales Manager', 'old_dept_id' => 6],
+            ['employee_id' => 1725, 'name' => 'Ahmed Abdel Aziz', 'email' => 'Ahmed.AbdelAziz@hpd.com.eg', 'title' => 'AP Accountant', 'old_dept_id' => 18],
+            ['employee_id' => 1872, 'name' => 'Ahmed Abdel Gawad', 'email' => 'Ahmed.AbdelGawad@hpd.com.eg', 'title' => 'Sales Supervisor', 'old_dept_id' => 6],
+            ['employee_id' => 2091, 'name' => 'Ahmed Abdel Rahman', 'email' => 'Ahmed.AbdelRahman@hpd.com.eg', 'title' => 'Sales Supervisor', 'old_dept_id' => 6],
+            ['employee_id' => 1044, 'name' => 'Ahmed Abdel Wahab', 'email' => 'Ahmed.Abdelwahab@hpd.com.eg', 'title' => 'Design Director', 'old_dept_id' => 15],
+            ['employee_id' => 1382, 'name' => 'Ahmed AbdelMoniem', 'email' => 'Ahmed.AbdelMoniem@hpd.com.eg', 'title' => 'Contracts Team Leader', 'old_dept_id' => 16],
+            ['employee_id' => 1610, 'name' => 'Ahmed Abdrabo', 'email' => 'Ahmed.Abdrabo@hpd.com.eg', 'title' => 'Community Senior Executive', 'old_dept_id' => 19],
+            ['employee_id' => 1115, 'name' => 'Ahmed Abo El Naga', 'email' => 'Ahmed.AboElNaga@hpd.com.eg', 'title' => 'Electrical Director', 'old_dept_id' => 8],
+            ['employee_id' => 1968, 'name' => 'Ahmed Abou El Hassan', 'email' => 'Ahmed.AbouElhassan@hpd.com.eg', 'title' => 'Senior Property Consultant', 'old_dept_id' => 6],
+            ['employee_id' => 2073, 'name' => 'Ahmed Aboubakr', 'email' => 'Ahmed.Aboubakr@hpd.com.eg', 'title' => 'Quality Associate Manager', 'old_dept_id' => 8],
+            ['employee_id' => 1741, 'name' => 'Ahmed Adel', 'email' => 'Ahmed.Adel@hpd.com.eg', 'title' => 'Senior Documents Controller', 'old_dept_id' => 8],
+            ['employee_id' => 1820, 'name' => 'Ahmed Adly', 'email' => 'Ahmed.Adly@hpd.com.eg', 'title' => 'Community Senior Manager', 'old_dept_id' => 19],
+            ['employee_id' => 2126, 'name' => 'Ahmed Al Fakharany', 'email' => 'Ahmed.Alfakharany@hpd.com.eg', 'title' => 'GL Senior Accountant', 'old_dept_id' => 18],
+            ['employee_id' => 1829, 'name' => 'Ahmed Al Hady', 'email' => 'Ahmed.AlHady@hpd.com.eg', 'title' => 'Technical Procurement Senior Engineer', 'old_dept_id' => 11],
+            ['employee_id' => 1801, 'name' => 'Ahmed Al Shami', 'email' => 'Ahmed.AlShami@hpd.com.eg', 'title' => 'Quantity Surveyor Senior Engineer', 'old_dept_id' => 8],
+            ['employee_id' => 1232, 'name' => 'Ahmed Alaa', 'email' => 'Ahmed.Alaa@hpd.com.eg', 'title' => 'CRM Associate Manager', 'old_dept_id' => 20],
+            ['employee_id' => 1849, 'name' => 'Ahmed Alaa El Din', 'email' => 'Ahmed.AlaaElDin@hpd.com.eg', 'title' => 'Sales Operations Senior Executive', 'old_dept_id' => 16],
+            ['employee_id' => 2080, 'name' => 'Ahmed Ali', 'email' => 'Ahmed.Ali@hpd.com.eg', 'title' => 'Sales Operations Executive', 'old_dept_id' => 16],
+            ['employee_id' => 1567, 'name' => 'Ahmed Amin', 'email' => 'Ahmed.Amin@hpd.com.eg', 'title' => 'Property Consultant', 'old_dept_id' => 6],
+            ['employee_id' => 1172, 'name' => 'Ahmed Anis', 'email' => 'Ahmed.Anis@hpd.com.eg', 'title' => 'Modifications Team Leader', 'old_dept_id' => 21],
+            ['employee_id' => 1513, 'name' => 'Ahmed Atef', 'email' => 'Ahmed.Atef@hpd.com.eg', 'title' => 'Projects senior Manger', 'old_dept_id' => 8],
+            ['employee_id' => 2137, 'name' => 'Ahmed Badr', 'email' => 'Ahmed.Badr@hpd.com.eg', 'title' => 'Sales Supervisor', 'old_dept_id' => 6],
+            ['employee_id' => 813, 'name' => 'Ahmed Dawood', 'email' => 'ahmed.dawood@hpd.com.eg', 'title' => 'Head of Customer Operations', 'old_dept_id' => 22],
+            ['employee_id' => 1893, 'name' => 'Ahmed Dessoky', 'email' => 'Ahmed.Dessoky@hpd.com.eg', 'title' => 'Senior Property Consultant', 'old_dept_id' => 6],
+            ['employee_id' => 2123, 'name' => 'Ahmed Ehab', 'email' => 'Ahmed.Ehab@hpd.com.eg', 'title' => 'Sales Supervisor', 'old_dept_id' => 6],
+            ['employee_id' => 1204, 'name' => 'Ahmed Eid', 'email' => 'Ahmed.Eid@hpd.com.eg', 'title' => 'Applications Senior Manager', 'old_dept_id' => 23],
+            ['employee_id' => 1599, 'name' => 'Ahmed El Adewii', 'email' => 'Ahmed.ElAdewii@hpd.com.eg', 'title' => 'Property Consultant', 'old_dept_id' => 6],
+            ['employee_id' => 2083, 'name' => 'Ahmed El Assal', 'email' => 'Ahmed.Elassal@hpd.com.eg', 'title' => 'Procurement Associate Manager', 'old_dept_id' => 11],
+            ['employee_id' => 1540, 'name' => 'Ahmed El Batal', 'email' => 'Ahmed.ElBatal@hpd.com.eg', 'title' => 'Finance Coordinator', 'old_dept_id' => 18],
+            ['employee_id' => null, 'name' => 'Ahmed El Degwy', 'email' => 'Ahmed.Eldegwy@hpd.com.eg', 'title' => 'Head of Supply Chain', 'old_dept_id' => 11],
+            ['employee_id' => 1088, 'name' => 'Ahmed El Ghamry', 'email' => 'Ahmed.ElGhamry@hpd.com.eg', 'title' => 'Chief Projects Officer', 'old_dept_id' => 8],
+            ['employee_id' => 1489, 'name' => 'Ahmed El Ghazaly', 'email' => 'Ahmed.ElGhazaly@hpd.com.eg', 'title' => 'Employee Relations Sr. Manager', 'old_dept_id' => 24],
+            ['employee_id' => 2025, 'name' => 'Ahmed El Henedy', 'email' => 'Ahmed.ElHenedy@hpd.com.eg', 'title' => 'Senior Planning Engineer', 'old_dept_id' => 8],
+            ['employee_id' => 5032, 'name' => 'Ahmed El Kholy (EXT)', 'email' => 'Ahmed.ElKholy@hpd.com.eg', 'title' => 'Outsource', 'old_dept_id' => 25],
+            ['employee_id' => 517, 'name' => 'Ahmed El Said', 'email' => 'ahmed.ahmed@hpd.com.eg', 'title' => 'Tax Senior Manager', 'old_dept_id' => 18],
+            ['employee_id' => 1539, 'name' => 'Ahmed El Salamony', 'email' => 'Ahmed.ElSalamony@hpd.com.eg', 'title' => 'Design Associate Manager', 'old_dept_id' => 15],
+            ['employee_id' => 1287, 'name' => 'Ahmed ElTaalab', 'email' => 'Ahmed.ElTaalab@hpd.com.eg', 'title' => 'IT Manager, Light Current', 'old_dept_id' => 26],
+            ['employee_id' => 1880, 'name' => 'Ahmed Essam', 'email' => 'Ahmed.Essam@hpd.com.eg', 'title' => 'Technical Commercial Associate Manager', 'old_dept_id' => 27],
+            ['employee_id' => 1381, 'name' => 'Ahmed FakhrEldin', 'email' => 'Ahmed.FakhrEldin@hpd.com.eg', 'title' => 'Contracts Team Leader', 'old_dept_id' => 16],
+            ['employee_id' => 2030, 'name' => 'Ahmed Farouk', 'email' => 'Ahmed.Farouk@hpd.com.eg', 'title' => 'Property Consultant', 'old_dept_id' => 6],
+            ['employee_id' => 837, 'name' => 'Ahmed Fouad', 'email' => 'ahmed.fouad@hpd.com.eg', 'title' => 'Marketing Senior Manager', 'old_dept_id' => 28],
+            ['employee_id' => 1653, 'name' => 'Ahmed Fouda', 'email' => 'Ahmed.Fouda@hpd.com.eg', 'title' => 'Deputy Governmental and Military Affairs Director', 'old_dept_id' => 9],
+            ['employee_id' => 699, 'name' => 'Ahmed Gaber', 'email' => 'Ahmed.Gaber@hpd.com.eg', 'title' => 'Administration Team Leader', 'old_dept_id' => 29],
+            ['employee_id' => null, 'name' => 'Ahmed Gad', 'email' => 'Ahmed.Gad@hpd.com.eg', 'title' => 'CFO', 'old_dept_id' => 18],
+            ['employee_id' => 1532, 'name' => 'Ahmed Gamal', 'email' => 'Ahmed.Gamal@hpd.com.eg', 'title' => 'Projects Associate Manager', 'old_dept_id' => 8],
+            ['employee_id' => null, 'name' => 'Ahmed Hagrass', 'email' => 'Ahmed.Hagrass@hpd.com.eg', 'title' => 'Client Relations Executive', 'old_dept_id' => 30],
+            ['employee_id' => 1808, 'name' => 'Ahmed Hamdy', 'email' => 'Ahmed.Hamdy@hpd.com.eg', 'title' => 'Technology Operations Senior Engineer', 'old_dept_id' => 26],
+            ['employee_id' => 1788, 'name' => 'Ahmed Hany', 'email' => 'Ahmed.Hany@hpd.com.eg', 'title' => 'Property Consultant', 'old_dept_id' => 6],
+            ['employee_id' => 1865, 'name' => 'Ahmed Hosny', 'email' => 'Ahmed.Hosny@hpd.com.eg', 'title' => 'Sales Manager', 'old_dept_id' => 6],
+            ['employee_id' => 1742, 'name' => 'Ahmed Hussein', 'email' => 'Ahmed.Hussein@hpd.com.eg', 'title' => 'Low Current Team Leader', 'old_dept_id' => 26],
+            ['employee_id' => 2073, 'name' => 'Ahmed Ibrahim (EXT)', 'email' => 'Ahmed.Ibrahim@hpd.com.eg', 'title' => 'Outsource', 'old_dept_id' => 31],
+            ['employee_id' => null, 'name' => 'Ahmed Kamal (EXT)', 'email' => 'Ahmed.Kamal@hpd.com.eg', 'title' => 'Outsource', 'old_dept_id' => 8],
+            ['employee_id' => 1650, 'name' => 'Ahmed Khalafallah', 'email' => 'Ahmed.Khalafallah@hpd.com.eg', 'title' => 'Tenant Relations Associate Manager', 'old_dept_id' => 32],
+            ['employee_id' => 1461, 'name' => 'Ahmed Lotfy', 'email' => 'Ahmed.Lotfy@hpd.com.eg', 'title' => 'Civil Defense Associate Manager', 'old_dept_id' => 33],
+            ['employee_id' => 2090, 'name' => 'Ahmed Mizo', 'email' => 'Ahmed.Mizo@hpd.com.eg', 'title' => 'Sales Director', 'old_dept_id' => 6],
+            ['employee_id' => 1800, 'name' => 'Ahmed Mohamed Khalifa', 'email' => 'Ahmed.Khalifa@hpd.com.eg', 'title' => 'Treasury Accountant', 'old_dept_id' => 18],
+            ['employee_id' => 2103, 'name' => 'Ahmed Mohey', 'email' => 'Ahmed.Mohey@hpd.com.eg', 'title' => 'Projects Team Leader', 'old_dept_id' => 8],
+            ['employee_id' => 1084, 'name' => 'Ahmed Mostafa', 'email' => 'Ahmed.Mostafa@hpd.com.eg', 'title' => 'AR Accounting Supervisor', 'old_dept_id' => 18],
+            ['employee_id' => 1822, 'name' => 'Ahmed Negm', 'email' => 'Ahmed.Negm@hpd.com.eg', 'title' => 'Projects Associate Manager', 'old_dept_id' => 8],
+            ['employee_id' => 878, 'name' => 'Ahmed Omar', 'email' => 'ahmed.omar@hpd.com.eg', 'title' => 'Senior Documents Controller', 'old_dept_id' => 8],
+            ['employee_id' => 1438, 'name' => 'Ahmed Rashad', 'email' => 'Ahmed.Rashad@hpd.com.eg', 'title' => 'FM Accounting Senior Manager', 'old_dept_id' => 18],
+            ['employee_id' => 1039, 'name' => 'Ahmed Saad', 'email' => 'Ahmed.Saad@hpd.com.eg', 'title' => 'Technical Director', 'old_dept_id' => 15],
+            ['employee_id' => 11012, 'name' => 'Ahmed Saafan (EXT)', 'email' => 'Ahmed.Saafan@hpd.com.eg', 'title' => 'Consultant', 'old_dept_id' => 34],
+            ['employee_id' => 1279, 'name' => 'Ahmed Salah', 'email' => 'Ahmed.Salah@hpd.com.eg', 'title' => 'FM Accounting Supervisor', 'old_dept_id' => 18],
+            ['employee_id' => null, 'name' => 'Ahmed Salama', 'email' => 'Ahmed.Salama@hpd.com.eg', 'title' => null, 'old_dept_id' => 8],
+            ['employee_id' => 1769, 'name' => 'Ahmed Saleh', 'email' => 'Ahmed.Saleh@hpd.com.eg', 'title' => 'Resale Property Consultant', 'old_dept_id' => 35],
+            ['employee_id' => null, 'name' => 'Ahmed Sayed', 'email' => 'ahmed.sayed@hpd.com.eg', 'title' => 'Documents Controller', 'old_dept_id' => 8],
+            ['employee_id' => 1772, 'name' => 'Ahmed Shaarawy', 'email' => 'Ahmed.Shaarawy@hpd.com.eg', 'title' => 'Projects Team Leader', 'old_dept_id' => 8],
+            ['employee_id' => 1944, 'name' => 'Ahmed Shabana', 'email' => 'Ahmed.Shabana@hpd.com.eg', 'title' => 'Sales Supervisor', 'old_dept_id' => 6],
+            ['employee_id' => 1139, 'name' => 'Ahmed Sharkawy', 'email' => 'Ahmed.Sharkawy@hpd.com.eg', 'title' => 'HR & Admin Manager', 'old_dept_id' => 24],
+            ['employee_id' => 1480, 'name' => 'Ahmed Shoukry', 'email' => 'Ahmed.Shoukry@hpd.com.eg', 'title' => 'Senior Property Consultant', 'old_dept_id' => 6],
+            ['employee_id' => 569, 'name' => 'Ahmed Soliman', 'email' => 'a.soliman@hpd.com.eg', 'title' => 'Document Control Team Leader', 'old_dept_id' => 8],
+            ['employee_id' => 1976, 'name' => 'Ahmed Talaat', 'email' => 'Ahmed.Talaat@hpd.com.eg', 'title' => 'AR Accountant', 'old_dept_id' => 18],
+            ['employee_id' => 1842, 'name' => 'Ahmed Tawfeek', 'email' => 'Ahmed.Tawfeek@hpd.com.eg', 'title' => 'Cost Senior Manager', 'old_dept_id' => 8],
+            ['employee_id' => 23011, 'name' => 'Ahmed Wagih (EXT)', 'email' => 'Ahmed.Wagih@hpd.com.eg', 'title' => 'Control Room Admin (Outsource)', 'old_dept_id' => 33],
+            ['employee_id' => 1749, 'name' => 'Ahmed Waheed', 'email' => 'Ahmed.Waheed@hpd.com.eg', 'title' => 'HSE Supervisor', 'old_dept_id' => 8],
+            ['employee_id' => 937, 'name' => 'Ahmed Wegdan', 'email' => 'ahmed.wegdan@hpd.com.eg', 'title' => 'IT Executive Director', 'old_dept_id' => 36],
+            ['employee_id' => 2108, 'name' => 'Ahmed Zain', 'email' => 'Ahmed.Zain@hpd.com.eg', 'title' => 'Associate Manager', 'old_dept_id' => 8],
+            ['employee_id' => 1797, 'name' => 'Ahmed Zeidan', 'email' => 'Ahmed.Zeidan@hpd.com.eg', 'title' => 'Sales Associate Manager', 'old_dept_id' => 6],
+            ['employee_id' => 2132, 'name' => 'Ahmed Zohry', 'email' => 'Ahmed.Zohry@hpd.com.eg', 'title' => 'Sales Supervisor', 'old_dept_id' => 6],
+            ['employee_id' => 2047, 'name' => 'Aisha Afifi', 'email' => 'Aisha.Afifi@hpd.com.eg', 'title' => 'Cost Control Team Leader', 'old_dept_id' => 8],
+            ['employee_id' => 1836, 'name' => 'Aisha Haggagi', 'email' => 'Aisha.Haggagi@hpd.com.eg', 'title' => 'Digital Marketing Senior Executive', 'old_dept_id' => 28],
+            ['employee_id' => 1183, 'name' => 'Akram Anwar', 'email' => 'Akram.Anwar@hpd.com.eg', 'title' => 'Administrator Supervisor', 'old_dept_id' => 29],
+            ['employee_id' => 1766, 'name' => 'Alaa Abo El Gheat', 'email' => 'Alaa.AboElGheat@hpd.com.eg', 'title' => 'Sales Supervisor', 'old_dept_id' => 6],
+            ['employee_id' => 23055, 'name' => 'Alaa Zinhom (EXT)', 'email' => 'Alaa.Zinhom@hpd.com.eg', 'title' => 'Outsource', 'old_dept_id' => 37],
+            ['employee_id' => 1561, 'name' => 'Ali Abdel Maguid', 'email' => 'Ali.AbdelMeguid@hpd.com.eg', 'title' => 'Sales Director', 'old_dept_id' => 6],
+            ['employee_id' => 1987, 'name' => 'Ali El Dinary', 'email' => 'Ali.ElDinary@hpd.com.eg', 'title' => 'Property Consultant', 'old_dept_id' => 6],
+            ['employee_id' => 924, 'name' => 'Ali El Nawawy', 'email' => 'ali.elnawawy@hpd.com.eg', 'title' => 'Head of Sales Operations & Contracts', 'old_dept_id' => 16],
+            ['employee_id' => 1729, 'name' => 'Ali Gnied', 'email' => 'Ali.Gnied@hpd.com.eg', 'title' => 'Accountant', 'old_dept_id' => 18],
+            ['employee_id' => 1515, 'name' => 'Ali Sami', 'email' => 'Ali.Sami@hpd.com.eg', 'title' => 'Senior Procurement Specialist', 'old_dept_id' => 11],
+            ['employee_id' => 1175, 'name' => 'Alshimaa Abdullatif', 'email' => 'AlShimaa.AbdulLatif@hpd.com.eg', 'title' => 'Contracts Senior Manager', 'old_dept_id' => 27],
+            ['employee_id' => null, 'name' => 'Aly Moussa', 'email' => 'Aly.Moussa@hpd.com.eg', 'title' => 'CRM Senior Manager (Founders)', 'old_dept_id' => null],
+            ['employee_id' => null, 'name' => 'Amgad Fouad', 'email' => 'Amgad.Fouad@hpdeg.onmicrosoft.com', 'title' => null, 'old_dept_id' => null],
+            ['employee_id' => 926, 'name' => 'Amin Serag', 'email' => 'amin.serag@hpd.com.eg', 'title' => 'Chief Executive Officer - CEO', 'old_dept_id' => null],
+            ['employee_id' => 1137, 'name' => 'Amina Mohamed', 'email' => 'Amina.Mohamed@hpd.com.eg', 'title' => 'Senior Document Controller', 'old_dept_id' => null],
+            ['employee_id' => 1784, 'name' => 'Amir Dawood', 'email' => 'Amir.Dawood@hpd.com.eg', 'title' => 'Technical Commercial Manager', 'old_dept_id' => 27],
+            ['employee_id' => null, 'name' => 'Amira Yassin', 'email' => 'Amira.Yassin@hpd.com.eg', 'title' => 'Mortgage Consultant', 'old_dept_id' => 18],
+            ['employee_id' => 462, 'name' => 'Amr Ahmed', 'email' => 'Amr.Ahmed@hpd.com.eg', 'title' => 'Administration Supervisor', 'old_dept_id' => 29],
+            ['employee_id' => 2120, 'name' => 'Amr El Leithy', 'email' => 'Amr.ElLeithy@hpd.com.eg', 'title' => 'Senior Property Consultant', 'old_dept_id' => 6],
+            ['employee_id' => 1859, 'name' => 'Amr El Zekairy', 'email' => 'Amr.ElZekairy@hpd.com.eg', 'title' => 'Senior Sales Manager', 'old_dept_id' => 6],
+            ['employee_id' => 5090, 'name' => 'Amr ElSharkawey', 'email' => 'Amr.ElSharkawey@hpd.com.eg', 'title' => null, 'old_dept_id' => null],
+            ['employee_id' => 1825, 'name' => 'Amr Fouad', 'email' => 'Amr.Fouad@hpd.com.eg', 'title' => 'Control Room Supervisor', 'old_dept_id' => null],
+            ['employee_id' => 2127, 'name' => 'Amr Hamdy', 'email' => 'Amr.Hamdy@hpd.com.eg', 'title' => 'Property Consultant', 'old_dept_id' => 6],
+            ['employee_id' => 1564, 'name' => 'Amr Hazem', 'email' => 'Amr.Hazem@hpd.com.eg', 'title' => 'Sales Associate Manager', 'old_dept_id' => 5],
+            ['employee_id' => null, 'name' => 'Amr Ibrahim', 'email' => 'Amr.Ibrahim@hpd.com.eg', 'title' => 'Cashier Club House', 'old_dept_id' => 18],
+            ['employee_id' => 40027, 'name' => 'Amr Mohamed', 'email' => 'Amr.mohamed@hpd.com.eg', 'title' => 'FM Manager', 'old_dept_id' => 10],
+            ['employee_id' => 1874, 'name' => 'Amr Seoudi', 'email' => 'Amr.Seoudi@hpd.com.eg', 'title' => 'Marketing Senior Manager', 'old_dept_id' => null],
+            ['employee_id' => 2141, 'name' => 'Amr Soliman', 'email' => 'Amr.Soliman@hpd.com.eg', 'title' => 'Development Manager', 'old_dept_id' => 22],
+            ['employee_id' => 2143, 'name' => 'Amr Yassin', 'email' => 'Amr.Yassin@hpd.com.eg', 'title' => 'Sales Supervisor', 'old_dept_id' => 6],
+            ['employee_id' => 1369, 'name' => 'Anwer Al Mallah', 'email' => 'Anwer.AlMallah@hpd.com.eg', 'title' => 'Sales Supervisor', 'old_dept_id' => 6],
+            ['employee_id' => 1738, 'name' => 'Ashraf Mohamed', 'email' => 'Ashraf.Mohamed@hpd.com.eg', 'title' => 'Hospitality Senior Manager', 'old_dept_id' => null],
+            ['employee_id' => 40017, 'name' => 'Asia Ouda', 'email' => 'Asia.Ouda@hpd.com.eg', 'title' => 'AP Accountant', 'old_dept_id' => 18],
+            ['employee_id' => 1511, 'name' => 'Asma Sherif', 'email' => 'Asma.Sherif@hpd.com.eg', 'title' => 'Credit Control Senior Executive', 'old_dept_id' => null],
+            ['employee_id' => 2148, 'name' => 'Assem Mahmoud', 'email' => 'Assem.Mahmoud@hpd.com.eg', 'title' => 'Cost Control Associate Manager', 'old_dept_id' => 8],
+            ['employee_id' => 1975, 'name' => 'Aya Diaa', 'email' => 'Aya.Diaa@hpd.com.eg', 'title' => 'Sales Supervisor', 'old_dept_id' => 6],
+            ['employee_id' => 1746, 'name' => 'Aya Seif', 'email' => 'Aya.Seif@hpd.com.eg', 'title' => 'Marketing Executive', 'old_dept_id' => null],
+            ['employee_id' => 2058, 'name' => 'Ayaat Ayman', 'email' => 'Ayaat.Ayman@hpd.com.eg', 'title' => 'Senior Property Consultant', 'old_dept_id' => 6],
+            ['employee_id' => 1616, 'name' => 'Ayat El Ghandour', 'email' => 'Ayat.ElGhandour@hpd.com.eg', 'title' => 'Sales Supervisor', 'old_dept_id' => 6],
+            ['employee_id' => 1454, 'name' => 'Ayman Badr', 'email' => 'Ayman.Badr@hpd.com.eg', 'title' => 'Credit Control Supervisor', 'old_dept_id' => null],
+            ['employee_id' => 2055, 'name' => 'Ayman Tarek', 'email' => 'Ayman.Tarek@hpd.com.eg', 'title' => 'Modification Senior Engineer', 'old_dept_id' => 8],
+            ['employee_id' => 1954, 'name' => 'Aziz Ibrahim', 'email' => 'Aziz.Ibrahim@hpd.com.eg', 'title' => 'Sales Associate Manager', 'old_dept_id' => 6],
+            ['employee_id' => null, 'name' => 'Badr Ahmed (EXT)', 'email' => 'Badr.Ahmed@hpd.com.eg', 'title' => 'Treasury Accountant (Outsource)', 'old_dept_id' => 18],
+            ['employee_id' => 2149, 'name' => 'Baher Hossam', 'email' => 'Baher.Hossam@hpd.com.eg', 'title' => 'Sales Supervisor', 'old_dept_id' => 6],
+            ['employee_id' => 11008, 'name' => 'Bahy Mareey (EXT)', 'email' => 'Bahy.Mareey@hpd.com.eg', 'title' => null, 'old_dept_id' => null],
+            ['employee_id' => 1999, 'name' => 'Basem Ezzat', 'email' => 'Basem.Ezzat@hpd.com.eg', 'title' => 'Landscape Design Associate Manager', 'old_dept_id' => 15],
+            ['employee_id' => 1263, 'name' => 'Bassel Yasser', 'email' => 'Bassel.Yasser@hpd.com.eg', 'title' => 'Sales Manager', 'old_dept_id' => 6],
+            ['employee_id' => 1709, 'name' => 'Besan Abdel Ghany', 'email' => 'Besan.AbdelGhany@hpd.com.eg', 'title' => 'Design Senior Manager', 'old_dept_id' => 15],
+            ['employee_id' => null, 'name' => 'Board Meeting Room', 'email' => 'Board.MeetingRoom@hpd.com.eg', 'title' => null, 'old_dept_id' => null],
+            ['employee_id' => null, 'name' => 'Board Room', 'email' => 'Board.Room@hpd.com.eg', 'title' => null, 'old_dept_id' => null],
+            ['employee_id' => null, 'name' => 'Brokers Delegation', 'email' => 'Brokers.Delegation@hpd.com.eg', 'title' => null, 'old_dept_id' => null],
+            ['employee_id' => null, 'name' => 'Careers', 'email' => 'Careers@hpd.com.eg', 'title' => null, 'old_dept_id' => null],
+            ['employee_id' => 1025, 'name' => 'Carie Ezzat', 'email' => 'Carie.Ezzat@hpd.com.eg', 'title' => 'Sales Operations Associate Manager', 'old_dept_id' => null],
+            ['employee_id' => null, 'name' => 'CEO', 'email' => 'CEO@hpd.com.eg', 'title' => null, 'old_dept_id' => null],
+            ['employee_id' => 1080, 'name' => 'Christian Shaker', 'email' => 'Christian.Shaker@hpd.com.eg', 'title' => 'Credit Control Associate Manager', 'old_dept_id' => null],
+            ['employee_id' => 1067, 'name' => 'Christine Kamal', 'email' => 'Christine.Kamal@hpd.com.eg', 'title' => 'Head of Technical Commercial', 'old_dept_id' => 27],
+            ['employee_id' => null, 'name' => 'CIL', 'email' => 'CIL@hpd.com.eg', 'title' => null, 'old_dept_id' => null],
+            ['employee_id' => null, 'name' => 'Club House Reception', 'email' => 'ClubHouse.Reception@hpd.com.eg', 'title' => null, 'old_dept_id' => null],
+            ['employee_id' => null, 'name' => 'Communication', 'email' => 'communication@hpd.com.eg', 'title' => null, 'old_dept_id' => null],
+            ['employee_id' => null, 'name' => 'Community Front Desk', 'email' => 'Community.FrontDesk@hpd.com.eg', 'title' => 'Community Front Desk', 'old_dept_id' => null],
+            ['employee_id' => null, 'name' => 'Credit', 'email' => 'Credit@hpd.com.eg', 'title' => null, 'old_dept_id' => null],
+            ['employee_id' => 1395, 'name' => 'Dalia Ahmed', 'email' => 'Dalia.Ahmed@hpd.com.eg', 'title' => 'Community Executive', 'old_dept_id' => 21],
+            ['employee_id' => 1521, 'name' => 'Dalia AlaaElddin', 'email' => 'Dalia.AlaaElddin@hpd.com.eg', 'title' => 'Design Manager', 'old_dept_id' => 15],
+            ['employee_id' => 907, 'name' => 'Dalia Mokhtar', 'email' => 'dalia.mokhtar@hpd.com.eg', 'title' => 'Masterplan Design Director', 'old_dept_id' => 15],
+            ['employee_id' => 40025, 'name' => 'David Sameh', 'email' => 'David.Sameh@hpd.com.eg', 'title' => 'Community Senior Executive', 'old_dept_id' => 19],
+            ['employee_id' => null, 'name' => 'Digital Ocean', 'email' => 'DigitalOcean@hpd.com.eg', 'title' => null, 'old_dept_id' => null],
+            ['employee_id' => 2006, 'name' => 'Dina Hussein', 'email' => 'Dina.Hussein@hpd.com.eg', 'title' => 'Talent Acquisition Senior Manager', 'old_dept_id' => 24],
+            ['employee_id' => 1982, 'name' => 'Dina Osama', 'email' => 'Dina.Osama@hpd.com.eg', 'title' => 'Modification Team Leader', 'old_dept_id' => 8],
+            ['employee_id' => 2062, 'name' => 'Dina Serag', 'email' => 'Dina.Serag@hpd.com.eg', 'title' => 'Senior Property Consultant', 'old_dept_id' => 6],
+            ['employee_id' => 2001, 'name' => 'Dina Wael', 'email' => 'Dina.Wael@hpd.com.eg', 'title' => 'Design Team Leader', 'old_dept_id' => 15],
+            ['employee_id' => 1989, 'name' => 'Doaa Raouf', 'email' => 'Doaa.Raouf@hpd.com.eg', 'title' => 'Corporate Legal Director', 'old_dept_id' => 34],
+            ['employee_id' => 2052, 'name' => 'Ehab Boushra', 'email' => 'Ehab.Boushra@hpd.com.eg', 'title' => 'Infrastructure Senior Manager', 'old_dept_id' => 8],
+            ['employee_id' => 2044, 'name' => 'Ehab Mostafa', 'email' => 'Ehab.Mostafa@hpd.com.eg', 'title' => 'Landscape & Roads Director', 'old_dept_id' => 8],
+            ['employee_id' => 2072, 'name' => 'Ehab Sobhy', 'email' => 'Ehab.Sobhy@hpd.com.eg', 'title' => 'Projects Director', 'old_dept_id' => 8],
+            ['employee_id' => 1628, 'name' => 'Emam Salem', 'email' => 'Emam.Salem@hpd.com.eg', 'title' => 'Landscape Senior Engineer-Facility Management', 'old_dept_id' => 10],
+            ['employee_id' => 1888, 'name' => 'Eman Allam', 'email' => 'Eman.Allam@hpd.com.eg', 'title' => 'Sales Supervisor', 'old_dept_id' => 6],
+            ['employee_id' => 839, 'name' => 'Eman Seadah', 'email' => 'Eman.Seadah@hpd.com.eg', 'title' => 'Sales Senior Manager', 'old_dept_id' => 6],
+            ['employee_id' => 2034, 'name' => 'Enas Goud', 'email' => 'Enas.Goud@hpd.com.eg', 'title' => 'Quantity Surveyor Senior Engineer', 'old_dept_id' => 8],
+            ['employee_id' => 1526, 'name' => 'Engy kheir Eldeen', 'email' => 'Engy.kheirEldeen@hpd.com.eg', 'title' => 'Senior property Consultant', 'old_dept_id' => 6],
+            ['employee_id' => 1793, 'name' => 'Eptesam Mansour', 'email' => 'Eptesam.Mansour@hpd.com.eg', 'title' => 'Government Relations Specialist', 'old_dept_id' => 8],
+            ['employee_id' => 2147, 'name' => 'Erfan El Tayeb', 'email' => 'Erfan.Eltayeb@hpd.com.eg', 'title' => 'Sales Supervisor', 'old_dept_id' => 6],
+            ['employee_id' => 1457, 'name' => 'Eslam Azmy', 'email' => 'Eslam.Azmy@hpd.com.eg', 'title' => 'Community Senior Executive', 'old_dept_id' => 21],
+            ['employee_id' => 2017, 'name' => 'Eslam El Rashidy', 'email' => 'Eslam.Elrashidy@hpd.com.eg', 'title' => 'Senior Property Consultant', 'old_dept_id' => 6],
+            ['employee_id' => 1068, 'name' => 'Eslam Essam', 'email' => 'Eslam.Essam@hpd.com.eg', 'title' => 'Senior Network Support', 'old_dept_id' => 26],
+            ['employee_id' => 1733, 'name' => 'Eslam Ibrahim', 'email' => 'Eslam.Ibrahim@hpd.com.eg', 'title' => 'Quantity Surveyor Team Leader', 'old_dept_id' => 8],
+            ['employee_id' => 1914, 'name' => 'Eslam Sayed', 'email' => 'Eslam.Sayed@hpd.com.eg', 'title' => 'HR Business Partner Manager', 'old_dept_id' => 24],
+            ['employee_id' => 2066, 'name' => 'Eslam Zahran', 'email' => 'Eslam.zahran@hpd.com.eg', 'title' => 'Sales Supervisor', 'old_dept_id' => 6],
+        ];
+
+        $finalUsers = [];
+        foreach ($usersData as $user) {
+            // التحقق مما إذا كان القسم القديم له مقابل جديد، وإلا يتم تعيينه null
+            $newDeptId = (isset($user['old_dept_id']) && isset($insertedDepartments[$user['old_dept_id']])) 
+                ? $insertedDepartments[$user['old_dept_id']] 
+                : null;
+
+            $finalUsers[] = [
+                'employee_id'       => $user['employee_id'] ?? null,
+                'name'              => $user['name'],
+                'email'             => $user['email'],
+                'email_verified_at' => null,
+                'password'          => bcrypt("Hydepark123"), 
+                'title'             => $user['title'] ?? null,
+                'category_id'     => $newDeptId,
+                'created_at'        => Carbon::now(),
+                'updated_at'        => Carbon::now(),
+            ];
+        }
+
+        // إدخال البيانات على دفعات (Chunks) لضمان سرعة الأداء وعدم تخطي حدود الذاكرة
+        foreach (array_chunk($finalUsers, 50) as $chunk) {
+            DB::table('users')->insert($chunk);
+        }
+
+        // إعادة تفعيل قيود المفاتيح الأجنبية
+        DB::statement('SET FOREIGN_KEY_CHECKS=1;');
+    }
+}

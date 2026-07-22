@@ -24,7 +24,7 @@ class UsersIndex extends Component
     {
         $user = User::findOrFail($id);
 
-        // ✅ منع حذف نفسه
+
         if ($user->id === FacadesAuth::id()) {
             $this->dispatch('show-toast', ['message' => __('You cannot delete yourself'), 'type' => 'error']);
             return;

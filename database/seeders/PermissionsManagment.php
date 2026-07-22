@@ -15,24 +15,24 @@ class PermissionsManagment extends Seeder
     public function run(): void
     {
 
-        $departmients = ['IT', 'HR', 'Finance', 'Operations', 'Sales'];
+        $departmients = ['IT'];
 
         foreach ($departmients as $dept) {
             Category::create(['name' => $dept]);
         }
 
         $admin_user = User::create([
-            'name' => 'Test User',
+            'name' => 'Omar Mahgoub',
             'email' => 'omar@app.com',
             'password' => bcrypt('123456'),
             'category_id' => Category::where('name', 'IT')->first()->id,
         ]);
 
         $user_user = User::create([
-            'name' => 'Normal User',
-            'email' => 'user@app.com',
+            'name' => 'Karim Mohsen',
+            'email' => 'karim@app.com',
             'password' => bcrypt('123456'),
-            'category_id' => Category::where('name', 'Finance')->first()->id,
+            'category_id' => Category::where('name', 'IT')->first()->id,
         ]);
 
         // إنشاء صلاحيات
@@ -61,6 +61,6 @@ class PermissionsManagment extends Seeder
 
         // تعيين دور للمستخدم الجديد
         $admin_user->assignRole('admin');
-        $user_user->assignRole('user');
+        $user_user->assignRole('admin');
     }
 }
