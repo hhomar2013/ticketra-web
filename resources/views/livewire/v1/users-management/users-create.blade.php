@@ -309,6 +309,22 @@
                         <div class="section-divider">{{ __('Personal Info') }}</div>
                     </div>
 
+
+                    <div class="col-md-6">
+                        <label class="f-lbl">{{ __('Employee Id') }} <span class="text-danger">*</span></label>
+                        <div class="f-wrap">
+                            <i class="fa fa-ticket f-ico"></i>
+                            <input type="text" wire:model.live="employee_id"
+                                class="f-input @error('employee_id') is-invalid @enderror"
+                                placeholder="{{ __('Enter Employee Id') }}">
+                        </div>
+                        @error('employee_id')
+                            <div class="f-err"><i class="fa fa-circle-exclamation"></i> {{ $message }}</div>
+                        @enderror
+                    </div>
+
+                    <div class="col-md-6"></div>
+
                     <div class="col-md-6">
                         <label class="f-lbl">{{ __('Full Name') }} <span class="text-danger">*</span></label>
                         <div class="f-wrap">

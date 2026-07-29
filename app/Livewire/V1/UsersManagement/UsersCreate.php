@@ -16,6 +16,7 @@ class UsersCreate extends Component
     public string $email = '';
     public string $password = '';
     public string $role = '';
+    public $employee_id = '';
     public bool $is_active = true;
     public $category_id;
     public $departments = [];
@@ -25,6 +26,7 @@ class UsersCreate extends Component
         if ($id) {
             $user = User::findOrFail($id);
             $this->userId = $id;
+            $this->employee_id = $user->employee_id;
             $this->IsEdit = true;
             $this->name = $user->name;
             $this->email = $user->email;
@@ -38,6 +40,7 @@ class UsersCreate extends Component
     public function save()
     {
         $rules = [
+            'employee_id' => 'required',
             'name' => 'required|string|max:100',
             'email' => 'required|email|unique:users,email' . ($this->userId ? ',' . $this->userId : ''),
             'role' => 'required|string|exists:roles,name',
@@ -52,6 +55,7 @@ class UsersCreate extends Component
         if ($this->IsEdit) {
             $user = User::findOrFail($this->userId);
             $user->update([
+                'employee_id' => $this->employee_id,
                 'name' => $this->name,
                 'email' => $this->email,
                 'status' => $this->is_active,
@@ -62,6 +66,7 @@ class UsersCreate extends Component
             }
         } else {
             $user = User::create([
+                'employee_id' => $this->employee_id,
                 'name' => $this->name,
                 'email' => $this->email,
                 'password' => Hash::make($this->password),
