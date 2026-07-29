@@ -1,7 +1,5 @@
 <?php
 namespace App\Models;
-
-
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Casts\Attribute;
@@ -73,7 +71,7 @@ class asset extends Model
     protected static function booted(): void
     {
         static::creating(function (asset $asset) {
-            $asset->asset_tag = 'TAG-' . str_pad(asset::count() + 1, 5, '0', STR_PAD_LEFT);
+            $asset->asset_tag = 'HPD-' . str_pad(asset::count() + 1, 5, '0', STR_PAD_LEFT);
         });
     }
     public function attributes()

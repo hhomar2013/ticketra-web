@@ -289,7 +289,7 @@
                         <tr>
                             <td class="ps-4">
                                 <span class="badge bg-light text-muted border" style="font-size: 11px;">
-                                    {{ $key + 1 }}
+                                    {{ $loop->iteration }}
                                 </span>
                             </td>
                             <td>
@@ -424,11 +424,13 @@
                                                 </button>
                                             </li>
                                             <li>
-                                                <button class="dropdown-item"
-                                                    onclick="confirmDelete({{ $asset->id }}, 'delete-asset')">
-                                                    <i class="fas fa-trash text-danger"></i>
-                                                    {{ __('Delete') }}
-                                                </button>
+                                                @if (!$asset->isAssigned())
+                                                    <button class="dropdown-item"
+                                                        onclick="confirmDelete({{ $asset->id }}, 'delete-asset')">
+                                                        <i class="fas fa-trash text-danger"></i>
+                                                        {{ __('Delete') }}
+                                                    </button>
+                                                @endif
                                             </li>
                                         </ul>
                                     </div>

@@ -36,6 +36,11 @@ class AssetsIndex extends Component
         'delete-asset' => 'deleteAsset',
     ];
 
+    public function updatedPerPage()
+    {
+        $this->resetPage();
+    }
+
     public $returnStatuses;
 
     public function mount()
@@ -99,8 +104,14 @@ class AssetsIndex extends Component
 
     public function deleteAsset($id)
     {
-        asset::find($id)->delete();
-        $this->dispatch('refreshAssetTable');
+        $asset = asset::find($id);
+        if ($asset) {
+            $asset->history()->delete();
+            $asset->assignments()->delete();
+            $asset->Transfer()->delete();
+            $asset->delete();
+            $this->dispatch('refreshAssetTable');
+        }
         // return redirect()->route('hardware.assets.index');
     }
 
