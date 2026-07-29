@@ -11,14 +11,18 @@ class UsersIndex extends Component
 {
     use WithPagination;
 
-    public string $search     = '';
+    public string $search = '';
     public string $roleFilter = '';
-    public int $perPage       = 10;
+    public int $perPage = 10;
 
     public function updatingSearch(): void
-    {$this->resetPage();}
+    {
+        $this->resetPage();
+    }
     public function updatingRoleFilter(): void
-    {$this->resetPage();}
+    {
+        $this->resetPage();
+    }
 
     public function deleteUser(int $id): void
     {
@@ -38,10 +42,10 @@ class UsersIndex extends Component
     public function toggleActive(int $id): void
     {
         $user = User::findOrFail($id);
-        $user->update(['status' => ! $user->status]);
+        $user->update(['status' => !$user->status]);
         $this->dispatch('show-toast', [
             'message' => $user->status ? __('User activated') : __('User deactivated'),
-            'type'    => 'success',
+            'type' => 'success',
         ]);
     }
 
@@ -49,11 +53,16 @@ class UsersIndex extends Component
     public function render()
     {
         $users = User::query()
-            ->when($this->search, fn($q) =>
+            ->when(
+                $this->search,
+                fn($q) =>
                 $q->where('name', 'like', '%' . $this->search . '%')
                     ->orWhere('email', 'like', '%' . $this->search . '%')
+                    ->orWhere('employee_id', 'like', '%' . $this->search . '%')
             )
-            ->when($this->roleFilter, fn($q) =>
+            ->when(
+                $this->roleFilter,
+                fn($q) =>
                 $q->role($this->roleFilter)
             )
             ->latest()

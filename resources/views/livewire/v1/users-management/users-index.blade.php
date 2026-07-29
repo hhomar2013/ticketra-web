@@ -155,6 +155,7 @@
                 <thead style="background: #f9fafb;">
                     <tr>
                         <th class="ps-4 py-3 text-muted small" style="width: 55px;">#</th>
+                        <th class="py-3 text-muted small">{{ __('Employee Id') }}</th>
                         <th class="py-3 text-muted small">{{ __('User') }}</th>
                         <th class="py-3 text-muted small">{{ __('Email') }}</th>
                         <th class="py-3 text-muted small">{{ __('Role') }}</th>
@@ -170,6 +171,12 @@
                             <td class="ps-4">
                                 <span class="badge bg-light text-muted border" style="font-size: 11px;">
                                     {{ $users->firstItem() + $key }}
+                                </span>
+                            </td>
+                            <td>
+                                <span class="badge bg-light text-primary border"
+                                    style="font-size: 11px;font-weight: bold;">
+                                    {{ $user->employee_id ?? '-' }}
                                 </span>
                             </td>
                             <td>
