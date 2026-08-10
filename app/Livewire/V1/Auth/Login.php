@@ -42,7 +42,6 @@ class Login extends Component
             $this->addError('email', __('Invalid login credentials.'));
         }
 
-        // $this->addError('email', 'بيانات تسجيل الدخول غير صحيحة.');
     }
 
     public function render()

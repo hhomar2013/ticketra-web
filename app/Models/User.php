@@ -70,6 +70,11 @@ class User extends Authenticatable
         return $this->hasMany(AssetAssignment::class);
     }
 
+    public function assignedByAssets()
+    {
+        return $this->hasMany(AssetAssignment::class, 'assigned_by');
+    }
+
     public function assignedTickets()
     {
         return $this->hasMany(Ticket::class, 'assigned_to');

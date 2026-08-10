@@ -82,7 +82,7 @@ Route::middleware(['auth'])->group(function () {
 
     Route::prefix('hardware/assets')->name('hardware.assets.')->group(function () {
         Route::get('/', AssetsIndex::class)->name('index');
-        Route::get('/create/', AssetsCreate::class)->name('create');
+        Route::get('/create', AssetsCreate::class)->name('create');
         Route::get('/edit/{id}', AssetsCreate::class)->name('edit');
         Route::get('/history/{id}', AssetsHistory::class)->name('history');
         Route::get('/assign-to-employee/{id}', AssignToEmployee::class)->name('assign-to-employee');

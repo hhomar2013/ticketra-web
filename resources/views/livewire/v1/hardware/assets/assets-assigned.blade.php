@@ -216,6 +216,9 @@
             <small class="text-muted">{{ __('Manage and track all assigned hardware assets') }}</small>
         </div>
         <div class="d-flex gap-2">
+            <a href="{{ route('hardware.assets.index') }}" class="btn btn-sm rounded-pill btn-outline-primary">
+                <i class="fa fa-arrow-left"></i> {{ __('Back') }}
+            </a>
 
         </div>
     </div>
@@ -229,24 +232,6 @@
                 <option value="50">50</option>
                 <option value="100">100</option>
             </select>
-            {{-- <button wire:click.prevent="sortBy('id')" class="filter-btn {{ $sortField === 'id' ? 'active' : '' }}">
-                <i class="fa fa-hashtag" style="font-size: 11px;"></i> {{ __('ID') }}
-            </button>
-            <button wire:click.prevent="sortBy('purchase_date')"
-                class="filter-btn {{ $sortField === 'purchase_date' ? 'active' : '' }}">
-                <i class="fa fa-calendar" style="font-size: 11px;"></i> {{ __('Purchase Date') }}
-            </button>
-            <button wire:click.prevent="sortBy('warranty_expiry')"
-                class="filter-btn {{ $sortField === 'warranty_expiry' ? 'active' : '' }}">
-                <i class="fa fa-shield-halved" style="font-size: 11px;"></i> {{ __('Warranty') }}
-            </button>
-            <button wire:click="reverseSort" class="filter-btn">
-                @if ($sortDirection === 'asc')
-                    <i class="fa fa-arrow-up-wide-short text-primary"></i> {{ __('Ascending') }}
-                @else
-                    <i class="fa fa-arrow-down-wide-short text-primary"></i> {{ __('Descending') }}
-                @endif
-            </button> --}}
         </div>
         <div class="search-wrap" style="min-width: 260px;">
             <i class="fa fa-search s-ico"></i>
@@ -337,69 +322,109 @@
 
                 <div class="modal-body p-4" style="background: #fdfdfd;">
                     @if ($selectedAsset && $selectedAsset->count() > 0)
-                        {{-- ─── الـ Card الرئيسي ─── --}}
-                        @forelse ($selectedAsset as $key => $asset)
-                            <div class="border rounded-4 bg-white shadow-sm overflow-hidden mb-4">
+                        <div class="row">
+                            @forelse ($selectedAsset as $key => $asset)
+                                <div class="col-lg-6">
+                                    <div class="border rounded-4 bg-white shadow-sm overflow-hidden mb-4">
+                                        <div class="p-4 border-bottom d-flex align-items-center justify-content-between"
+                                            style="background: linear-gradient(to right, #fafafa, #fff);">
+                                            <div>
+                                                <span
+                                                    class="badge bg-primary-subtle text-primary mb-2 px-3 py-1 rounded-pill fw-bold"
+                                                    style="font-size: 11px;">
+                                                    {{ $asset->asset->asset_tag }}
+                                                </span>
+                                                <span class="fw-bold mb-1 {{ $asset->status->badge() }}">
+                                                    {{ $asset->status->label() }}
+                                                </span><br>
+                                                @if ($asset->asset->brand && $asset->asset->typeModel)
+                                                    <span class="small mb-1 text-primary">
+                                                        {{ $asset->asset->brand->name . ' (' . $asset->asset->typeModel->name . ')' }}
+                                                    </span>
+                                                @endif
 
-                                <div class="p-4 border-bottom d-flex align-items-center justify-content-between"
-                                    style="background: linear-gradient(to right, #fafafa, #fff);">
-                                    <div>
-                                        <span
-                                            class="badge bg-primary-subtle text-primary mb-2 px-3 py-1 rounded-pill fw-bold"
-                                            style="font-size: 11px;">
-                                            {{ $asset->asset->asset_tag }}
-                                        </span>
-                                        <h4 class="fw-bold text-dark mb-1 {{ $asset->asset->status->badge() }}">
-                                            {{ $asset->asset->status->label() }}
-                                        </h4>
-                                        <p class="text-muted small mb-0 font-monospace"><i
-                                                class="fa fa-barcode me-1"></i>S/N:
-                                        </p>
+                                                <hr class="border-dark mt-2">
+
+                                                <p class=" d-flex ">
+                                                    <span class="small font-monospace text-dark">S.No:
+                                                        {{ $asset->asset->serial_number }}</span>
+                                                </p>
+                                            </div>
+
+                                            @if ($asset->asset->category->slug == 'laptop')
+                                                <div class="text-center">
+                                                    <div class="bg-light rounded-circle p-3 d-inline-flex">
+                                                        <i class="fa-solid fa-laptop fs-2 text-primary"></i>
+                                                    </div>
+                                                </div>
+                                            @elseif ($asset->asset->category->slug == 'monitor')
+                                                <div class="text-center">
+                                                    <div class="bg-light rounded-circle p-3 d-inline-flex">
+                                                        <i class="fa-solid fa-display fs-2 text-primary"></i>
+                                                    </div>
+                                                </div>
+                                            @elseif ($asset->asset->category->slug == 'printer')
+                                                <div class="text-center">
+                                                    <div class="bg-light rounded-circle p-3 d-inline-flex">
+                                                        <i class="fa-solid fa-print fs-2 text-primary"></i>
+                                                    </div>
+                                                </div>
+                                            @elseif ($asset->asset->category->slug == 'scanner')
+                                                <div class="text-center">
+                                                    <div class="bg-light rounded-circle p-3 d-inline-flex">
+                                                        <i class="fa-solid fa-scanner fs-2 text-primary"></i>
+                                                    </div>
+                                                </div>
+                                            @elseif ($asset->asset->category->slug == 'camera')
+                                                <div class="text-center">
+                                                    <div class="bg-light rounded-circle p-3 d-inline-flex">
+                                                        <i class="fa-solid fa-camera fs-2 text-primary"></i>
+                                                    </div>
+                                                </div>
+                                            @elseif ($asset->asset->category->slug == 'projector')
+                                                <div class="text-center">
+                                                    <div class="bg-light rounded-circle p-3 d-inline-flex">
+                                                        <i class="fa-solid fa-projector fs-2 text-primary"></i>
+                                                    </div>
+                                                </div>
+                                            @elseif ($asset->asset->category->slug == 'speaker')
+                                                <div class="text-center">
+                                                    <div class="bg-light rounded-circle p-3 d-inline-flex">
+                                                        <i class="fa-solid fa-volume-high fs-2 text-primary"></i>
+                                                    </div>
+                                                </div>
+                                            @elseif($asset->asset->category->slug == 'pc')
+                                                <div class="text-center">
+                                                    <div class="bg-light rounded-circle p-3 d-inline-flex">
+                                                        <i class="fa-solid fa-computer fs-2 text-primary"></i>
+                                                    </div>
+                                                </div>
+                                            @endif
+                                        </div>
+
+                                        <hr class="border-dark mt-2">
+                                        <div class="row g-2 px-2">
+                                            <div class="col text-center">
+                                                <p class="small fw-bold">{{ __('Assigned at') }}<br>
+                                                    {{ $asset->assigned_at }}</p>
+                                            </div>
+                                            @if ($asset->returned_at != null)
+                                                <div class="col text-center">
+                                                    <p class="small fw-bold text-danger">{{ __('Returned at') }} <br>
+                                                        {{ $asset->returned_at }}</p>
+                                                </div>
+                                            @endif
+                                        </div>
                                     </div>
                                 </div>
 
-                                {{-- شبكة المواصفات التقنية (Premium Grid View) --}}
-                                <div class="p-4">
-                                    <h6 class="fw-bold text-dark mb-3 d-flex align-items-center gap-2">
-                                        <i class="fa-solid fa-microchip text-primary"></i>
-                                        {{ __('Hardware Specifications') }}
-                                    </h6>
-
-                                    <div class="row g-3">
-                                        {{-- @forelse ($selectedAsset->specs as $spec)
-                                        <div class="col-md-6 col-lg-4">
-                                            <div class="p-3 border rounded-3 bg-light-subtle h-100">
-                                                <div class="text-muted small mb-1"><i class="fa-solid fa-grip me-1"></i>
-                                                    {{ $spec->attribute->name }}
-                                                </div>
-                                                <div class="fw-bold text-dark small">{{ $spec->value }}
-                                                </div>
-                                            </div>
-                                        </div>
-                                    @empty
-                                        <div class="col-md-6 col-lg-4">
-                                            <div class="p-3 border rounded-3 bg-light-subtle h-100">
-                                                <div class="text-muted small mb-1"><i
-                                                        class="fa-solid fa-processor me-1"></i>
-                                                    {{ __('No Specifications') }}</div>
-                                            </div>
-                                        </div>
-                                    @endforelse --}}
-
-
-                                    </div>
-
-                                    <hr class="my-4 opacity-50">
-
-
+                            @empty
+                                <div class="text-center py-4">
+                                    <div class="spinner-border text-primary" role="status"></div>
+                                    <p class="mt-2 text-muted small">{{ __('Loading asset configuration...') }}</p>
                                 </div>
-                            </div>
-                        @empty
-                            <div class="text-center py-4">
-                                <div class="spinner-border text-primary" role="status"></div>
-                                <p class="mt-2 text-muted small">{{ __('Loading asset configuration...') }}</p>
-                            </div>
-                        @endforelse
+                            @endforelse
+                        </div>
                     @else
                         <div class="text-center py-4">
                             <i class="fa-solid fa-laptop text-muted" style="font-size: 48px;"></i>

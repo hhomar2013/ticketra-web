@@ -2,13 +2,14 @@
 
 namespace App\Models;
 
+use App\Core\Enum\AssetStatus;
 use Illuminate\Database\Eloquent\Model;
 
 class AssetAssignment extends Model
 {
 
     protected $guarded = [];
-
+    protected $casts = ['status' => AssetStatus::class];
 
     public function asset()
     {
