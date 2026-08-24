@@ -4,8 +4,10 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\AssetOnline;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Str;
 
 class AssetController extends Controller
 {
@@ -14,6 +16,8 @@ class AssetController extends Controller
         try {
             $data = $request->validate([
                 'computer_name' => 'required|string',
+                'user_name' => 'required|string',
+                'employee_id' => 'required|string',
                 'serial_number' => 'required|string',
                 'manufacturer' => 'nullable|string',
                 'model' => 'nullable|string',
@@ -49,6 +53,18 @@ class AssetController extends Controller
                     'last_sync_at' => now(),
                 ]
             );
+
+            if ($asset) {
+                $user = User::query()->where('employee_id', $data['employee_id'])->first();
+                if (!$user) {
+                    User::query()->create([
+                        'name' => Str::title(Str::replace(".", " ", $data['user_name'])),
+                        'employee_id' => $data['employee_id'],
+                        'email' => $data['user_name'] . '@hpd.eg.com',
+                        'password' => bcrypt('Hydepark123'),
+                    ]);
+                }
+            }
 
             return response()->json([
                 'success' => true,
