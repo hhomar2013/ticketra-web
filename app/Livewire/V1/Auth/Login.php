@@ -36,7 +36,13 @@ class Login extends Component
         ) {
 
             session()->regenerate();
-            return redirect()->intended('/');
+            $user = Auth::user();
+
+            if ($user->hasRole('admin')) {
+                return redirect()->intended('/dashboard');
+            } else {
+                return redirect()->intended('/founders/dashboard');
+            }
 
         } else {
             $this->addError('email', __('Invalid login credentials.'));
