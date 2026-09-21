@@ -15,7 +15,8 @@ class localAssetLogs extends Seeder
      */
     public function run(): void
     {
-        $assets = asset::query()->get();
+        $assets = asset::query()
+            ->whereNotNull('user_id')->get();
         foreach ($assets as $asset) {
             asset_log::query()->firstOrCreate(
                 ['asset_id' => $asset->id],

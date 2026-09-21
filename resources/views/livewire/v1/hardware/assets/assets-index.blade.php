@@ -277,6 +277,7 @@
                         <th class="ps-4 py-3 text-muted small" style="width: 55px;">#</th>
                         <th class="py-3 text-muted small">{{ __('Asset Tag') }}</th>
                         <th class="py-3 text-muted small">{{ __('Serial Number') }}</th>
+                        <th class="py-3 text-muted small">{{ __('Model') }}</th>
                         <th class="py-3 text-muted small">{{ __('Status') }}</th>
                         <th class="py-3 text-muted small">{{ __('Branch') }}</th>
                         <th class="py-3 text-muted small">{{ __('Purchase Date') }}</th>
@@ -297,6 +298,10 @@
                             </td>
                             <td>
                                 <span class="text-muted small font-monospace">{{ $asset->serial_number }}</span>
+                            </td>
+                            <td>
+                                <span
+                                    class="text-white small font-monospace badge bg-dark ">{{ $asset->typeModel?->name }}</span>
                             </td>
                             <td>
                                 {{-- @php

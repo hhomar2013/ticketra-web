@@ -94,7 +94,7 @@
                 </li>
 
                 {{-- ── Maintenance ── --}}
-                <li class="nav-small-cap">
+                {{-- <li class="nav-small-cap">
                     <i class="ti ti-dots nav-small-cap-icon fs-6"></i>
                     <span class="hide-menu">{{ __('Maintenance') }}</span>
                 </li>
@@ -107,7 +107,7 @@
                         </span>
                         <span class="hide-menu">{{ __('Maintenance Invoices') }}</span>
                     </a>
-                </li>
+                </li> --}}
 
                 {{-- ── Settings ── --}}
                 <li class="nav-small-cap">

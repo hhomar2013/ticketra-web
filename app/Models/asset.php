@@ -71,7 +71,7 @@ class asset extends Model
     protected static function booted(): void
     {
         static::creating(function (asset $asset) {
-            $asset->asset_tag = 'HPD-' . str_pad(asset::count() + 1, 5, '0', STR_PAD_LEFT);
+            $asset->asset_tag = 'HPD-' . str_pad(asset::count() + 2, 5, '0', STR_PAD_LEFT);
         });
     }
     public function attributes()

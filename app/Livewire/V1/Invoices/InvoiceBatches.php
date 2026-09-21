@@ -38,7 +38,7 @@ class InvoiceBatches extends Component
     public function mount(int $id): void
     {
         $this->invoice = Invoices::with(['supplier', 'batches.assets'])->findOrFail($id);
-        $this->batch_status = $this->invoice->batches->first()?->status;
+        $this->batch_status = StatusEnum::Pending->value;
         $this->received_date = now()->format('Y-m-d');
         $this->purchase_date = now()->format('Y-m-d');
         $this->batch_number = 'BATCH-' . now()->format('Y') . '-' . str_pad(AssetBatch::count() + 1, 3, '0', STR_PAD_LEFT);

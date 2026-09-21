@@ -61,7 +61,10 @@ class AssetsIndex extends Component
         return asset::query()->with(['category', 'branch', 'brand', 'typeModel', 'specs'])
             ->when($this->search, function ($query) {
                 $query->where('asset_tag', 'like', '%' . $this->search . '%')
-                    ->orWhere('serial_number', 'like', '%' . $this->search . '%');
+                    ->orWhere('serial_number', 'like', '%' . $this->search . '%')
+                    ->orWhereHas('typeModel', function ($modelQuery) {
+                        $modelQuery->where('name', 'like', '%' . $this->search . '%');
+                    });
             })
             ->orderBy($this->sortField, $this->sortDirection)
             ->paginate($this->perPage);

@@ -247,7 +247,8 @@
                 <thead style="background: #f9fafb;">
                     <tr>
                         <th class="ps-4 py-3 text-muted small" style="width: 55px;">#</th>
-                        <th class="py-3 text-muted small">{{ __('Employee Name') }}</th>
+                        <th class="py-3 text-muted small">{{ __('EMP Num ') }}</th>
+                        <th class="py-3 text-muted small">{{ __('EMP Name') }}</th>
                         <th class="py-3 text-muted small">{{ __('Asset Count') }}</th>
                         <th class="py-3 text-muted small text-center"><i class="fas fa-cog"></i> {{ __('Actions') }}
                         </th>
@@ -259,6 +260,11 @@
                             <td class="ps-4">
                                 <span class="badge bg-light text-muted border" style="font-size: 11px;">
                                     {{ $key + 1 }}
+                                </span>
+                            </td>
+                            <td class="text-start">
+                                <span class="badge bg-light text-danger border font-monospace" style="font-size: 11px;">
+                                    {{ $asset->employee_id }}
                                 </span>
                             </td>
                             <td>

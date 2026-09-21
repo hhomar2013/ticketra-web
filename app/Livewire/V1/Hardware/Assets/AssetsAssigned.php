@@ -24,16 +24,24 @@ class AssetsAssigned extends Component
     public $selectedAsset;
     public $perPage = 10;
 
+    public $search = "";
 
     #[Computed]
     public function assets()
     {
-        return User::query()
+        $user = User::query()
             ->with('assets.assignments')
             ->whereHas('assets', function ($query) {
                 $query->where('status', AssetStatus::Assigned->value);
             })
+            ->when($this->search, function ($query) {
+                $query->where('name', 'like', '%' . $this->search . '%')
+                    ->orWhere('email', 'like', '%' . $this->search . '%')
+                    ->orWhere('employee_id', $this->search);
+            })
             ->paginate($this->perPage);
+
+        return $user;
     }
 
 

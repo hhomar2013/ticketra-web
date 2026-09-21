@@ -289,20 +289,44 @@
 
                         {{-- Employee ✅ نفس wire:model.live --}}
                         <div class="col-12">
-                            <label class="f-lbl">{{ __('Employee') }}</label>
-                            <div class="f-wrap">
-                                <i class="fa fa-user f-ico"></i>
-                                <select class="f-input @error('employee_id') is-invalid @enderror"
-                                    wire:model.live="employee_id">
-                                    <option value="">{{ __('Select Employee') }}</option>
-                                    @foreach ($employees as $employee)
-                                        <option value="{{ $employee->id }}">{{ $employee->name }}</option>
-                                    @endforeach
-                                </select>
+
+                            <div class="row">
+                                <div class="col-6">
+                                    <label class="f-lbl">{{ __('Search') }}</label>
+                                    <div class="f-wrap">
+                                        <i class="fa fa-search f-ico"></i>
+                                        <input type="text" class="f-input" wire:model.live="search"
+                                            placeholder="Search..." />
+                                        @error('search')
+                                            <div class="f-err"><i class="fa fa-circle-exclamation"></i> {{ $message }}
+                                            </div>
+                                        @enderror
+                                    </div>
+                                </div>
+                                <div class="col-6" wire:target="search">
+
+                                    @if ($result)
+                                        <div class="search-results-container"
+                                            style="margin-top: 22px; max-height: 180px; overflow-y: auto; border: 1.5px solid #e5e7eb; border-radius: 12px; padding: 8px; background: #fff;">
+                                            @forelse ($result as $results)
+                                                <div class="p-1 mb-1" style="border-radius: 8px;">
+                                                    <label for="employee_res_{{ $results->id }}"
+                                                        style="display: flex; align-items: center; gap: 10px; cursor: pointer; margin: 0; width: 100%;">
+                                                        <input type="radio" id="employee_res_{{ $results->id }}"
+                                                            name="employee_id" wire:model.live="employee_id"
+                                                            value="{{ $results->id }}"
+                                                            style="cursor: pointer; width: 16px; height: 16px; margin: 0;">
+                                                        <span
+                                                            style="font-size: 14px; color: #111827;">{{ $results->name }}</span>
+                                                    </label>
+                                                </div>
+                                            @endforeach
+                                        </div>
+                                    @endif
+                                </div>
                             </div>
-                            @error('employee_id')
-                                <div class="f-err"><i class="fa fa-circle-exclamation"></i> {{ $message }}</div>
-                            @enderror
+
+
                         </div>
 
                         {{-- Branch ✅ نفس wire:model.live + $branch as $branch --}}

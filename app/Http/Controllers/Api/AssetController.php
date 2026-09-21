@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\AssetOnline;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 
@@ -57,12 +58,13 @@ class AssetController extends Controller
             if ($asset) {
                 $user = User::query()->where('employee_id', $data['employee_id'])->first();
                 if (!$user) {
-                    User::query()->create([
+                    $user = User::query()->create([
                         'name' => Str::title(Str::replace(".", " ", $data['user_name'])),
                         'employee_id' => $data['employee_id'],
-                        'email' => $data['user_name'] . '@hpd.eg.com',
-                        'password' => bcrypt('Hydepark123'),
+                        'email' => Str::lower($data['user_name']) . '@hpd.eg.com',
+                        'password' => Hash::make('123456'),
                     ]);
+                    $user->assignRole('user');
                 }
             }
 

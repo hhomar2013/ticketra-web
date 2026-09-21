@@ -14,7 +14,9 @@ class AssignToEmployee extends Component
     public $asset;
     public $employees;
     public $employee_id;
-    public $search;
+    public $search = "";
+    public $result = "";
+
     public $branch, $branch_id;
     public $notes;
     public function mount($id = null)
@@ -29,11 +31,25 @@ class AssignToEmployee extends Component
         // ✅ استثنيهم
         $this->employees = User::query()
             // ->role('user')
-            // ->whereNotIn('id', $assignedUserIds)
+            //= ->whereNotIn('id', $assignedUserIds)
             ->latest()
             ->get();
     }
 
+    public function updatedSearch()
+    {
+        $this->reset('result');
+        if ($this->search != '') {
+            $this->result = User::query()
+                ->when($this->search, function ($query) {
+                    $query->where('name', 'like', '%' . $this->search . '%')
+                        ->orWhere('email', 'like', '%' . $this->search . '%')
+                        ->orWhere('employee_id', $this->search);
+                })
+                ->latest()
+                ->get();
+        }
+    }
     public function updatedEmployeeId()
     {
         // $this->asset->employee_id = $this->employee_id;
