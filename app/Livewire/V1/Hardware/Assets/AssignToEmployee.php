@@ -44,7 +44,7 @@ class AssignToEmployee extends Component
                 ->when($this->search, function ($query) {
                     $query->where('name', 'like', '%' . $this->search . '%')
                         ->orWhere('email', 'like', '%' . $this->search . '%')
-                        ->orWhere('employee_id', $this->search);
+                        ->orWhere('employee_id', 'like', '%' . $this->search . '%');
                 })
                 ->latest()
                 ->get();

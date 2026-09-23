@@ -317,10 +317,16 @@
                                                             value="{{ $results->id }}"
                                                             style="cursor: pointer; width: 16px; height: 16px; margin: 0;">
                                                         <span
-                                                            style="font-size: 14px; color: #111827;">{{ $results->name }}</span>
+                                                            style="font-size: 14px; color: #111827;">{{ $results->employee_id }}
+                                                            - {{ $results->name }}</span>
                                                     </label>
                                                 </div>
-                                            @endforeach
+                                            @empty
+                                                <div class="p-1 mb-1" style="border-radius: 8px;">
+                                                    <span style="font-size: 14px; color: #111827;">No Employee
+                                                        Found</span>
+                                                </div>
+                                            @endforelse
                                         </div>
                                     @endif
                                 </div>

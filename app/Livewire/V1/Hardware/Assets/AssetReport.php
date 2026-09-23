@@ -2,6 +2,7 @@
 
 namespace App\Livewire\V1\Hardware\Assets;
 
+use App\Core\Enum\AssetStatus;
 use App\Models\asset;
 use Livewire\Component;
 use Livewire\Attributes\Layout;
@@ -16,7 +17,9 @@ class AssetReport extends Component
             'specs' => function ($query) {
                 $query->orderBy('attribute_id', 'asc');
             },
-            'assignments.user'
+            'assignments' => function ($query) {
+                $query->where('status', AssetStatus::Assigned)->with('user', 'user.category')->first();
+            }
         ])->findOrFail($id);
     }
 

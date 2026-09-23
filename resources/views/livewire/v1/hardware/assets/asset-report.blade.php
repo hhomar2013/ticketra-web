@@ -24,18 +24,18 @@
         <div class="user-card  p-5 mb-4 shadow-sm">
             <div class="d-flex align-items-center justify-content-between ">
                 <div style="position: relative; z-index: 1;">
-
+                    {{-- @dd($asset->assignments) --}}
                     <h5 class="text-dark  mb-2">
                         Date : {{ now()->format('d / m / Y') }}
                     </h5>
                     <h4 class="text-dark fw-bold mb-2">
-                        Name : {{ $asset->assignments[0]['user']['name'] }}
+                        Name : {{ $asset->assignments->first()->user?->name }}
                     </h4>
                     <h4 class="text-dark fw-bold mb-2">
-                        Department : {{ $asset->assignments[0]['user']['category']['name'] }}
+                        Department : {{ $asset->assignments->first()->user?->category->name }}
                     </h4>
                     <h5 class="text-dark fw-bold mb-2">
-                        Title : {{ $asset->assignments[0]['user']['title'] }}
+                        Title : {{ $asset->assignments->first()->user->title }}
                     </h5>
                 </div>
                 <div class="d-none d-md-block text-dark" style="position: relative; z-index: 1;" dir="rtl">
@@ -151,10 +151,10 @@
                     <h5 dir="">أسم المستلم <br>________________</h5>
                     <h5 dir="">التوقيع <Br>________________</h5>
                 </div>
-                <div class="col-md-6">
+                {{-- <div class="col-md-6">
                     <h5 dir="">القائم بدور التسليم <br>{{ Auth::user()->name }}</h5>
                     <h5 dir="">التوقيع <Br>________________</h5>
-                </div>
+                </div> --}}
             </div>
             <h6 class="mt-5" dir="rtl">لقد تم تحرير هذا المحضر باللغتين الإنجليزية والعربية،وفى حالة الاختلاف
                 يكون الاحتكام في
