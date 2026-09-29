@@ -34,6 +34,14 @@ class AssignToEmployee extends Component
             //= ->whereNotIn('id', $assignedUserIds)
             ->latest()
             ->get();
+
+        if (session()->has('user_id')) {
+            $id = session()->get('user_id');
+            $this->search = $id;
+            $this->updatedSearch();
+            $this->employee_id = $id;
+            session()->forget('user_id');
+        }
     }
 
     public function updatedSearch()
@@ -75,7 +83,8 @@ class AssignToEmployee extends Component
         ]);
         if ($q) {
             $this->dispatch('alert', type: 'success', message: __('Asset Assigned to Employee Successfully'));
-            return redirect()->route('hardware.assets.index');
+            // return redirect()->route('hardware.assets.index');
+            return redirect()->route('assets-reports.index', ['id' => $this->asset->id]);
         } else {
             $this->dispatch('alert', type: 'error', message: __('Asset Assigned to Employee Failed'));
         }

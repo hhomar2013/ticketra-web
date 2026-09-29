@@ -2,6 +2,7 @@
 
 namespace App\Livewire\V1\Hardware\Assets;
 
+use App\Models\asset;
 use App\Models\AssetOnline;
 use Illuminate\Support\Facades\Storage;
 use Livewire\Attributes\Computed;
@@ -32,6 +33,13 @@ class OnlineAssets extends Component
             })
             ->latest()
             ->paginate(10);
+    }
+
+    public function assignToEmployee($id, $user)
+    {
+        $asset = asset::query()->where("serial_number", $id)->first();
+        session()->put('user_id', $user);
+        return redirect()->route('hardware.assets.assign-to-employee', $asset->id);
     }
 
     public function export()

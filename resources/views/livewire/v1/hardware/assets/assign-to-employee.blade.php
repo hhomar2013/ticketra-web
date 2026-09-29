@@ -284,7 +284,7 @@
             <div class="form-panel-body">
 
                 {{-- ✅ نفس wire:submit --}}
-                <form wire:submit="assignToEmployee">
+                <form wire:submit="assignToEmployee" target="_blank">
                     <div class="row g-4">
 
                         {{-- Employee ✅ نفس wire:model.live --}}

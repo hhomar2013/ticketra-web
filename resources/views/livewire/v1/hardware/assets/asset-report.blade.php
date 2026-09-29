@@ -1,21 +1,38 @@
 <style>
     .user-card {
-        /* background: linear-gradient(135deg, #407bd449 0%, #ffffff 50%); */
         background-color: #88ade48b;
         border-radius: 20px;
         border: none;
         overflow: hidden;
         position: relative;
     }
+
+    /* إخفاء العناصر التي تحمل هذه الفئة عند الطباعة */
+    @media print {
+        .no-print {
+            display: none !important;
+        }
+    }
 </style>
+
 <div class="container-fluid p-5">
+
+
+    <div class="d-flex justify-content-start align-items-center mb-4 no-print p-2">
+        <button onclick="window.print()" class="btn btn-dark px-4 py-2 mx-2">
+            <i class="fa fa-print"></i> {{ __('Print') }}
+        </button>
+        <a href="{{ route('admin.dashboard') }}" class="btn btn-secondary px-4 py-2 mx-2">
+            <i class="fa fa-arrow-left"></i> {{ __('Back to Dashboard') }}
+        </a>
+    </div>
+
     <div class="row">
         <div class="col-md-2">
             <img src="{{ asset('asset/images/logo.png') }}" alt="" srcset="" style="width: 200px;">
         </div>
         <div class="col-md-10">
             <h1 class="text-center">{{ __('IT Asset Receipt') }}</h1>
-            {{-- <p class="text-center">{{ __('IT Department') }}</p> --}}
         </div>
     </div>
     <h3 class="mb-3">{{ __('Date') }} : {{ now()->format('Y - m - d') }}</h3>
@@ -24,7 +41,6 @@
         <div class="user-card  p-5 mb-4 shadow-sm">
             <div class="d-flex align-items-center justify-content-between ">
                 <div style="position: relative; z-index: 1;">
-                    {{-- @dd($asset->assignments) --}}
                     <h5 class="text-dark  mb-2">
                         Date : {{ now()->format('d / m / Y') }}
                     </h5>
@@ -39,7 +55,6 @@
                     </h5>
                 </div>
                 <div class="d-none d-md-block text-dark" style="position: relative; z-index: 1;" dir="rtl">
-
                     <h5 class="text-dark  mb-2">
                         التاريخ : {{ now()->format('d / m / Y') }}
                     </h5>
@@ -56,7 +71,6 @@
             </div>
         </div>
     </div>
-    {{-- Employee Info --}}
 
     <div class="row">
         <h4 class="mb-3" style="text-decoration: underline;" dir="rtl"><b>مواصفات الجهاز كالتالي : </b></h4>
@@ -70,7 +84,6 @@
                     @foreach ($asset->specs as $spec)
                         <th class="bg-dark text-white">{{ __($spec->attribute->name) }}</th>
                     @endforeach
-
                 </tr>
             </thead>
             <tbody>
@@ -86,19 +99,15 @@
                             <h5 class="fw-bold">{{ $spec->value }}</h5>
                         </td>
                     @endforeach
-
                 </tr>
-
             </tbody>
         </table>
     </div>
-    {{-- Device Info --}}
 
     <div class="row">
         <div class="col-md-6">
             <h4 class="mb-3 text-start" dir="ltr" style="text-decoration: underline;"><b>The Device Accessories
-                    :</b>
-            </h4>
+                    :</b></h4>
 
             <div class="row text-start">
                 <div class="col-md-12">
@@ -126,8 +135,7 @@
             </div>
         </div>
         <div class="col-md-6 text-end" style="border-left: 2px solid black">
-            <h4 class="mb-3 text-end" dir="rtl" style="text-decoration: underline;"><b>ملحقات الجهاز كالتالي :
-                </b>
+            <h4 class="mb-3 text-end" dir="rtl" style="text-decoration: underline;"><b>ملحقات الجهاز كالتالي : </b>
             </h4>
 
             <div class="row text-end">
@@ -140,7 +148,7 @@
             <h6 dir="rtl"> الموظف في إدارة __________________ </h6>
             <h6 dir="rtl">
                 <br> <br>
-                لدى شركة هايد بارك للتطوير العقاري ش.م.م<br>
+                لدى شركة هايد بارك العقاريه ش.م.م<br>
                 باستلامي جهاز اللاب توب مع ملحقاته والموضحة بياناته أعلاه.
                 وألتزم بالمحافظة عليه واستخدامه لأغراض العمل فقط.
                 كما أتحمل المسئولية الكاملة في حالة سرقته أو ضياعه أو تلفه.
@@ -151,15 +159,9 @@
                     <h5 dir="">أسم المستلم <br>________________</h5>
                     <h5 dir="">التوقيع <Br>________________</h5>
                 </div>
-                {{-- <div class="col-md-6">
-                    <h5 dir="">القائم بدور التسليم <br>{{ Auth::user()->name }}</h5>
-                    <h5 dir="">التوقيع <Br>________________</h5>
-                </div> --}}
             </div>
             <h6 class="mt-5" dir="rtl">لقد تم تحرير هذا المحضر باللغتين الإنجليزية والعربية،وفى حالة الاختلاف
-                يكون الاحتكام في
-                ذلك إلى النص العربي.</h6>
+                يكون الاحتكام في ذلك إلى النص العربي.</h6>
         </div>
     </div>
-    {{-- Legal Agreement --}}
 </div>

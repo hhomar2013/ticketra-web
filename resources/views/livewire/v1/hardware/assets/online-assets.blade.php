@@ -123,6 +123,15 @@
                                     </button>
 
                                     <ul class="dropdown-menu dropdown-menu-end">
+
+                                        <li>
+                                            <button class="dropdown-item text-start"
+                                                wire:click="assignToEmployee('{{ $asset->serial_number }}', '{{ $asset->user_id }}')"
+                                                data-bs-target="#kt_modal_1">
+                                                <i class="fa-solid fa-user-plus text-info"></i>
+                                                {{ __('Assign To Employee') }}
+                                            </button>
+                                        </li>
                                         <li>
                                             <a class="dropdown-item"
                                                 href="{{ route('hardware.assets-online.show', $asset->id) }}">

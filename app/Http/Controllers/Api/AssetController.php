@@ -38,6 +38,7 @@ class AssetController extends Controller
                 $driversArray = [];
             }
 
+
             $asset = AssetOnline::updateOrCreate(
                 ['serial_number' => trim($data['serial_number'])],
                 [
@@ -57,6 +58,7 @@ class AssetController extends Controller
 
             if ($asset) {
                 $user = User::query()->where('employee_id', $data['employee_id'])->first();
+
                 if (!$user) {
                     $user = User::query()->create([
                         'name' => Str::title(Str::replace(".", " ", $data['user_name'])),
@@ -66,6 +68,9 @@ class AssetController extends Controller
                     ]);
                     $user->assignRole('user');
                 }
+                $asset->update([
+                    'user_id' => $user->id,
+                ]);
             }
 
             return response()->json([
