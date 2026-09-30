@@ -27,6 +27,7 @@ class OnlineAssets extends Component
     public function assets()
     {
         return AssetOnline::query()
+            ->with('assignedAsset')
             ->when($this->search, function ($query) {
                 $query->where('computer_name', 'like', '%' . $this->search . '%')
                     ->orWhere('serial_number', 'like', '%' . $this->search . '%');

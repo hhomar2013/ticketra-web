@@ -22,6 +22,11 @@ class AssetOnline extends Model
         return $this->belongsTo(User::class, 'user_id');
     }
 
+    public function assignedAsset()
+    {
+        return $this->hasOne(asset::class, 'serial_number', 'serial_number');
+    }
+
     protected function appsCount(): Attribute
     {
         return Attribute::make(
