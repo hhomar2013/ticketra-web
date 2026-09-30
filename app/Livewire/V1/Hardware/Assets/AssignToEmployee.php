@@ -37,7 +37,8 @@ class AssignToEmployee extends Component
 
         if (session()->has('user_id')) {
             $id = session()->get('user_id');
-            $this->search = $id;
+            $user = User::query()->find($id);
+            $this->search = $user->employee_id;
             $this->updatedSearch();
             $this->employee_id = $id;
             session()->forget('user_id');

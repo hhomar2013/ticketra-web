@@ -124,7 +124,7 @@
                                     </button>
 
                                     <ul class="dropdown-menu dropdown-menu-end">
-                                        @if (!$asset->assignedAsset)
+                                        @if(!$asset->assignedAsset)
                                             <li>
                                                 <button class="dropdown-item text-start"
                                                     wire:click="assignToEmployee('{{ $asset->serial_number }}', '{{ $asset->user_id }}')"

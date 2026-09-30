@@ -24,7 +24,7 @@ class AssetOnline extends Model
 
     public function assignedAsset()
     {
-        return $this->hasOne(asset::class, 'serial_number', 'serial_number');
+        return $this->hasOne(asset::class, 'serial_number', 'serial_number')->where('status', 'assigned');
     }
 
     protected function appsCount(): Attribute
