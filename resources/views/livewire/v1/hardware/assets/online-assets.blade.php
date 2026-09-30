@@ -143,7 +143,7 @@
                                         </li>
                                         <li>
                                             <button class="dropdown-item"
-                                                onclick="confirmDelete({{ $asset->id }}, 'delete-asset')">
+                                                onclick="confirmDelete({{ $asset->id }}, 'deleteOnlineAsset')">
                                                 <i class="fas fa-trash text-danger"></i>
                                                 {{ __('Delete') }}
                                             </button>

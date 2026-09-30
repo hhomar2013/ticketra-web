@@ -30,22 +30,24 @@ new class extends Component {
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
 
                     @role('admin')
-                        <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')" wire:navigate>
-                            {{ __('Dashboard') }}
-                        </x-nav-link>
-                        <x-nav-link :href="route('it.tickets.index')" :active="request()->routeIs('it.tickets.index')" wire:navigate>
-                            {{ __('Tickets') }}
-                        </x-nav-link>
+                    <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')" wire:navigate>
+                        {{ __('Dashboard') }}
+                    </x-nav-link>
+                    <x-nav-link :href="route('it.tickets.index')" :active="request()->routeIs('it.tickets.index')"
+                        wire:navigate>
+                        {{ __('Tickets') }}
+                    </x-nav-link>
 
-                        <x-nav-link :href="route('admin.users')" :active="request()->routeIs('admin.users')" wire:navigate>
-                            {{ __('Users Management') }}
-                        </x-nav-link>
+                    <x-nav-link :href="route('admin.users')" :active="request()->routeIs('admin.users')" wire:navigate>
+                        {{ __('Users Management') }}
+                    </x-nav-link>
                     @endrole
 
                     @role('user')
-                        <x-nav-link :href="route('it.tickets.create')" :active="request()->routeIs('it.tickets.create')" wire:navigate>
-                            {{ __('My Tickets') }}
-                        </x-nav-link>
+                    <x-nav-link :href="route('it.tickets.create')" :active="request()->routeIs('it.tickets.create')"
+                        wire:navigate>
+                        {{ __('My Tickets') }}
+                    </x-nav-link>
                     @endrole
 
                 </div>
@@ -113,7 +115,8 @@ new class extends Component {
         <!-- Responsive Settings Options -->
         <div class="pt-4 pb-1 border-t border-gray-200">
             <div class="px-4">
-                <div class="font-medium text-base text-gray-800" x-data="{{ json_encode(['name' => auth()->user()->name]) }}" x-text="name"
+                <div class="font-medium text-base text-gray-800"
+                    x-data="{{ json_encode(['name' => auth()->user()->name]) }}" x-text="name"
                     x-on:profile-updated.window="name = $event.detail.name"></div>
                 <div class="font-medium text-sm text-gray-500">{{ auth()->user()->email }}</div>
             </div>

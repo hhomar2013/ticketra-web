@@ -6,6 +6,7 @@ use App\Models\asset;
 use App\Models\AssetOnline;
 use Illuminate\Support\Facades\Storage;
 use Livewire\Attributes\Computed;
+use Livewire\Attributes\On;
 use Livewire\Component;
 use Livewire\WithPagination;
 
@@ -46,6 +47,25 @@ class OnlineAssets extends Component
     public function export()
     {
         return Storage::disk("public")->download("agent/collectinformation.bat");
+    }
+
+    #[On('deleteOnlineAsset')]
+    public function deleteOnlineAsset($id)
+    {
+
+        $asset = AssetOnline::find($id);
+        if ($asset) {
+            $asset->delete();
+            $this->dispatch('show-toast', [
+                'type' => 'success',
+                'message' => 'Asset deleted successfully',
+            ]);
+        } else {
+            $this->dispatch('show-toast', [
+                'type' => 'error',
+                'message' => 'Asset not found',
+            ]);
+        }
     }
 
 

@@ -4,6 +4,7 @@ namespace App\Livewire;
 use App\Models\Category;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
+use Livewire\Attributes\On;
 use Livewire\Component;
 use Spatie\Permission\Models\Role;
 
@@ -17,7 +18,7 @@ class UserManager extends Component
     public function mount()
     {
         $this->categories = Category::all();
-        $this->roles      = Role::all();
+        $this->roles = Role::all();
         $this->loadUsers();
     }
 
@@ -40,16 +41,16 @@ class UserManager extends Component
     public function createUser()
     {
         $this->validate([
-            'name'     => 'required',
-            'email'    => 'required|email|unique:users,email',
+            'name' => 'required',
+            'email' => 'required|email|unique:users,email',
             'password' => 'required|min:6',
-            'role'     => 'required|exists:roles,name',
+            'role' => 'required|exists:roles,name',
             'category_id' => 'nullable|exists:categories,id',
         ]);
 
         $user = User::create([
-            'name'     => $this->name,
-            'email'    => $this->email,
+            'name' => $this->name,
+            'email' => $this->email,
             'password' => Hash::make($this->password),
             'category_id' => $this->category_id,
         ]);
@@ -63,41 +64,42 @@ class UserManager extends Component
 
     public function editUser($id)
     {
-        $user                = User::findOrFail($id);
+        $user = User::findOrFail($id);
         $this->editingUserId = $id;
-        $this->name          = $user->name;
-        $this->email         = $user->email;
-        $this->role          = $user->roles->pluck('name')->first();
-        $this->category_id   = $user->category_id;
+        $this->name = $user->name;
+        $this->email = $user->email;
+        $this->role = $user->roles->pluck('name')->first();
+        $this->category_id = $user->category_id;
     }
 
     public function updateUser()
     {
         $this->validate([
-            'name'  => 'required',
+            'name' => 'required',
             'email' => 'required|email|unique:users,email,' . $this->editingUserId,
-            'role'  => 'required|exists:roles,name',
+            'role' => 'required|exists:roles,name',
             'category_id' => 'nullable|exists:categories,id',
         ]);
 
         $user = User::findOrFail($this->editingUserId);
         $user->update([
-            'name'  => $this->name,
+            'name' => $this->name,
             'email' => $this->email,
             'category_id' => $this->category_id,
         ]);
 
         $user->syncRoles([$this->role]);
 
-        session()->flash('message', 'User updated successfully');
+        $this->dispatch('showToast', 'User updated successfully', 'success');
         $this->reset(['name', 'email', 'password', 'role', 'editingUserId', 'category_id']);
         $this->loadUsers();
     }
-
+    #[On('delete-user')]
     public function deleteUser($id)
     {
+        dd($id);
         User::findOrFail($id)->delete();
-        session()->flash('message', 'User deleted successfully');
+        $this->dispatch('showToast', 'User deleted successfully', 'success');
         $this->loadUsers();
     }
 

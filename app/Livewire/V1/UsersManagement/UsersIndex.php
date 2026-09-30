@@ -23,11 +23,10 @@ class UsersIndex extends Component
     {
         $this->resetPage();
     }
-
+    #[On('delete-user')]
     public function deleteUser(int $id): void
     {
         $user = User::findOrFail($id);
-
 
         if ($user->id === FacadesAuth::id()) {
             $this->dispatch('show-toast', ['message' => __('You cannot delete yourself'), 'type' => 'error']);
@@ -56,14 +55,14 @@ class UsersIndex extends Component
             ->when(
                 $this->search,
                 fn($q) =>
-                $q->where('name', 'like', '%' . $this->search . '%')
-                    ->orWhere('email', 'like', '%' . $this->search . '%')
-                    ->orWhere('employee_id', 'like', '%' . $this->search . '%')
+                    $q->where('name', 'like', '%' . $this->search . '%')
+                        ->orWhere('email', 'like', '%' . $this->search . '%')
+                        ->orWhere('employee_id', 'like', '%' . $this->search . '%')
             )
             ->when(
                 $this->roleFilter,
                 fn($q) =>
-                $q->role($this->roleFilter)
+                    $q->role($this->roleFilter)
             )
             ->latest()
             ->paginate($this->perPage);
